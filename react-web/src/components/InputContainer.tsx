@@ -30,7 +30,9 @@ export default function InputContainer({setMessages, ...props}: InputContainerPr
                     text: messageInputRef.current?.value ?? ""
                 });
             }
-
+            
+            // The ! here tells TypeScript that messageInputRef.current will not be null in this context.
+            // It doesn't see that we have the ref set to the textarea element in JSX.
             messageInputRef.current!.value = "";
             return newMessages;
         });

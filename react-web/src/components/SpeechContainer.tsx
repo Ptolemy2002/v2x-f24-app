@@ -12,6 +12,8 @@ export default function SpeechContainer({messages=[],...props}: SpeechContainerP
 
     // useCallback is used to keep a stable reference to the function.
     const scrollToEnd = useCallback(() => {
+        // The ! here tells TypeScript that messageInputRef.current will not be null in this context.
+        // It doesn't see that we have the ref set to the div element in JSX.
         speechContainerRef.current!.scrollTop = speechContainerRef.current!.scrollHeight;
     }, []);
 
