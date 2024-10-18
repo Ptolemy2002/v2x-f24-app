@@ -4,19 +4,23 @@ import { HTMLProps } from "react";
 type SpeechBubbleMessageBase<T extends string> = {
     origin: "sender" | "recepient";
     type: T;
-}
+};
 
+// SpeechBubbleText will take a message object as well as the default properties for a speech bubble.
 export type SpeechBubbleTextMessage = {
     text: string;
 } & SpeechBubbleMessageBase<"text">;
 
+// SpeechBubbleImage will take a src and alt attribute as well as the default properties for a speech bubble.
 export type SpeechBubbleImageMessage = {
     src: string;
     alt?: string;
 } & SpeechBubbleMessageBase<"image">;
 
+// Just a utility type here.
 export type SpeechBubbleMessage = SpeechBubbleTextMessage | SpeechBubbleImageMessage;
 
+// SpeechBubbleText will take a message object as well as the default properties for a paragraph element.
 export type SpeechBubbleTextProps = {
     message: SpeechBubbleTextMessage;
 } & HTMLProps<HTMLParagraphElement>;
@@ -33,7 +37,12 @@ export function SpeechBubbleText({message, className, ...props}: SpeechBubbleTex
                 lines.map((line, i) => (
                     <span key={`line-${i}`}>
                         {line}
-                        {i < lines.length - 1 && <br />}
+                        {
+                            // If the left side is false, the expression evaluates to false, which means React
+                            // won't render anything here. Otherwise, it will evaluate to the right side,
+                            // which is a br element in this case.
+                            i < lines.length - 1 && <br />
+                        }
                     </span>
                 ))
             }
@@ -41,19 +50,23 @@ export function SpeechBubbleText({message, className, ...props}: SpeechBubbleTex
     );
 }
 
+// SpeechBubbleImage will take a message object as well as the default properties for an image element.
 export type SpeechBubbleImageProps = {
     message: SpeechBubbleImageMessage;
-    scrollToEnd: () => void;
+    scrollToEnd: () => void; // Function type definitions have similar syntax to JavaScript arrow functions.
+    // void just means that the function doesn't return anything.
 } & HTMLProps<HTMLImageElement>;
 
 export function SpeechBubbleImage({message, scrollToEnd, className, ...props}: SpeechBubbleImageProps) {
     return (
         <img
             className={clsx("speech-bubble", message.origin, className)}
-            src={message.src}
-            alt={message.alt ?? ""}
+            {...props} // Pass any additional props to the element itself.
+
+            // This comes after the spread so that it can't be overridden by the props. className doesn't have that issue because we extract it above.
             onLoad={scrollToEnd}
-            {...props}
+            src={message.src}
+            alt={message.alt ?? ""} // ?? here is the nullish coalescing operator, which returns the right side if the left side is null or undefined.
         />
     );
 }

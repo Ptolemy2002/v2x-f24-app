@@ -17,6 +17,7 @@ export default function Sidebar({className, ...props}: HTMLProps<HTMLUListElemen
     );
 }
 
+// TimeLabel will take a text string and an optional screenReaderText string as well as the default properties for a paragraph element.
 export type TimeLabelProps = {
     text: string;
     screenReaderText?: string;
@@ -31,6 +32,7 @@ export function TimeLabel({text, screenReaderText="Last Accessed", className, ..
     );
 }
 
+// ChatLink will take a text string, an href string, and an optional active boolean as well as the default properties for a list item element.
 export type ChatLinkProps = {
     text: string;
     href: string;
@@ -39,6 +41,8 @@ export type ChatLinkProps = {
 
 export function ChatLink({text, href, active=false, className, ...props}: ChatLinkProps) {
     return (
+        // clsx is just a utility that lets us combine class names. Falsy values do not get added to the class list,
+        // which is why "active" is only added when the active prop is true.
         <li className={clsx("chat-link", active && "active", className)} {...props}>
             <a href={href}>{text}</a>
         </li>

@@ -11,11 +11,12 @@ export default function InputContainer({setMessages, ...props}: InputContainerPr
     // This ref is used to allow access to the message content through the textarea element.
     const messageInputRef = useRef<HTMLTextAreaElement>(null);
 
+    // useCallback is used to keep a stable reference to the function.
     const handleClick = useCallback(() => {
         setMessages((messages) => {
             const newMessages = [...messages];
 
-            // Evens are the sender, odds are the recipient.
+            // If the current message is even, the sender is the recipient. Otherwise, the sender is the user.
             if (newMessages.length % 2 === 0) {
                 newMessages.push({
                     origin: "recepient",
@@ -33,13 +34,13 @@ export default function InputContainer({setMessages, ...props}: InputContainerPr
             messageInputRef.current!.value = "";
             return newMessages;
         });
-    }, [setMessages]);
+    }, [setMessages]); // Recreate the function only when setMessages changes.
 
     const addImage = useCallback(() => {
         setMessages((messages) => {
             const newMessages = [...messages];
 
-            // Evens are the sender, odds are the recipient.
+            // If the current message is even, the sender is the recipient. Otherwise, the sender is the user.
             if (newMessages.length % 2 === 0) {
                 newMessages.push({
                     origin: "recepient",
@@ -62,6 +63,7 @@ export default function InputContainer({setMessages, ...props}: InputContainerPr
         });
     }, [setMessages]);
 
+    // useCallback is used to keep a stable reference to the function.
     const handleKeyDown = useCallback((event: KeyboardEvent<HTMLTextAreaElement>) => {
         if (event.key === 'Enter' && !event.shiftKey) {
             event.preventDefault();
@@ -76,7 +78,7 @@ export default function InputContainer({setMessages, ...props}: InputContainerPr
     return (
         <div id="input-container" {...props}>
             <textarea
-                ref={messageInputRef}
+                ref={messageInputRef} // This ref property will set messageInputRef.current to the textarea element.
                 className="input"
                 id="message-input"
                 placeholder="Type a message..."
