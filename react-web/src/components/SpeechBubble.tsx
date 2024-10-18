@@ -1,18 +1,19 @@
 import clsx from "clsx";
 import { HTMLProps } from "react";
 
-export type SpeechBubbleTextMessage = {
+type SpeechBubbleMessageBase<T extends string> = {
     origin: "sender" | "recepient";
-    type: "text";
+    type: T;
+}
+
+export type SpeechBubbleTextMessage = {
     text: string;
-};
+} & SpeechBubbleMessageBase<"text">;
 
 export type SpeechBubbleImageMessage = {
-    origin: "sender" | "recepient";
-    type: "image";
     src: string;
     alt?: string;
-};
+} & SpeechBubbleMessageBase<"image">;
 
 export type SpeechBubbleMessage = SpeechBubbleTextMessage | SpeechBubbleImageMessage;
 
@@ -50,7 +51,7 @@ export function SpeechBubbleImage({message, scrollToEnd, className, ...props}: S
         <img
             className={clsx("speech-bubble", message.origin, className)}
             src={message.src}
-            alt={message.alt}
+            alt={message.alt ?? ""}
             onLoad={scrollToEnd}
             {...props}
         />
