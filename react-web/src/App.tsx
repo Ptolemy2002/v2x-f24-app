@@ -19,7 +19,7 @@ export default function App() {
 
             <Row as="main">
                 <BSMediaQuery breakpoint='xxl' comparison='min'>
-                    <Sidebar />
+                    <Sidebar colSize={1} />
                 </BSMediaQuery>
                 
                 <BSMediaQuery breakpoint='xl' comparison='max'>

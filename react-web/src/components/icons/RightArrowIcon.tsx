@@ -1,3 +1,3 @@
 export default function RightArrowIcon() {
-    return <i className="bi bi-arrow-right"></i>;
+    return <i className="bi bi-arrow-right" />
 }
