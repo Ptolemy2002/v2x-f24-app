@@ -1,13 +1,13 @@
 import { useCallback, useState } from 'react';
 import { Row } from 'react-bootstrap';
-import { BSMediaQuery, useCurrentBreakpointIndex } from "@ptolemy2002/react-bs-media-queries";
+import { BSMediaQuery, useBreakpointQuery } from "@ptolemy2002/react-bs-media-queries";
 import Sidebar from 'src/components/Sidebar';
 import ConversationContainer from 'src/components/ConversationContainer';
 import Header from 'src/components/Header';
 
 export default function App() {
     const [showSidebar, setShowSidebar] = useState(false);
-    const currentBreakpointIndex = useCurrentBreakpointIndex();
+    const breakpointQuery = useBreakpointQuery("md", "min");
 
     const toggleSidebar = useCallback(() => {
         setShowSidebar((v) => !v);
@@ -23,7 +23,7 @@ export default function App() {
                 </BSMediaQuery>
                 
                 <BSMediaQuery breakpoint='xl' comparison='max'>
-                    {showSidebar && <Sidebar colSize={currentBreakpointIndex! >= 2 ? 3 : 12} />}
+                    {showSidebar && <Sidebar colSize={breakpointQuery ? 3 : 12} />}
                 </BSMediaQuery>
 
                 <ConversationContainer />
