@@ -1,4 +1,5 @@
 import { Row } from 'react-bootstrap';
+import { BSMediaQuery } from "@ptolemy2002/react-bs-media-queries";
 import Sidebar from 'src/components/Sidebar';
 import ConversationContainer from 'src/components/ConversationContainer';
 
@@ -13,7 +14,10 @@ export default function App() {
             </Row>
 
             <Row as="main">
-                <Sidebar />
+                <BSMediaQuery breakpoint='xxl' comparison='min'>
+                    <Sidebar />
+                </BSMediaQuery>
+                
                 <ConversationContainer />
             </Row>
         </>
