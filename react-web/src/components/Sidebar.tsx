@@ -2,11 +2,15 @@ import clsx from "clsx";
 import { Col } from "react-bootstrap";
 import { HTMLProps } from "react";
 
-export default function Sidebar({className, ...props}: HTMLProps<HTMLUListElement>) {
+export type SidebarProps = {
+    colSize?: number;
+} & HTMLProps<HTMLUListElement>;
+
+export default function Sidebar({className, colSize=1, ...props}: SidebarProps) {
     return (
         // We need to explicitly set the "col" class here so LESS can recognize it as a column.
         // We also need to set the "as" prop after spreading the others to make sure it doesn't get overridden.
-        <Col id="sidebar" xs={1} className={clsx("col", className)} {...props} as="ul">
+        <Col id="sidebar" xs={colSize} className={clsx("col", className)} {...props} as="ul">
             <GenericLinks timeLabel="Today" />
             <GenericLinks timeLabel="Yesterday" start={10} />
             <GenericLinks timeLabel="This Week" start={20} />

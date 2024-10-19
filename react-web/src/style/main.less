@@ -29,6 +29,27 @@ header, footer, main {
     padding: @content-padding;
 }
 
+header {
+    display: flex;
+    flex-direction: row;
+
+    > * {
+        flex-grow: 1;
+        // !important is needed to override bootstrap
+        width: fit-content !important;
+
+        margin: 0;
+        // Vertically center the span
+        display: flex;
+        align-items: center;
+    }
+
+    > #menu-button {
+        flex-grow: 0;
+        width: 2em;
+    }
+}
+
 main {
     flex-grow: 1;
     
