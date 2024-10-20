@@ -1,8 +1,12 @@
 import clsx from "clsx";
 import { HTMLProps } from "react";
 
-type SpeechBubbleMessageBase<T extends string> = {
-    origin: "sender" | "recepient";
+// The message can only originate from the sender or the recipient.
+export type SpeechBubbleMessageOrigin = "sender" | "recepient";
+
+// Define the base separately to reduce repetition.
+export type SpeechBubbleMessageBase<T extends string> = {
+    origin: SpeechBubbleMessageOrigin;
     type: T;
 };
 
@@ -22,20 +26,23 @@ export type SpeechBubbleAudioMessage = {
     src: string;
 } & SpeechBubbleMessageBase<"audio">;
 
-// Just a utility type here.
+// Combined type for any speech bubble message.
 export type SpeechBubbleMessage = SpeechBubbleTextMessage | SpeechBubbleImageMessage | SpeechBubbleAudioMessage;
 
+// Combined type for all different types options for speech bubble messages.
+export type SpeechBubbleMessageType = SpeechBubbleMessage["type"];
+
 // Get the message object of the specified type where the type is just a string.
-export type SpeechBubbleMessageOfType<T extends SpeechBubbleMessage["type"]> = Extract<SpeechBubbleMessage, {type: T}>;
+export type SpeechBubbleMessageOfType<T extends SpeechBubbleMessageType> = Extract<SpeechBubbleMessage, {type: T}>;
 
 // Get the properties that are exclusive to the speech bubble of specified type
 // (i.e. included in the specified speech bubble type but not in the base type).
-export type SpeechBubbleMessageExclusiveProps<T extends SpeechBubbleMessage["type"]> =
+export type SpeechBubbleMessageExclusiveProps<T extends SpeechBubbleMessageType> =
     Omit<SpeechBubbleMessageOfType<T>, keyof SpeechBubbleMessageBase<T>>;
 
 export type ScreenReaderTextProps = {
     text?: string;
-    origin: SpeechBubbleTextMessage["origin"];
+    origin: SpeechBubbleMessageOrigin;
 } & HTMLProps<HTMLSpanElement>;
 export function ScreenReaderText({text="said", origin}: ScreenReaderTextProps) {
     return (

@@ -87,7 +87,7 @@ export default function InputContainer({setMessages, ...props}: InputContainerPr
                 addAudio();
             }
         }
-    }, []);
+    }, [addText, addImage, addAudio]);
 
     return (
         <div id="input-container" {...props}>
