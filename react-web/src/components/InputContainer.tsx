@@ -1,7 +1,32 @@
 import { Dispatch, HTMLProps, SetStateAction, KeyboardEvent, useCallback, useRef } from "react";
-import { SpeechBubbleMessage } from "src/components/SpeechBubble";
+import { SpeechBubbleMessage, SpeechBubbleMessageExclusiveProps, SpeechBubbleMessageOfType } from "src/components/SpeechBubble";
 import { Button } from "react-bootstrap";
 import RightArrowIcon from "./icons/RightArrowIcon";
+
+function addMessage<T extends SpeechBubbleMessage["type"]>(
+    messages: SpeechBubbleMessage[],
+    type: T,
+    createMessage: () => SpeechBubbleMessageExclusiveProps<T>
+): SpeechBubbleMessage[] {
+    const newMessages = [...messages];
+
+    // If the current message is even, the sender is the recipient. Otherwise, the sender is the user.
+    if (newMessages.length % 2 === 0) {
+        newMessages.push({
+            ...createMessage(),
+            origin: "recepient",
+            type
+        } as SpeechBubbleMessageOfType<T>);
+    } else {
+        newMessages.push({
+            ...createMessage(),
+            origin: "sender",
+            type
+        } as SpeechBubbleMessageOfType<T>);
+    }
+
+    return newMessages;
+}
 
 export type InputContainerProps = {
     setMessages: Dispatch<SetStateAction<SpeechBubbleMessage[]>>;
@@ -14,84 +39,36 @@ export default function InputContainer({setMessages, ...props}: InputContainerPr
     // useCallback is used to keep a stable reference to the function.
     const addText = useCallback(() => {
         setMessages((messages) => {
-            const newMessages = [...messages];
+            return addMessage(messages, "text", () => {
+                // We do this in a timeout to fix a bug in strict mode where the text comes up empty the second time this
+                // code is run. In non-strict mode, the bug doesn't happen.
+                setTimeout(() => {
+                    // The ! here tells TypeScript that messageInputRef.current will not be null in this context.
+                    // It doesn't see that we have the ref set to the textarea element in JSX.
+                    messageInputRef.current!.value = "";
+                }, 0);
 
-            // If the current message is even, the sender is the recipient. Otherwise, the sender is the user.
-            if (newMessages.length % 2 === 0) {
-                newMessages.push({
-                    origin: "recepient",
-                    type: "text",
-                    text: messageInputRef.current?.value ?? ""
-                });
-            } else {
-                newMessages.push({
-                    origin: "sender",
-                    type: "text",
-                    text: messageInputRef.current?.value ?? ""
-                });
-            }
-            
-            // We do this in a timeout to fix a bug in strict mode where the text comes up empty the second time this
-            // code is run. In non-strict mode, the bug doesn't happen.
-            setTimeout(() => {
-                // The ! here tells TypeScript that messageInputRef.current will not be null in this context.
-                // It doesn't see that we have the ref set to the textarea element in JSX.
-                messageInputRef.current!.value = "";
-            }, 0);
-
-            return newMessages;
+                return { text: messageInputRef.current!.value };
+            });
         });
     }, [setMessages]); // Recreate the function only when setMessages changes.
 
     const addImage = useCallback(() => {
         setMessages((messages) => {
-            const newMessages = [...messages];
-
-            // If the current message is even, the sender is the recipient. Otherwise, the sender is the user.
-            if (newMessages.length % 2 === 0) {
-                newMessages.push({
-                    origin: "recepient",
-                    type: "image",
-                    // Just a placeholder image for now.
-                    src: "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png",
-                    alt: "Placeholder image"
-                });
-            } else {
-                newMessages.push({
-                    origin: "sender",
-                    type: "image",
-                    // Just a placeholder image for now.
-                    src: "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png",
-                    alt: "Placeholder image"
-                });
-            }
-
-            return newMessages;
+            return addMessage(messages, "image", () => ({
+                // Just a placeholder image for now.
+                src: "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png",
+                alt: "Placeholder image"
+            }));
         });
     }, [setMessages]);
 
     const addAudio = useCallback(() => {
         setMessages((messages) => {
-            const newMessages = [...messages];
-
-            // If the current message is even, the sender is the recipient. Otherwise, the sender is the user.
-            if (newMessages.length % 2 === 0) {
-                newMessages.push({
-                    origin: "recepient",
-                    type: "audio",
-                    // Just a placeholder audio for now.
-                    src: "/aud-test.wav"
-                });
-            } else {
-                newMessages.push({
-                    origin: "sender",
-                    type: "audio",
-                    // Just a placeholder audio for now.
-                    src: "/aud-test.wav"
-                });
-            }
-
-            return newMessages;
+            return addMessage(messages, "audio", () => ({
+                // Just a placeholder audio for now.
+                src: "/aud-test.wav"
+            }));
         });
     }, [setMessages]);
 

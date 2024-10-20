@@ -24,6 +24,12 @@ export type SpeechBubbleAudioMessage = {
 
 // Just a utility type here.
 export type SpeechBubbleMessage = SpeechBubbleTextMessage | SpeechBubbleImageMessage | SpeechBubbleAudioMessage;
+// Get the message object of the specified type where the type is just a string.
+export type SpeechBubbleMessageOfType<T extends SpeechBubbleMessage["type"]> = Extract<SpeechBubbleMessage, {type: T}>;
+// Get the properties that are exclusive to the speech bubble of specified type
+// (i.e. included in the specified speech bubble type but not in the base type).
+export type SpeechBubbleMessageExclusiveProps<T extends SpeechBubbleMessage["type"]> =
+    Omit<SpeechBubbleMessageOfType<T>, keyof SpeechBubbleMessageBase<T>>;
 
 // SpeechBubbleText will take a message object as well as the default properties for a paragraph element.
 export type SpeechBubbleTextProps = {
