@@ -1,5 +1,5 @@
 import { HTMLProps, useCallback, useRef } from "react";
-import { SpeechBubbleText, SpeechBubbleImage, SpeechBubbleMessage } from "src/components/SpeechBubble";
+import { SpeechBubbleText, SpeechBubbleImage, SpeechBubbleAudio, SpeechBubbleMessage } from "src/components/SpeechBubble";
 
 // SpeechContainer will take an array of messages as well as the default props for a div element.
 export type SpeechContainerProps = {
@@ -24,9 +24,11 @@ export default function SpeechContainer({messages=[],...props}: SpeechContainerP
                 // results of the function applied to each element.
                 messages.map((message, i) => {
                     if (message.type === "text") {
-                        return <SpeechBubbleText key={i} message={message} />;
-                    } else {
-                        return <SpeechBubbleImage key={i} message={message} scrollToEnd={scrollToEnd} />;
+                        return <SpeechBubbleText key={`text-${i}`} message={message} />;
+                    } else if (message.type === "image") {
+                        return <SpeechBubbleImage key={`img-${i}`} message={message} scrollToEnd={scrollToEnd} />;
+                    } else if (message.type === "audio") {
+                        return <SpeechBubbleAudio key={`aud-${i}`} message={message} />;
                     }
                 })
             }

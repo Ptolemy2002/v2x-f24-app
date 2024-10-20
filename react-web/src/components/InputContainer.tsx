@@ -12,7 +12,7 @@ export default function InputContainer({setMessages, ...props}: InputContainerPr
     const messageInputRef = useRef<HTMLTextAreaElement>(null);
 
     // useCallback is used to keep a stable reference to the function.
-    const handleClick = useCallback(() => {
+    const addText = useCallback(() => {
         setMessages((messages) => {
             const newMessages = [...messages];
 
@@ -31,9 +31,14 @@ export default function InputContainer({setMessages, ...props}: InputContainerPr
                 });
             }
             
-            // The ! here tells TypeScript that messageInputRef.current will not be null in this context.
-            // It doesn't see that we have the ref set to the textarea element in JSX.
-            messageInputRef.current!.value = "";
+            // We do this in a timeout to fix a bug in strict mode where the text comes up empty the second time this
+            // code is run. In non-strict mode, the bug doesn't happen.
+            setTimeout(() => {
+                // The ! here tells TypeScript that messageInputRef.current will not be null in this context.
+                // It doesn't see that we have the ref set to the textarea element in JSX.
+                messageInputRef.current!.value = "";
+            }, 0);
+
             return newMessages;
         });
     }, [setMessages]); // Recreate the function only when setMessages changes.
@@ -65,15 +70,45 @@ export default function InputContainer({setMessages, ...props}: InputContainerPr
         });
     }, [setMessages]);
 
+    const addAudio = useCallback(() => {
+        setMessages((messages) => {
+            const newMessages = [...messages];
+
+            // If the current message is even, the sender is the recipient. Otherwise, the sender is the user.
+            if (newMessages.length % 2 === 0) {
+                newMessages.push({
+                    origin: "recepient",
+                    type: "audio",
+                    // Just a placeholder audio for now.
+                    src: "/aud-test.wav"
+                });
+            } else {
+                newMessages.push({
+                    origin: "sender",
+                    type: "audio",
+                    // Just a placeholder audio for now.
+                    src: "/aud-test.wav"
+                });
+            }
+
+            return newMessages;
+        });
+    }, [setMessages]);
+
     // useCallback is used to keep a stable reference to the function.
     const handleKeyDown = useCallback((event: KeyboardEvent<HTMLTextAreaElement>) => {
         if (event.key === 'Enter' && !event.shiftKey) {
             event.preventDefault();
-            handleClick();
-        } // Send an image when the user presses Control + I
-        else if (event.key === 'i' && event.ctrlKey) {
-            event.preventDefault();
-            addImage();
+            addText();
+        } else if (event.ctrlKey) {
+            // Send an image when the user presses Control + I and an audio when the user presses Control + M.
+            if (event.key === 'i') {
+                event.preventDefault();
+                addImage();
+            } else if (event.key === 'm') {
+                event.preventDefault();
+                addAudio();
+            }
         }
     }, []);
 
@@ -92,7 +127,7 @@ export default function InputContainer({setMessages, ...props}: InputContainerPr
                 className="send-button"
                 as="button"
                 aria-label="Send Message"
-                onClick={handleClick}
+                onClick={addText}
             >
                 <RightArrowIcon />
             </Button>

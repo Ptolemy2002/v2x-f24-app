@@ -60,6 +60,16 @@
                 ;
             }
         }
+
+        &-aud {
+            .speech-bubble-style(@speech-bubble-aud-width);
+            width: 100%; // This will be capped by the max-width.
+            min-height: @speech-bubble-aud-min-height;
+
+            > audio {
+                width: 100%;
+            }
+        }
     }
 }
 

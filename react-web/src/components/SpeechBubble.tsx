@@ -17,8 +17,13 @@ export type SpeechBubbleImageMessage = {
     alt?: string;
 } & SpeechBubbleMessageBase<"image">;
 
+// SpeechBubbleAudio will take a src attribute as well as the default properties for a speech bubble.
+export type SpeechBubbleAudioMessage = {
+    src: string;
+} & SpeechBubbleMessageBase<"audio">;
+
 // Just a utility type here.
-export type SpeechBubbleMessage = SpeechBubbleTextMessage | SpeechBubbleImageMessage;
+export type SpeechBubbleMessage = SpeechBubbleTextMessage | SpeechBubbleImageMessage | SpeechBubbleAudioMessage;
 
 // SpeechBubbleText will take a message object as well as the default properties for a paragraph element.
 export type SpeechBubbleTextProps = {
@@ -28,7 +33,7 @@ export type SpeechBubbleTextProps = {
 export function SpeechBubbleText({message, className, ...props}: SpeechBubbleTextProps) {
     const lines = message.text.split("\n");
     return (
-        <p className={clsx(message.type === "text" ? "speech-bubble" : "speech-bubble-img", message.origin, className)} {...props}>
+        <p className={clsx("speech-bubble", message.origin, className)} {...props}>
             <span className="visually-hidden">
                 {message.origin === "sender" ? "You said" : "Recipient said"}
             </span>
@@ -60,13 +65,29 @@ export type SpeechBubbleImageProps = {
 export function SpeechBubbleImage({message, scrollToEnd, className, ...props}: SpeechBubbleImageProps) {
     return (
         <img
-            className={clsx("speech-bubble", message.origin, className)}
+            className={clsx("speech-bubble-img", message.origin, className)}
             {...props} // Pass any additional props to the element itself.
 
             // This comes after the spread so that it can't be overridden by the props. className doesn't have that issue because we extract it above.
             onLoad={scrollToEnd}
             src={message.src}
             alt={message.alt ?? ""} // ?? here is the nullish coalescing operator, which returns the right side if the left side is null or undefined.
+        />
+    );
+}
+
+// SpeechBubbleAudio will take a message object as well as the default properties for an audio element.
+export type SpeechBubbleAudioProps = {
+    message: SpeechBubbleAudioMessage;
+} & HTMLProps<HTMLAudioElement>;
+
+export function SpeechBubbleAudio({message, className, ...props}: SpeechBubbleAudioProps) {
+    return (
+        <audio
+            className={clsx("speech-bubble-aud", message.origin, className)}
+            {...props}
+            controls // This is a boolean attribute, so it doesn't need a value.
+            src={message.src}
         />
     );
 }
