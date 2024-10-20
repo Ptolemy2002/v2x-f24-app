@@ -24,12 +24,26 @@ export type SpeechBubbleAudioMessage = {
 
 // Just a utility type here.
 export type SpeechBubbleMessage = SpeechBubbleTextMessage | SpeechBubbleImageMessage | SpeechBubbleAudioMessage;
+
 // Get the message object of the specified type where the type is just a string.
 export type SpeechBubbleMessageOfType<T extends SpeechBubbleMessage["type"]> = Extract<SpeechBubbleMessage, {type: T}>;
+
 // Get the properties that are exclusive to the speech bubble of specified type
 // (i.e. included in the specified speech bubble type but not in the base type).
 export type SpeechBubbleMessageExclusiveProps<T extends SpeechBubbleMessage["type"]> =
     Omit<SpeechBubbleMessageOfType<T>, keyof SpeechBubbleMessageBase<T>>;
+
+export type ScreenReaderTextProps = {
+    text?: string;
+    origin: SpeechBubbleTextMessage["origin"];
+} & HTMLProps<HTMLSpanElement>;
+export function ScreenReaderText({text="said", origin}: ScreenReaderTextProps) {
+    return (
+        <span className="visually-hidden">
+            {origin === "sender" ? `You ${text}` : `Recipient ${text}`}
+        </span>
+    );
+}
 
 // SpeechBubbleText will take a message object as well as the default properties for a paragraph element.
 export type SpeechBubbleTextProps = {
@@ -40,9 +54,8 @@ export function SpeechBubbleText({message, className, ...props}: SpeechBubbleTex
     const lines = message.text.split("\n");
     return (
         <p className={clsx("speech-bubble", message.origin, className)} {...props}>
-            <span className="visually-hidden">
-                {message.origin === "sender" ? "You said" : "Recipient said"}
-            </span>
+            <ScreenReaderText origin={message.origin} />
+
             {
                 // Create a br element after each line except the last one.
                 lines.map((line, i) => (
@@ -66,34 +79,40 @@ export type SpeechBubbleImageProps = {
     message: SpeechBubbleImageMessage;
     scrollToEnd: () => void; // Function type definitions have similar syntax to JavaScript arrow functions.
     // void just means that the function doesn't return anything.
-} & HTMLProps<HTMLImageElement>;
+} & HTMLProps<HTMLDivElement>;
 
 export function SpeechBubbleImage({message, scrollToEnd, className, ...props}: SpeechBubbleImageProps) {
     return (
-        <img
+        <div
             className={clsx("speech-bubble-img", message.origin, className)}
             {...props} // Pass any additional props to the element itself.
-
-            // This comes after the spread so that it can't be overridden by the props. className doesn't have that issue because we extract it above.
-            onLoad={scrollToEnd}
-            src={message.src}
-            alt={message.alt ?? ""} // ?? here is the nullish coalescing operator, which returns the right side if the left side is null or undefined.
-        />
+        >
+            <ScreenReaderText origin={message.origin} text="sent an image" />
+            <img
+                onLoad={scrollToEnd}
+                src={message.src}
+                alt={message.alt ?? ""} // ?? here is the nullish coalescing operator, which returns the right side if the left side is null or undefined.
+            />
+        </div>
     );
 }
 
 // SpeechBubbleAudio will take a message object as well as the default properties for an audio element.
 export type SpeechBubbleAudioProps = {
     message: SpeechBubbleAudioMessage;
-} & HTMLProps<HTMLAudioElement>;
+    scrollToEnd: () => void; // Function type definitions have similar syntax to JavaScript arrow functions.
+} & HTMLProps<HTMLDivElement>;
 
-export function SpeechBubbleAudio({message, className, ...props}: SpeechBubbleAudioProps) {
+export function SpeechBubbleAudio({message, className, scrollToEnd, ...props}: SpeechBubbleAudioProps) {
     return (
-        <audio
-            className={clsx("speech-bubble-aud", message.origin, className)}
-            {...props}
-            controls // This is a boolean attribute, so it doesn't need a value.
-            src={message.src}
-        />
+        <div className={clsx("speech-bubble-aud", message.origin, className)} {...props}>
+            <ScreenReaderText origin={message.origin} text="sent an audio message" />
+
+            <audio
+                controls // This is a boolean attribute, so it doesn't need a value.
+                src={message.src}
+                onLoadedMetadata={scrollToEnd}
+            />
+        </div>
     );
 }

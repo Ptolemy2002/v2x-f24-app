@@ -1,4 +1,4 @@
-import { HTMLProps, useCallback, useRef } from "react";
+import { HTMLProps, useCallback, useEffect, useRef } from "react";
 import { SpeechBubbleText, SpeechBubbleImage, SpeechBubbleAudio, SpeechBubbleMessage } from "src/components/SpeechBubble";
 
 // SpeechContainer will take an array of messages as well as the default props for a div element.
@@ -17,6 +17,14 @@ export default function SpeechContainer({messages=[],...props}: SpeechContainerP
         speechContainerRef.current!.scrollTop = speechContainerRef.current!.scrollHeight;
     }, []);
 
+    // When a text message is added, scroll to the end automatically. The onLoad solution used for images
+    // and audio messages doesn't work for text messages, so this is necessary.
+    useEffect(() => {
+        if (messages.length > 0 && messages[messages.length - 1].type === "text") {
+            scrollToEnd();
+        }
+    }, [messages, scrollToEnd]);
+
     return (
         <div id="speech-container" ref={speechContainerRef} {...props}>
             {
@@ -28,7 +36,7 @@ export default function SpeechContainer({messages=[],...props}: SpeechContainerP
                     } else if (message.type === "image") {
                         return <SpeechBubbleImage key={`img-${i}`} message={message} scrollToEnd={scrollToEnd} />;
                     } else if (message.type === "audio") {
-                        return <SpeechBubbleAudio key={`aud-${i}`} message={message} />;
+                        return <SpeechBubbleAudio key={`aud-${i}`} message={message} scrollToEnd={scrollToEnd} />;
                     }
                 })
             }

@@ -16,13 +16,13 @@ function addMessage<T extends SpeechBubbleMessage["type"]>(
             ...createMessage(),
             origin: "recepient",
             type
-        } as SpeechBubbleMessageOfType<T>);
+        } as SpeechBubbleMessageOfType<T>); // We use "as" to tell TypeScript that the type is correct because it can't be inferred.
     } else {
         newMessages.push({
             ...createMessage(),
             origin: "sender",
             type
-        } as SpeechBubbleMessageOfType<T>);
+        } as SpeechBubbleMessageOfType<T>); // We use "as" to tell TypeScript that the type is correct because it can't be inferred.
     }
 
     return newMessages;
