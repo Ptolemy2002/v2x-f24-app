@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import { HTMLProps } from "react";
+import AudioPlayer from "src/components/AudioPlayer";
 
 // The message can only originate from the sender or the recipient.
 export type SpeechBubbleMessageOrigin = "sender" | "recepient";
@@ -115,10 +116,9 @@ export function SpeechBubbleAudio({message, className, scrollToEnd, ...props}: S
         <div className={clsx("speech-bubble-aud", message.origin, className)} {...props}>
             <ScreenReaderText origin={message.origin} text="sent an audio message" />
 
-            <audio
-                controls // This is a boolean attribute, so it doesn't need a value.
+            <AudioPlayer
                 src={message.src}
-                onLoadedMetadata={scrollToEnd}
+                onAudioLoaded={scrollToEnd}
             />
         </div>
     );

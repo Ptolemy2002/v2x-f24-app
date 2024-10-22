@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useState, ReactNode } from 'react';
 import { Row } from 'react-bootstrap';
 import { useBreakpointQuery } from "@ptolemy2002/react-bs-media-queries";
 import Sidebar from 'src/components/Sidebar';
@@ -15,7 +15,7 @@ export default function App() {
     }, []);
 
     // If sidebar remains null, it will not be rendered
-    let sidebar = null;
+    let sidebar: ReactNode | null = null;
     if (isXXL) {
         sidebar = <Sidebar colSize={1} />;
     } else if (showSidebar) {

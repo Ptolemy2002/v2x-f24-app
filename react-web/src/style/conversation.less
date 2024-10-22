@@ -63,12 +63,10 @@
 
         &-aud {
             .speech-bubble-style(@speech-bubble-aud-width);
-            width: 100%; // This will be capped by the max-width.
-            min-height: @speech-bubble-aud-min-height;
+            width: 100%; // This will be capped by the max-width property
 
-            > audio {
+            .audio-player {
                 width: 100%;
-                height: 100%;
             }
         }
     }
