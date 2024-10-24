@@ -7,9 +7,6 @@ type CSSProperties = {
     [K in keyof _CSSProperties]-?: _CSSProperties[K];
 };
 
-export const BACKGROUND_COLOR: CSSProperties["backgroundColor"] = "black";
-export const TEXT_COLOR: CSSProperties["color"] = "white";
-
 export const BORDER_THICKNESS: CSSProperties["borderWidth"] = "1px";
 export const BORDER_STYLE: CSSProperties["borderStyle"] = "solid";
 export const BORDER_COLOR: CSSProperties["borderColor"] = "white";
@@ -39,14 +36,6 @@ export const SPEECH_BUBBLE_IMG_BORDER_COLOR: CSSProperties["borderColor"] = "bla
 export const SPEECH_BUBBLE_AUD_WIDTH: CSSProperties["width"] = "50%";
 
 export const AUDIO_PLAYER_GAP: CSSProperties["gap"] = "20px";
-export const AUDIO_PLAYER_PROGRESS_COLOR: CSSProperties["backgroundColor"] = "white";
-export const AUDIO_PLAYER_PROGRESS_BACKGROUND_COLOR: CSSProperties["backgroundColor"] = "black";
-
-export const RECEPIENT_COLOR: CSSProperties["backgroundColor"] = "#f0f0f0";
-export const RECEPIENT_TEXT_COLOR: CSSProperties["color"] = "black";
-
-export const SENDER_COLOR: CSSProperties["backgroundColor"] = "#007bff";
-export const SENDER_TEXT_COLOR: CSSProperties["color"] = "white";
 
 export const INPUT_CONTAINER_GAP: CSSProperties["gap"] = "10px";
 export const INPUT_RADIUS: CSSProperties["borderRadius"] = "10px";

@@ -5,7 +5,7 @@ import PauseIcon from "src/components/icons/PauseIcon";
 import { Button } from "react-bootstrap";
 import { intervalToDuration, Duration } from "date-fns";
 import RestartIcon from "src/components/icons/RestartIcon";
-import { AUDIO_PLAYER_GAP, AUDIO_PLAYER_PROGRESS_BACKGROUND_COLOR, AUDIO_PLAYER_PROGRESS_COLOR, centerVertical } from "src/Style";
+import { AUDIO_PLAYER_GAP, centerVertical } from "src/Style";
 import styled from "styled-components";
 
 function formatDuration(duration: Duration) {
@@ -123,20 +123,20 @@ const AudioPlayer = styled(_AudioPlayer)`
         flex-grow: 1;
 
         // IE10
-        background-color: ${AUDIO_PLAYER_PROGRESS_BACKGROUND_COLOR};
-        color: ${AUDIO_PLAYER_PROGRESS_COLOR};
+        background-color: ${({theme}) => theme.audioPlayerBackgroundColor};
+        color: ${({theme}) => theme.audioPlayerProgressColor};
 
         // Chrome and Safari
         &::-webkit-progress-value {
-            background-color: ${AUDIO_PLAYER_PROGRESS_COLOR};
+            background-color: ${({theme}) => theme.audioPlayerProgressColor};
         }
         &::-webkit-progress-bar {
-            background-color: ${AUDIO_PLAYER_PROGRESS_BACKGROUND_COLOR};
+            background-color: ${({theme}) => theme.audioPlayerBackgroundColor};
         }
 
         // Firefox
         &::-moz-progress-bar {
-            background-color: ${AUDIO_PLAYER_PROGRESS_COLOR};
+            background-color: ${({theme}) => theme.audioPlayerProgressColor};
         }
 
         border: none;

@@ -3,7 +3,7 @@ import { SpeechBubbleMessage, SpeechBubbleMessageExclusiveProps, SpeechBubbleMes
 import { Button } from "react-bootstrap";
 import RightArrowIcon from "./icons/RightArrowIcon";
 import styled from "styled-components";
-import { centerVertical, INPUT_CONTAINER_GAP, INPUT_MAX_HEIGHT, INPUT_MIN_HEIGHT, INPUT_PADDING, INPUT_RADIUS, SEND_BUTTON_PADDING, SEND_BUTTON_RADIUS, SENDER_COLOR, SENDER_TEXT_COLOR } from "src/Style";
+import { centerVertical, INPUT_CONTAINER_GAP, INPUT_MAX_HEIGHT, INPUT_MIN_HEIGHT, INPUT_PADDING, INPUT_RADIUS, SEND_BUTTON_PADDING, SEND_BUTTON_RADIUS } from "src/Style";
 
 function addMessage<T extends SpeechBubbleMessage["type"]>(
     messages: SpeechBubbleMessage[],
@@ -130,8 +130,8 @@ const InputContainer = styled(_InputContainer)`
     }
 
     > .send-button {
-        background-color: ${SENDER_COLOR};
-        color: ${SENDER_TEXT_COLOR};
+        background-color: ${({theme}) => theme.senderColor};
+        color: ${({theme}) => theme.senderTextColor};
         border-radius: ${SEND_BUTTON_RADIUS};
         padding: ${SEND_BUTTON_PADDING};
 

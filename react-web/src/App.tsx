@@ -1,11 +1,11 @@
-import { useCallback, useState, ReactNode } from 'react';
+import { useCallback, useState, ReactNode, CSSProperties } from 'react';
 import { Row } from 'react-bootstrap';
 import { useBreakpointQuery } from "@ptolemy2002/react-bs-media-queries";
 import Sidebar from 'src/components/Sidebar';
 import ConversationContainer from 'src/components/ConversationContainer';
 import Header from 'src/components/Header';
 import styled from 'styled-components';
-import { BACKGROUND_COLOR, BORDER_COLOR, BORDER_STYLE, BORDER_THICKNESS, CONTENT_PADDING } from 'src/Style';
+import { BORDER_COLOR, BORDER_STYLE, BORDER_THICKNESS, CONTENT_PADDING } from 'src/Style';
 import { border } from 'polished';
 
 function _App({className}: {className?: string}) {
@@ -37,14 +37,22 @@ function _App({className}: {className?: string}) {
     );
 }
 
-const App = styled(_App)`
+export type AppStyleAttributes = {
+    $padding?: CSSProperties["padding"];
+}
+
+const App = styled(_App).attrs<AppStyleAttributes>(
+    (props) => ({
+        $padding: props.$padding ?? CONTENT_PADDING
+    })
+)`
     display: flex;
     flex-direction: column;
     height: 100%;
 
     header, footer, main {
-        background-color: ${BACKGROUND_COLOR};
-        padding: ${CONTENT_PADDING};
+        background-color: ${({theme}) => theme.backgroundColor};
+        padding: ${({$padding}) => $padding};
     }
 
     main {

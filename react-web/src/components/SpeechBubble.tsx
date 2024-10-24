@@ -2,7 +2,7 @@ import clsx from "clsx";
 import { HTMLProps } from "react";
 import styled, {css} from "styled-components";
 import AudioPlayer from "src/components/AudioPlayer";
-import { alignLeft, alignRight, RECEPIENT_COLOR, RECEPIENT_TEXT_COLOR, SENDER_COLOR, SENDER_TEXT_COLOR, SPEECH_BUBBLE_AUD_WIDTH, SPEECH_BUBBLE_IMG_BORDER_COLOR, SPEECH_BUBBLE_IMG_BORDER_STYLE, SPEECH_BUBBLE_IMG_BORDER_THICKNESS, SPEECH_BUBBLE_IMG_MAX_WIDTH, SPEECH_BUBBLE_MAX_WIDTH, SPEECH_BUBBLE_PADDING, SPEECH_BUBBLE_RADIUS } from "src/Style";
+import { alignLeft, alignRight, SPEECH_BUBBLE_AUD_WIDTH, SPEECH_BUBBLE_IMG_BORDER_COLOR, SPEECH_BUBBLE_IMG_BORDER_STYLE, SPEECH_BUBBLE_IMG_BORDER_THICKNESS, SPEECH_BUBBLE_IMG_MAX_WIDTH, SPEECH_BUBBLE_MAX_WIDTH, SPEECH_BUBBLE_PADDING, SPEECH_BUBBLE_RADIUS } from "src/Style";
 import { border } from "polished";
 
 // The message can only originate from the sender or the recipient.
@@ -69,14 +69,14 @@ export function speechBubbleBaseStyle(maxWidth: string | number) {
         padding: ${SPEECH_BUBBLE_PADDING};
 
         &.recepient {
-            background-color: ${RECEPIENT_COLOR};
-            color: ${RECEPIENT_TEXT_COLOR};
+            background-color: ${({theme}) => theme.recepientColor};
+            color: ${({theme}) => theme.recepientTextColor};
             ${alignLeft()}
         }
 
         &.sender {
-            background-color: ${SENDER_COLOR};
-            color: ${SENDER_TEXT_COLOR};
+            background-color: ${({theme}) => theme.senderColor};
+            color: ${({theme}) => theme.senderTextColor};
             ${alignRight()}
         }
     `;

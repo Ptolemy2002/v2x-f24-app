@@ -2,7 +2,7 @@ import clsx from "clsx";
 import { Col } from "react-bootstrap";
 import { HTMLProps } from "react";
 import styled, { css } from "styled-components";
-import { BACKGROUND_COLOR, marginX, marginY, paddingX, paddingY, SIDEBAR_ITEM_MARGIN, SIDEBAR_ITEM_PADDING, SIDEBAR_PADDING_X, SIDEBAR_PADDING_Y, TEXT_COLOR } from "src/Style";
+import { marginX, marginY, paddingX, paddingY, SIDEBAR_ITEM_MARGIN, SIDEBAR_ITEM_PADDING, SIDEBAR_PADDING_X, SIDEBAR_PADDING_Y } from "src/Style";
 import { lighten } from "polished";
 
 export type SidebarProps = {
@@ -92,14 +92,14 @@ export const ChatLink = styled(_ChatLink)`
     border-radius: 3px;
 
     &:hover {
-        background-color: ${lighten(0.2, BACKGROUND_COLOR)};
+        background-color: ${({theme}) => lighten(0.2, theme.backgroundColor)};
     }
 
     > a {
         // In block display, the a tag will take up the full space of the li tag.
         display: block;
         text-decoration: none;
-        color: ${TEXT_COLOR};
+        color: ${({theme}) => theme.textColor};
     }
 `;
 ChatLink.displayName = "ChatLink";
