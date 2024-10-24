@@ -1,9 +1,3 @@
-@import "functions";
-@import "variables";
-@import "bs/functions";
-@import "conversation";
-@import "sidebar";
-
 :root {
     // We don't need more than a single page worth of content here.
     overflow: hidden; 
@@ -18,48 +12,8 @@
 
     overflow-anchor: none; // Fixes a few React bugs
 
-    color: @text-color;
+    color: white;
     li::marker {
-        color: @text-color;
-    }
-}
-
-header, footer, main {
-    background-color: @background-color;
-    padding: @content-padding;
-}
-
-header {
-    display: flex;
-    flex-direction: row;
-
-    > * {
-        flex-grow: 1;
-        // !important is needed to override bootstrap
-        width: fit-content !important;
-
-        margin: 0;
-        // Vertically center the span
-        display: flex;
-        align-items: center;
-    }
-
-    > #menu-button {
-        flex-grow: 0;
-        width: 2em;
-    }
-}
-
-main {
-    flex-grow: 1;
-    
-    // The main element should not change size based on its content, they will handle scrolling themselves
-    min-height: 0;
-
-    // Direct children that are also columns
-    > .col {
-        max-height: 100%;
-        margin: 0;
-        border: @border-thickness @border-style @border-color;
+        color: white;
     }
 }

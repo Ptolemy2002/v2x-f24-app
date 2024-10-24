@@ -1,5 +1,7 @@
 import { HTMLProps, useCallback, useEffect, useRef } from "react";
 import { SpeechBubbleText, SpeechBubbleImage, SpeechBubbleAudio, SpeechBubbleMessage } from "src/components/SpeechBubble";
+import { SPEECH_CONTAINER_GAP, SPEECH_CONTAINER_MARGIN_BOTTOM } from "src/Style";
+import styled from "styled-components";
 
 // SpeechContainer will take an array of messages as well as the default props for a div element.
 export type SpeechContainerProps = {
@@ -7,7 +9,7 @@ export type SpeechContainerProps = {
 } & HTMLProps<HTMLDivElement>;
 
 // ...props here will contain any additional props we haven't explicitly consumed.
-export default function SpeechContainer({messages=[],...props}: SpeechContainerProps) {
+function _SpeechContainer({messages=[], ...props}: SpeechContainerProps) {
     const speechContainerRef = useRef<HTMLDivElement>(null);
 
     // useCallback is used to keep a stable reference to the function.
@@ -43,3 +45,16 @@ export default function SpeechContainer({messages=[],...props}: SpeechContainerP
         </div>
     );
 }
+
+const SpeechContainer = styled(_SpeechContainer)`
+    // Scroll if the content is too tall, but don't show the scrollbar if it's not needed.
+    overflow-y: auto;
+    flex-grow: 1;
+    margin-bottom: ${SPEECH_CONTAINER_MARGIN_BOTTOM};
+
+    display: flex;
+    flex-direction: column;
+    gap: ${SPEECH_CONTAINER_GAP};
+`;
+SpeechContainer.displayName = "SpeechContainer";
+export default SpeechContainer;

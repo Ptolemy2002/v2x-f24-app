@@ -2,6 +2,8 @@ import { Dispatch, HTMLProps, SetStateAction, KeyboardEvent, useCallback, useRef
 import { SpeechBubbleMessage, SpeechBubbleMessageExclusiveProps, SpeechBubbleMessageOfType } from "src/components/SpeechBubble";
 import { Button } from "react-bootstrap";
 import RightArrowIcon from "./icons/RightArrowIcon";
+import styled from "styled-components";
+import { centerVertical, INPUT_CONTAINER_GAP, INPUT_MAX_HEIGHT, INPUT_MIN_HEIGHT, INPUT_PADDING, INPUT_RADIUS, SEND_BUTTON_PADDING, SEND_BUTTON_RADIUS, SENDER_COLOR, SENDER_TEXT_COLOR } from "src/Style";
 
 function addMessage<T extends SpeechBubbleMessage["type"]>(
     messages: SpeechBubbleMessage[],
@@ -32,7 +34,7 @@ export type InputContainerProps = {
     setMessages: Dispatch<SetStateAction<SpeechBubbleMessage[]>>;
 } & HTMLProps<HTMLDivElement>;
 
-export default function InputContainer({setMessages, ...props}: InputContainerProps) {
+function _InputContainer({setMessages, ...props}: InputContainerProps) {
     // This ref is used to allow access to the message content through the textarea element.
     const messageInputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -111,3 +113,31 @@ export default function InputContainer({setMessages, ...props}: InputContainerPr
         </div>
     );
 }
+
+const InputContainer = styled(_InputContainer)`
+    display: flex;
+    flex-direction: row;
+    gap: ${INPUT_CONTAINER_GAP};
+    max-height: ${INPUT_MAX_HEIGHT};
+
+    > .input {
+        min-height: ${INPUT_MIN_HEIGHT};
+        max-height: 100%;
+        flex-grow: 1;
+
+        border-radius: ${INPUT_RADIUS};
+        padding: ${INPUT_PADDING};
+    }
+
+    > .send-button {
+        background-color: ${SENDER_COLOR};
+        color: ${SENDER_TEXT_COLOR};
+        border-radius: ${SEND_BUTTON_RADIUS};
+        padding: ${SEND_BUTTON_PADDING};
+
+        height: fit-content;
+        ${centerVertical()}
+    }
+`;
+InputContainer.displayName = "InputContainer";
+export default InputContainer;

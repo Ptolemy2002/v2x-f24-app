@@ -1,6 +1,9 @@
 import clsx from "clsx";
 import { HTMLProps } from "react";
+import styled, {css} from "styled-components";
 import AudioPlayer from "src/components/AudioPlayer";
+import { alignLeft, alignRight, RECEPIENT_COLOR, RECEPIENT_TEXT_COLOR, SENDER_COLOR, SENDER_TEXT_COLOR, SPEECH_BUBBLE_AUD_WIDTH, SPEECH_BUBBLE_IMG_BORDER_COLOR, SPEECH_BUBBLE_IMG_BORDER_STYLE, SPEECH_BUBBLE_IMG_BORDER_THICKNESS, SPEECH_BUBBLE_IMG_MAX_WIDTH, SPEECH_BUBBLE_MAX_WIDTH, SPEECH_BUBBLE_PADDING, SPEECH_BUBBLE_RADIUS } from "src/Style";
+import { border } from "polished";
 
 // The message can only originate from the sender or the recipient.
 export type SpeechBubbleMessageOrigin = "sender" | "recepient";
@@ -58,7 +61,28 @@ export type SpeechBubbleTextProps = {
     message: SpeechBubbleTextMessage;
 } & HTMLProps<HTMLParagraphElement>;
 
-export function SpeechBubbleText({message, className, ...props}: SpeechBubbleTextProps) {
+export function speechBubbleBaseStyle(maxWidth: string | number) {
+    return css`
+        width: fit-content;
+        max-width: ${maxWidth};
+        border-radius: ${SPEECH_BUBBLE_RADIUS};
+        padding: ${SPEECH_BUBBLE_PADDING};
+
+        &.recepient {
+            background-color: ${RECEPIENT_COLOR};
+            color: ${RECEPIENT_TEXT_COLOR};
+            ${alignLeft()}
+        }
+
+        &.sender {
+            background-color: ${SENDER_COLOR};
+            color: ${SENDER_TEXT_COLOR};
+            ${alignRight()}
+        }
+    `;
+}
+
+function _SpeechBubbleText({message, className, ...props}: SpeechBubbleTextProps) {
     const lines = message.text.split("\n");
     return (
         <p className={clsx("speech-bubble", message.origin, className)} {...props}>
@@ -82,6 +106,11 @@ export function SpeechBubbleText({message, className, ...props}: SpeechBubbleTex
     );
 }
 
+export const SpeechBubbleText = styled(_SpeechBubbleText)`
+    ${speechBubbleBaseStyle(SPEECH_BUBBLE_MAX_WIDTH)}
+`;
+SpeechBubbleText.displayName = "SpeechBubbleText";
+
 // SpeechBubbleImage will take a message object as well as the default properties for an image element.
 export type SpeechBubbleImageProps = {
     message: SpeechBubbleImageMessage;
@@ -89,7 +118,7 @@ export type SpeechBubbleImageProps = {
     // void just means that the function doesn't return anything.
 } & HTMLProps<HTMLDivElement>;
 
-export function SpeechBubbleImage({message, scrollToEnd, className, ...props}: SpeechBubbleImageProps) {
+function _SpeechBubbleImage({message, scrollToEnd, className, ...props}: SpeechBubbleImageProps) {
     return (
         <div
             className={clsx("speech-bubble-img", message.origin, className)}
@@ -105,13 +134,28 @@ export function SpeechBubbleImage({message, scrollToEnd, className, ...props}: S
     );
 }
 
+export const SpeechBubbleImage = styled(_SpeechBubbleImage)`
+    ${speechBubbleBaseStyle(SPEECH_BUBBLE_IMG_MAX_WIDTH)}
+
+    > img {
+        max-width: 100%;
+        height: auto;
+        ${border(
+            SPEECH_BUBBLE_IMG_BORDER_THICKNESS,
+            SPEECH_BUBBLE_IMG_BORDER_STYLE,
+            SPEECH_BUBBLE_IMG_BORDER_COLOR
+        )}
+    }
+`;
+SpeechBubbleImage.displayName = "SpeechBubbleImage";
+
 // SpeechBubbleAudio will take a message object as well as the default properties for an audio element.
 export type SpeechBubbleAudioProps = {
     message: SpeechBubbleAudioMessage;
     scrollToEnd: () => void; // Function type definitions have similar syntax to JavaScript arrow functions.
 } & HTMLProps<HTMLDivElement>;
 
-export function SpeechBubbleAudio({message, className, scrollToEnd, ...props}: SpeechBubbleAudioProps) {
+function _SpeechBubbleAudio({message, className, scrollToEnd, ...props}: SpeechBubbleAudioProps) {
     return (
         <div className={clsx("speech-bubble-aud", message.origin, className)} {...props}>
             <ScreenReaderText origin={message.origin} text="sent an audio message" />
@@ -123,3 +167,9 @@ export function SpeechBubbleAudio({message, className, scrollToEnd, ...props}: S
         </div>
     );
 }
+
+export const SpeechBubbleAudio = styled(_SpeechBubbleAudio)`
+    ${speechBubbleBaseStyle(SPEECH_BUBBLE_AUD_WIDTH)}
+    width: 100%; // This will be capped by the max-width property
+`;
+SpeechBubbleAudio.displayName = "SpeechBubbleAudio";

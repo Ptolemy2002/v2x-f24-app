@@ -1,10 +1,12 @@
 import clsx from "clsx";
 import { HTMLProps, useState } from "react"
-import { SpeechBubbleMessage } from "./SpeechBubble";
-import SpeechContainer from "./SpeechContainer";
-import InputContainer from "./InputContainer";
+import { SpeechBubbleMessage } from "src/components/SpeechBubble";
+import SpeechContainer from "src/components/SpeechContainer";
+import InputContainer from "src/components/InputContainer";
+import { CONVERSATION_PADDING } from "src/Style";
+import styled from "styled-components";
 
-export default function ConversationContainer({className, ...props}: HTMLProps<HTMLDivElement>) {
+function _ConversationContainer({className, ...props}: HTMLProps<HTMLDivElement>) {
     const [messages, setMessages] = useState<SpeechBubbleMessage[]>([
         {origin: "recepient", type: "text", text: "Hello, how are you?"}
     ]);
@@ -16,3 +18,11 @@ export default function ConversationContainer({className, ...props}: HTMLProps<H
         </div>
     );
 }
+
+const ConversationContainer = styled(_ConversationContainer)`
+    display: flex;
+    flex-direction: column;
+    padding: ${CONVERSATION_PADDING};
+`;
+ConversationContainer.displayName = "ConversationContainer";
+export default ConversationContainer;

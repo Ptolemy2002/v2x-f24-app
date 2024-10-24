@@ -1,10 +1,12 @@
 import { HTMLProps, useMemo, useRef, forwardRef, useState, RefObject, MouseEvent, useCallback } from "react";
 import clsx from "clsx";
-import PlayIcon from "./icons/PlayIcon";
-import PauseIcon from "./icons/PauseIcon";
+import PlayIcon from "src/components/icons/PlayIcon";
+import PauseIcon from "src/components/icons/PauseIcon";
 import { Button } from "react-bootstrap";
 import { intervalToDuration, Duration } from "date-fns";
-import RestartIcon from "./icons/RestartIcon";
+import RestartIcon from "src/components/icons/RestartIcon";
+import { AUDIO_PLAYER_GAP, AUDIO_PLAYER_PROGRESS_BACKGROUND_COLOR, AUDIO_PLAYER_PROGRESS_COLOR, centerVertical } from "src/Style";
+import styled from "styled-components";
 
 function formatDuration(duration: Duration) {
     const hours = (duration.hours ?? 0).toString()
@@ -23,7 +25,7 @@ export type AudioPlayerProps = {
     src: string;
     onAudioLoaded?: () => void;
 } & HTMLProps<HTMLDivElement>;
-export default function AudioPlayer({src, onAudioLoaded, className, ...props}: AudioPlayerProps) {
+function _AudioPlayer({src, onAudioLoaded, className, ...props}: AudioPlayerProps) {
     const audioRef = useRef<HTMLAudioElement>(null);
     const [isAudioLoaded, setIsAudioLoaded] = useState(false);
 
@@ -106,6 +108,43 @@ export default function AudioPlayer({src, onAudioLoaded, className, ...props}: A
         </div>
     );
 }
+
+const AudioPlayer = styled(_AudioPlayer)`
+    display: flex;
+    flex-direction: row;
+    gap: ${AUDIO_PLAYER_GAP};
+    width: 100%;
+
+    > .progress-label {
+        ${centerVertical()}
+    }
+
+    > progress {
+        flex-grow: 1;
+
+        // IE10
+        background-color: ${AUDIO_PLAYER_PROGRESS_BACKGROUND_COLOR};
+        color: ${AUDIO_PLAYER_PROGRESS_COLOR};
+
+        // Chrome and Safari
+        &::-webkit-progress-value {
+            background-color: ${AUDIO_PLAYER_PROGRESS_COLOR};
+        }
+        &::-webkit-progress-bar {
+            background-color: ${AUDIO_PLAYER_PROGRESS_BACKGROUND_COLOR};
+        }
+
+        // Firefox
+        &::-moz-progress-bar {
+            background-color: ${AUDIO_PLAYER_PROGRESS_COLOR};
+        }
+
+        border: none;
+        ${centerVertical()}
+    }
+`;
+AudioPlayer.displayName = "AudioPlayer";
+export default AudioPlayer;
 
 export type AudioMediaProps = {
     src: string;
