@@ -65,8 +65,40 @@
             .speech-bubble-style(@speech-bubble-aud-width);
             width: 100%; // This will be capped by the max-width property
 
-            .audio-player {
+            > .audio-player {
+                display: flex;
+                flex-direction: row;
+                gap: @audio-player-gap;
                 width: 100%;
+
+                > .progress-label {
+                    .center-vertical();
+                }
+
+                > progress {
+                    flex-grow: 1;
+                    
+                    // IE10
+                    background-color: @audio-player-progress-background-color;
+                    color: @audio-player-progress-color;
+
+                    // Chrome and Safari
+                    &::-webkit-progress-value {
+                        background-color: @audio-player-progress-color;
+                    }
+                    &::-webkit-progress-bar {
+                        background-color: @audio-player-progress-background-color;
+                    }
+
+                    // Firefox
+                    &::-moz-progress-bar {
+                        background-color: @audio-player-progress-color;
+                    }
+
+                    border: none;
+
+                    .center-vertical();
+                }
             }
         }
     }
