@@ -15,7 +15,7 @@ function formatDuration(duration: Duration) {
 
     const result = minutes.padStart(2, "0") + ":" + seconds.padStart(2, "0");
     if (hours !== "0") {
-        return hours.padStart(2, "0") + ":" + result;
+        return hours + ":" + result;
     } else {
         return result;
     }
@@ -37,9 +37,11 @@ function _AudioPlayer({src, onAudioLoaded, className, ...props}: AudioPlayerProp
     const formattedDuration = useMemo(() => {
         const audio = audioRef.current;
         if (!audio) {
-            return {minutes: 0, seconds: 0};
+            return {hours: 0, minutes: 0, seconds: 0};
         }
 
+        // Since the audio should definitely not be longer than 24 hours, we can safely
+        // use this duration, as the amount of hours will always be accurate.
         return intervalToDuration({start: 0, end: audio.duration * 1000});
     }, [audioRef.current?.duration, isAudioLoaded]);
     // even though we don't use isAudioLoaded, we need to include it to make sure the duration calculated
@@ -118,30 +120,6 @@ const AudioPlayer = styled(_AudioPlayer)`
     > .progress-label {
         ${centerVertical()}
     }
-
-    > progress {
-        flex-grow: 1;
-
-        // IE10
-        background-color: ${({theme}) => theme.audioPlayerBackgroundColor};
-        color: ${({theme}) => theme.audioPlayerProgressColor};
-
-        // Chrome and Safari
-        &::-webkit-progress-value {
-            background-color: ${({theme}) => theme.audioPlayerProgressColor};
-        }
-        &::-webkit-progress-bar {
-            background-color: ${({theme}) => theme.audioPlayerBackgroundColor};
-        }
-
-        // Firefox
-        &::-moz-progress-bar {
-            background-color: ${({theme}) => theme.audioPlayerProgressColor};
-        }
-
-        border: none;
-        ${centerVertical()}
-    }
 `;
 AudioPlayer.displayName = "AudioPlayer";
 export default AudioPlayer;
@@ -152,7 +130,9 @@ export type AudioMediaProps = {
     ref?: RefObject<HTMLAudioElement>;
 } & HTMLProps<HTMLAudioElement>;
 
-export const AudioMedia = forwardRef<HTMLAudioElement, AudioMediaProps>(({src, onAudioLoaded, ...props}, ref) => {
+export const AudioMedia = forwardRef<
+    HTMLAudioElement, AudioMediaProps
+>(({src, onAudioLoaded, ...props}, ref) => {
     return (
         <audio ref={ref} {...props} onLoadedData={onAudioLoaded}>
             <source src={src} />
@@ -167,7 +147,7 @@ export type ProgressBarProps = {
     onSeek: (percentage: number) => void;
 } & HTMLProps<HTMLProgressElement>;
 
-export function ProgressBar({progress, duration, onSeek, ...props}: ProgressBarProps) {
+function _ProgressBar({progress, duration, onSeek, ...props}: ProgressBarProps) {
     const seekHandler = useCallback((e: MouseEvent<HTMLProgressElement>) => {
         const rect = e.currentTarget.getBoundingClientRect();
         const x = e.clientX - rect.left;
@@ -191,3 +171,28 @@ export function ProgressBar({progress, duration, onSeek, ...props}: ProgressBarP
         />
     );
 }
+
+export const ProgressBar = styled(_ProgressBar)`
+    flex-grow: 1;
+
+    // IE10
+    background-color: ${({theme}) => theme.audioPlayerBackgroundColor};
+    color: ${({theme}) => theme.audioPlayerProgressColor};
+
+    // Chrome and Safari
+    &::-webkit-progress-value {
+        background-color: ${({theme}) => theme.audioPlayerProgressColor};
+    }
+    &::-webkit-progress-bar {
+        background-color: ${({theme}) => theme.audioPlayerBackgroundColor};
+    }
+
+    // Firefox
+    &::-moz-progress-bar {
+        background-color: ${({theme}) => theme.audioPlayerProgressColor};
+    }
+
+    border: none;
+    ${centerVertical()}
+`;
+ProgressBar.displayName = "ProgressBar";

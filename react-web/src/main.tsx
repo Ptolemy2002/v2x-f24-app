@@ -7,12 +7,16 @@ import { ThemeProvider } from 'styled-components';
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ThemeProvider theme={{
-        backgroundColor: "black",
+        backgroundColor: "#343541",
+        headerBackgroundColor: "#202123",
         textColor: "white",
-        senderColor: "#007bff",
+        senderColor: "#19c37d",
         senderTextColor: "white",
-        recepientColor: "#f0f0f0",
-        recepientTextColor: "black",
+        recepientColor: "#40414F",
+        timestampColor: "#bbb",
+        inputColor: "#555",
+        inputTextColor: "white",
+        recepientTextColor: "white",
         audioPlayerProgressColor: "red",
         audioPlayerBackgroundColor: "black",
     }}>

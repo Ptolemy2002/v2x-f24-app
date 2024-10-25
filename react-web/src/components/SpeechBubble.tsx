@@ -12,6 +12,7 @@ export type SpeechBubbleMessageOrigin = "sender" | "recepient";
 export type SpeechBubbleMessageBase<T extends string> = {
     origin: SpeechBubbleMessageOrigin;
     type: T;
+    date: Date;
 };
 
 // SpeechBubbleText will take a message object as well as the default properties for a speech bubble.
@@ -65,19 +66,35 @@ export function speechBubbleBaseStyle(maxWidth: string | number) {
     return css`
         width: fit-content;
         max-width: ${maxWidth};
-        border-radius: ${SPEECH_BUBBLE_RADIUS};
-        padding: ${SPEECH_BUBBLE_PADDING};
+
+        display: flex;
+        flex-direction: row;
+        gap: 5px;
 
         &.recepient {
-            background-color: ${({theme}) => theme.recepientColor};
-            color: ${({theme}) => theme.recepientTextColor};
+            flex-direction: row-reverse;
             ${alignLeft()}
         }
 
         &.sender {
-            background-color: ${({theme}) => theme.senderColor};
-            color: ${({theme}) => theme.senderTextColor};
+            flex-direction: row;
             ${alignRight()}
+        }
+
+        > .speech-bubble-content {
+            border-radius: ${SPEECH_BUBBLE_RADIUS};
+            padding: ${SPEECH_BUBBLE_PADDING};
+            flex-grow: 1;
+
+            &.recepient {
+                background-color: ${({theme}) => theme.recepientColor};
+                color: ${({theme}) => theme.recepientTextColor};
+            }
+
+            &.sender {
+                background-color: ${({theme}) => theme.senderColor};
+                color: ${({theme}) => theme.senderTextColor};
+            }
         }
     `;
 }
@@ -85,23 +102,26 @@ export function speechBubbleBaseStyle(maxWidth: string | number) {
 function _SpeechBubbleText({message, className, ...props}: SpeechBubbleTextProps) {
     const lines = message.text.split("\n");
     return (
-        <p className={clsx("speech-bubble", message.origin, className)} {...props}>
-            <ScreenReaderText origin={message.origin} />
+        <p className={clsx("speech-bubble-txt", message.origin, className)} {...props}>
+            <Timestamp date={message.date} />
+            <div className={`speech-bubble-content ${message.origin}`}>
+                <ScreenReaderText origin={message.origin} />
 
-            {
-                // Create a br element after each line except the last one.
-                lines.map((line, i) => (
-                    <span key={`line-${i}`}>
-                        {line}
-                        {
-                            // If the left side is false, the expression evaluates to false, which means React
-                            // won't render anything here. Otherwise, it will evaluate to the right side,
-                            // which is a br element in this case.
-                            i < lines.length - 1 && <br />
-                        }
-                    </span>
-                ))
-            }
+                {
+                    // Create a br element after each line except the last one.
+                    lines.map((line, i) => (
+                        <span key={`line-${i}`}>
+                            {line}
+                            {
+                                // If the left side is false, the expression evaluates to false, which means React
+                                // won't render anything here. Otherwise, it will evaluate to the right side,
+                                // which is a br element in this case.
+                                i < lines.length - 1 && <br />
+                            }
+                        </span>
+                    ))
+                }
+            </div>
         </p>
     );
 }
@@ -124,27 +144,31 @@ function _SpeechBubbleImage({message, scrollToEnd, className, ...props}: SpeechB
             className={clsx("speech-bubble-img", message.origin, className)}
             {...props} // Pass any additional props to the element itself.
         >
-            <ScreenReaderText origin={message.origin} text="sent an image" />
-            <img
-                onLoad={scrollToEnd}
-                src={message.src}
-                alt={message.alt ?? ""} // ?? here is the nullish coalescing operator, which returns the right side if the left side is null or undefined.
-            />
+            <Timestamp date={message.date} />
+            <div className={`speech-bubble-content ${message.origin}`}>
+                <ScreenReaderText origin={message.origin} text="sent an image" />
+                <img
+                    onLoad={scrollToEnd}
+                    src={message.src}
+                    alt={message.alt ?? ""} // ?? here is the nullish coalescing operator, which returns the right side if the left side is null or undefined.
+                />
+            </div>
         </div>
     );
 }
 
 export const SpeechBubbleImage = styled(_SpeechBubbleImage)`
     ${speechBubbleBaseStyle(SPEECH_BUBBLE_IMG_MAX_WIDTH)}
-
-    > img {
-        max-width: 100%;
-        height: auto;
-        ${border(
-            SPEECH_BUBBLE_IMG_BORDER_THICKNESS,
-            SPEECH_BUBBLE_IMG_BORDER_STYLE,
-            SPEECH_BUBBLE_IMG_BORDER_COLOR
-        )}
+    > .speech-bubble-content {
+        > img {
+            max-width: 100%;
+            height: auto;
+            ${border(
+                SPEECH_BUBBLE_IMG_BORDER_THICKNESS,
+                SPEECH_BUBBLE_IMG_BORDER_STYLE,
+                SPEECH_BUBBLE_IMG_BORDER_COLOR
+            )}
+        }
     }
 `;
 SpeechBubbleImage.displayName = "SpeechBubbleImage";
@@ -158,12 +182,15 @@ export type SpeechBubbleAudioProps = {
 function _SpeechBubbleAudio({message, className, scrollToEnd, ...props}: SpeechBubbleAudioProps) {
     return (
         <div className={clsx("speech-bubble-aud", message.origin, className)} {...props}>
-            <ScreenReaderText origin={message.origin} text="sent an audio message" />
+            <Timestamp date={message.date} />
+            <div className={`speech-bubble-content ${message.origin}`}>
+                <ScreenReaderText origin={message.origin} text="sent an audio message" />
 
-            <AudioPlayer
-                src={message.src}
-                onAudioLoaded={scrollToEnd}
-            />
+                <AudioPlayer
+                    src={message.src}
+                    onAudioLoaded={scrollToEnd}
+                />
+            </div>
         </div>
     );
 }
@@ -173,3 +200,19 @@ export const SpeechBubbleAudio = styled(_SpeechBubbleAudio)`
     width: 100%; // This will be capped by the max-width property
 `;
 SpeechBubbleAudio.displayName = "SpeechBubbleAudio";
+
+export type TimestampProps = {
+    date: Date;
+} & HTMLProps<HTMLSpanElement>;
+function _Timestamp({date, className, ...props}: TimestampProps) {
+    return (
+        <span className={clsx("speech-bubble-timestamp", className)} {...props}>
+            {date.toLocaleTimeString()}
+        </span>
+    );
+}
+
+export const Timestamp = styled(_Timestamp)`
+    color: ${({theme}) => theme.timestampColor};
+    min-width: fit-content;
+`;

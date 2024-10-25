@@ -50,8 +50,11 @@ const App = styled(_App).attrs<AppStyleAttributes>(
     flex-direction: column;
     height: 100%;
 
-    header, footer, main {
+    main {
         background-color: ${({theme}) => theme.backgroundColor};
+    }
+
+    header, main {
         padding: ${({$padding}) => $padding};
     }
 

@@ -17,13 +17,15 @@ function addMessage<T extends SpeechBubbleMessage["type"]>(
         newMessages.push({
             ...createMessage(),
             origin: "recepient",
-            type
+            type,
+            date: new Date()
         } as SpeechBubbleMessageOfType<T>); // We use "as" to tell TypeScript that the type is correct because it can't be inferred.
     } else {
         newMessages.push({
             ...createMessage(),
             origin: "sender",
-            type
+            type,
+            date: new Date()
         } as SpeechBubbleMessageOfType<T>); // We use "as" to tell TypeScript that the type is correct because it can't be inferred.
     }
 
@@ -121,6 +123,10 @@ const InputContainer = styled(_InputContainer)`
     max-height: ${INPUT_MAX_HEIGHT};
 
     > .input {
+        background-color: ${({theme}) => theme.inputColor};
+        color: ${({theme}) => theme.inputTextColor};
+        border: none;
+
         min-height: ${INPUT_MIN_HEIGHT};
         max-height: 100%;
         flex-grow: 1;

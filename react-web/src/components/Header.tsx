@@ -32,6 +32,7 @@ function _Header({ onMenuClick, ...props }: HeaderProps) {
 const Header = styled(_Header)`
     display: flex;
     flex-direction: row;
+    background-color: ${({theme}) => theme.headerBackgroundColor};
 
     > * {
         flex-grow: 1;
