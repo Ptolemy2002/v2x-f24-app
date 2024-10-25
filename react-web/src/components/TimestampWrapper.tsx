@@ -32,6 +32,6 @@ export default function TimestampWrapper({render, updateInterval, date, relative
         const suffix = isAfter(date, new Date()) ? "from now" : "ago";
         return render(formatDistanceToNow(date) + " " + suffix);
     } else {
-        return render(date.toISOString());
+        return render(date.toLocaleTimeString());
     }
 }
