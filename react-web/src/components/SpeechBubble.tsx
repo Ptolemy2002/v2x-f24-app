@@ -1,9 +1,11 @@
 import clsx from "clsx";
-import { HTMLProps } from "react";
+import { HTMLProps, useEffect } from "react";
 import styled, {css} from "styled-components";
 import AudioPlayer from "src/components/AudioPlayer";
 import { alignLeft, alignRight, SPEECH_BUBBLE_AUD_WIDTH, SPEECH_BUBBLE_IMG_BORDER_COLOR, SPEECH_BUBBLE_IMG_BORDER_STYLE, SPEECH_BUBBLE_IMG_BORDER_THICKNESS, SPEECH_BUBBLE_IMG_MAX_WIDTH, SPEECH_BUBBLE_MAX_WIDTH, SPEECH_BUBBLE_PADDING, SPEECH_BUBBLE_RADIUS } from "src/Style";
 import { border } from "polished";
+import { formatDistanceToNow, secondsToMilliseconds } from "date-fns";
+import useForceRerender from "@ptolemy2002/react-force-rerender";
 
 // The message can only originate from the sender or the recipient.
 export type SpeechBubbleMessageOrigin = "sender" | "recepient";
@@ -203,11 +205,19 @@ SpeechBubbleAudio.displayName = "SpeechBubbleAudio";
 
 export type TimestampProps = {
     date: Date;
+    updateInterval?: number;
 } & HTMLProps<HTMLSpanElement>;
-function _Timestamp({date, className, ...props}: TimestampProps) {
+function _Timestamp({date, className, updateInterval = 60, ...props}: TimestampProps) {
+    // Update on the specified interval (once per minute by default).
+    const forceRerender = useForceRerender();
+    useEffect(() => {
+        const interval = setInterval(forceRerender, secondsToMilliseconds(updateInterval));
+        return () => clearInterval(interval);
+    }, [forceRerender]);
+
     return (
         <span className={clsx("speech-bubble-timestamp", className)} {...props}>
-            {date.toLocaleTimeString()}
+            {formatDistanceToNow(date)} ago
         </span>
     );
 }
