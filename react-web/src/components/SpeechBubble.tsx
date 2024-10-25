@@ -1,11 +1,10 @@
 import clsx from "clsx";
-import { HTMLProps, useEffect } from "react";
+import { HTMLProps } from "react";
 import styled, {css} from "styled-components";
 import AudioPlayer from "src/components/AudioPlayer";
 import { alignLeft, alignRight, SPEECH_BUBBLE_AUD_WIDTH, SPEECH_BUBBLE_IMG_BORDER_COLOR, SPEECH_BUBBLE_IMG_BORDER_STYLE, SPEECH_BUBBLE_IMG_BORDER_THICKNESS, SPEECH_BUBBLE_IMG_MAX_WIDTH, SPEECH_BUBBLE_MAX_WIDTH, SPEECH_BUBBLE_PADDING, SPEECH_BUBBLE_RADIUS } from "src/Style";
 import { border } from "polished";
-import { formatDistanceToNow, secondsToMilliseconds } from "date-fns";
-import useForceRerender from "@ptolemy2002/react-force-rerender";
+import TimestampWrapper from "src/components/TimestampWrapper";
 
 // The message can only originate from the sender or the recipient.
 export type SpeechBubbleMessageOrigin = "sender" | "recepient";
@@ -105,7 +104,7 @@ function _SpeechBubbleText({message, className, ...props}: SpeechBubbleTextProps
     const lines = message.text.split("\n");
     return (
         <p className={clsx("speech-bubble-txt", message.origin, className)} {...props}>
-            <Timestamp date={message.date} />
+            <TimestampWrapper date={message.date} updateInterval={60} render={(text) => <SpeechBubbleTimestamp text={text} />} />
             <div className={`speech-bubble-content ${message.origin}`}>
                 <ScreenReaderText origin={message.origin} />
 
@@ -146,7 +145,7 @@ function _SpeechBubbleImage({message, scrollToEnd, className, ...props}: SpeechB
             className={clsx("speech-bubble-img", message.origin, className)}
             {...props} // Pass any additional props to the element itself.
         >
-            <Timestamp date={message.date} />
+            <TimestampWrapper date={message.date} updateInterval={60} render={(text) => <SpeechBubbleTimestamp text={text} />} />
             <div className={`speech-bubble-content ${message.origin}`}>
                 <ScreenReaderText origin={message.origin} text="sent an image" />
                 <img
@@ -184,7 +183,8 @@ export type SpeechBubbleAudioProps = {
 function _SpeechBubbleAudio({message, className, scrollToEnd, ...props}: SpeechBubbleAudioProps) {
     return (
         <div className={clsx("speech-bubble-aud", message.origin, className)} {...props}>
-            <Timestamp date={message.date} />
+            <TimestampWrapper date={message.date} updateInterval={60} render={(text) => <SpeechBubbleTimestamp text={text} />} />
+            
             <div className={`speech-bubble-content ${message.origin}`}>
                 <ScreenReaderText origin={message.origin} text="sent an audio message" />
 
@@ -203,26 +203,20 @@ export const SpeechBubbleAudio = styled(_SpeechBubbleAudio)`
 `;
 SpeechBubbleAudio.displayName = "SpeechBubbleAudio";
 
-export type TimestampProps = {
-    date: Date;
-    updateInterval?: number;
+export type SpeechBubbleTimestampProps = {
+    text: string
 } & HTMLProps<HTMLSpanElement>;
-function _Timestamp({date, className, updateInterval = 60, ...props}: TimestampProps) {
-    // Update on the specified interval (once per minute by default).
-    const forceRerender = useForceRerender();
-    useEffect(() => {
-        const interval = setInterval(forceRerender, secondsToMilliseconds(updateInterval));
-        return () => clearInterval(interval);
-    }, [forceRerender]);
+function _SpeechBubbleTimestamp({text, className, ...props}: SpeechBubbleTimestampProps) {
 
     return (
         <span className={clsx("speech-bubble-timestamp", className)} {...props}>
-            {formatDistanceToNow(date)} ago
+            {text}
         </span>
     );
 }
 
-export const Timestamp = styled(_Timestamp)`
+export const SpeechBubbleTimestamp = styled(_SpeechBubbleTimestamp)`
     color: ${({theme}) => theme.timestampColor};
     min-width: fit-content;
 `;
+SpeechBubbleTimestamp.displayName = "SpeechBubbleTimestamp";
