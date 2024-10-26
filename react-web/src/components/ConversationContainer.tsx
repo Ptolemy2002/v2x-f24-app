@@ -3,7 +3,7 @@ import { HTMLProps, useState } from "react"
 import { SpeechBubbleMessage } from "src/components/SpeechBubble";
 import SpeechContainer from "src/components/SpeechContainer";
 import InputContainer from "src/components/InputContainer";
-import { CONVERSATION_PADDING } from "src/Style";
+import { RequiredCSSProperties } from "src/Style";
 import styled from "styled-components";
 
 function _ConversationContainer({className, ...props}: HTMLProps<HTMLDivElement>) {
@@ -19,10 +19,17 @@ function _ConversationContainer({className, ...props}: HTMLProps<HTMLDivElement>
     );
 }
 
-const ConversationContainer = styled(_ConversationContainer)`
+export type ConversationContainerStyleAttributes = {
+    $padding?: RequiredCSSProperties["padding"];
+};
+const ConversationContainer = styled(_ConversationContainer).attrs<ConversationContainerStyleAttributes>(
+    (props) => ({
+        $padding: props.$padding ?? "10px",
+    })
+)`
     display: flex;
     flex-direction: column;
-    padding: ${CONVERSATION_PADDING};
+    padding: ${({$padding}) => $padding};
 `;
 ConversationContainer.displayName = "ConversationContainer";
 export default ConversationContainer;

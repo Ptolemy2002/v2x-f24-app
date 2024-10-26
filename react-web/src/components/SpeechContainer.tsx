@@ -1,6 +1,6 @@
 import { HTMLProps, useCallback, useEffect, useRef } from "react";
 import { SpeechBubbleText, SpeechBubbleImage, SpeechBubbleAudio, SpeechBubbleMessage } from "src/components/SpeechBubble";
-import { SPEECH_CONTAINER_GAP, SPEECH_CONTAINER_MARGIN_BOTTOM } from "src/Style";
+import { RequiredCSSProperties } from "src/Style";
 import styled from "styled-components";
 
 // SpeechContainer will take an array of messages as well as the default props for a div element.
@@ -46,15 +46,24 @@ function _SpeechContainer({messages=[], ...props}: SpeechContainerProps) {
     );
 }
 
-const SpeechContainer = styled(_SpeechContainer)`
+export type SpeechContainerStyleAttributes = {
+    $marginBottom?: RequiredCSSProperties["marginBottom"];
+    $gap?: RequiredCSSProperties["gap"];
+};
+const SpeechContainer = styled(_SpeechContainer).attrs<SpeechContainerStyleAttributes>(
+    (props) => ({
+        $marginBottom: props.$marginBottom ?? "20px",
+        $gap: props.$gap ?? "10px",
+    })
+)`
     // Scroll if the content is too tall, but don't show the scrollbar if it's not needed.
     overflow-y: auto;
     flex-grow: 1;
-    margin-bottom: ${SPEECH_CONTAINER_MARGIN_BOTTOM};
+    margin-bottom: ${({$marginBottom}) => $marginBottom};
 
     display: flex;
     flex-direction: column;
-    gap: ${SPEECH_CONTAINER_GAP};
+    gap: ${({$gap}) => $gap};
 `;
 SpeechContainer.displayName = "SpeechContainer";
 export default SpeechContainer;

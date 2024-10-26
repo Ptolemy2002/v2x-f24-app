@@ -2,9 +2,10 @@ import clsx from "clsx";
 import { HTMLProps } from "react";
 import styled, {css} from "styled-components";
 import AudioPlayer from "src/components/AudioPlayer";
-import { alignLeft, alignRight, SPEECH_BUBBLE_AUD_WIDTH, SPEECH_BUBBLE_IMG_BORDER_COLOR, SPEECH_BUBBLE_IMG_BORDER_STYLE, SPEECH_BUBBLE_IMG_BORDER_THICKNESS, SPEECH_BUBBLE_IMG_MAX_WIDTH, SPEECH_BUBBLE_MAX_WIDTH, SPEECH_BUBBLE_PADDING, SPEECH_BUBBLE_RADIUS } from "src/Style";
+import { alignLeft, alignRight, bsBreakpointMax, bsBreakpointMin } from "src/Style";
 import { border } from "polished";
 import TimestampWrapper from "src/components/TimestampWrapper";
+import { RequiredCSSProperties } from "src/Style";
 
 // The message can only originate from the sender or the recipient.
 export type SpeechBubbleMessageOrigin = "sender" | "recepient";
@@ -63,7 +64,11 @@ export type SpeechBubbleTextProps = {
     message: SpeechBubbleTextMessage;
 } & HTMLProps<HTMLParagraphElement>;
 
-export function speechBubbleBaseStyle(maxWidth: string | number) {
+export function speechBubbleBaseStyle(
+    maxWidth: RequiredCSSProperties["maxWidth"],
+    borderRadius: RequiredCSSProperties["borderRadius"],
+    padding: RequiredCSSProperties["padding"],
+) {
     return css`
         width: fit-content;
         max-width: ${maxWidth};
@@ -72,19 +77,23 @@ export function speechBubbleBaseStyle(maxWidth: string | number) {
         flex-direction: row;
         gap: 5px;
 
+        ${
+            bsBreakpointMax("lg", css`flex-direction: column-reverse;`)
+        }
+
         &.recepient {
-            flex-direction: row-reverse;
+            ${bsBreakpointMin("xl", css`flex-direction: row-reverse;`)}
             ${alignLeft()}
         }
 
         &.sender {
-            flex-direction: row;
+            ${bsBreakpointMin("xl", css`flex-direction: row;`)}
             ${alignRight()}
         }
 
         > .speech-bubble-content {
-            border-radius: ${SPEECH_BUBBLE_RADIUS};
-            padding: ${SPEECH_BUBBLE_PADDING};
+            border-radius: ${borderRadius};
+            padding: ${padding};
             flex-grow: 1;
 
             &.recepient {
@@ -103,8 +112,8 @@ export function speechBubbleBaseStyle(maxWidth: string | number) {
 function _SpeechBubbleText({message, className, ...props}: SpeechBubbleTextProps) {
     const lines = message.text.split("\n");
     return (
-        <p className={clsx("speech-bubble-txt", message.origin, className)} {...props}>
-            <TimestampWrapper date={message.date} updateInterval={60} render={(text) => <SpeechBubbleTimestamp text={text} />} />
+        <div className={clsx("speech-bubble-txt", message.origin, className)} {...props}>
+            <TimestampWrapper date={message.date} updateInterval={10} render={(text) => <SpeechBubbleTimestamp text={text} />} />
             <div className={`speech-bubble-content ${message.origin}`}>
                 <ScreenReaderText origin={message.origin} />
 
@@ -123,12 +132,23 @@ function _SpeechBubbleText({message, className, ...props}: SpeechBubbleTextProps
                     ))
                 }
             </div>
-        </p>
+        </div>
     );
 }
 
-export const SpeechBubbleText = styled(_SpeechBubbleText)`
-    ${speechBubbleBaseStyle(SPEECH_BUBBLE_MAX_WIDTH)}
+export type SpeechBubbleTextStyleAttributes = {
+    $maxWidth?: RequiredCSSProperties["maxWidth"];
+    $padding?: RequiredCSSProperties["padding"];
+    $borderRadius?: RequiredCSSProperties["borderRadius"];
+};
+export const SpeechBubbleText = styled(_SpeechBubbleText).attrs<SpeechBubbleTextStyleAttributes>(
+    (props) => ({
+        $maxWidth: props.$maxWidth ?? "75%",
+        $padding: props.$padding ?? "10px",
+        $borderRadius: props.$borderRadius ?? "10px",
+    })
+)`
+    ${({$maxWidth, $padding, $borderRadius}) => speechBubbleBaseStyle($maxWidth!, $borderRadius!, $padding!)}
 `;
 SpeechBubbleText.displayName = "SpeechBubbleText";
 
@@ -145,7 +165,7 @@ function _SpeechBubbleImage({message, scrollToEnd, className, ...props}: SpeechB
             className={clsx("speech-bubble-img", message.origin, className)}
             {...props} // Pass any additional props to the element itself.
         >
-            <TimestampWrapper date={message.date} updateInterval={60} render={(text) => <SpeechBubbleTimestamp text={text} />} />
+            <TimestampWrapper date={message.date} updateInterval={10} render={(text) => <SpeechBubbleTimestamp text={text} />} />
             <div className={`speech-bubble-content ${message.origin}`}>
                 <ScreenReaderText origin={message.origin} text="sent an image" />
                 <img
@@ -158,16 +178,33 @@ function _SpeechBubbleImage({message, scrollToEnd, className, ...props}: SpeechB
     );
 }
 
-export const SpeechBubbleImage = styled(_SpeechBubbleImage)`
-    ${speechBubbleBaseStyle(SPEECH_BUBBLE_IMG_MAX_WIDTH)}
+export type SpeechBubbleImageStyleAttributes = {
+    $maxWidth?: RequiredCSSProperties["maxWidth"];
+    $borderThickness?: RequiredCSSProperties["borderWidth"];
+    $padding?: RequiredCSSProperties["padding"];
+    $borderRadius?: RequiredCSSProperties["borderRadius"];
+    $borderStyle?: RequiredCSSProperties["borderStyle"];
+    $borderColor?: RequiredCSSProperties["borderColor"];
+};
+export const SpeechBubbleImage = styled(_SpeechBubbleImage).attrs<SpeechBubbleImageStyleAttributes>(
+    (props) => ({
+        $maxWidth: props.$maxWidth ?? "50%",
+        $padding: props.$padding ?? "10px",
+        $borderRadius: props.$borderRadius ?? "10px",
+        $borderThickness: props.$borderThickness ?? "1px",
+        $borderStyle: props.$borderStyle ?? "solid",
+        $borderColor: props.$borderColor ?? "black",
+    })
+)`
+    ${({$maxWidth, $padding, $borderRadius}) => speechBubbleBaseStyle($maxWidth!, $borderRadius!, $padding!)}
     > .speech-bubble-content {
         > img {
             max-width: 100%;
             height: auto;
-            ${border(
-                SPEECH_BUBBLE_IMG_BORDER_THICKNESS,
-                SPEECH_BUBBLE_IMG_BORDER_STYLE,
-                SPEECH_BUBBLE_IMG_BORDER_COLOR
+            ${({$borderThickness, $borderStyle, $borderColor}) => border(
+                $borderThickness!,
+                $borderStyle!,
+                $borderColor!
             )}
         }
     }
@@ -183,7 +220,7 @@ export type SpeechBubbleAudioProps = {
 function _SpeechBubbleAudio({message, className, scrollToEnd, ...props}: SpeechBubbleAudioProps) {
     return (
         <div className={clsx("speech-bubble-aud", message.origin, className)} {...props}>
-            <TimestampWrapper date={message.date} updateInterval={60} render={(text) => <SpeechBubbleTimestamp text={text} />} />
+            <TimestampWrapper date={message.date} updateInterval={10} render={(text) => <SpeechBubbleTimestamp text={text} />} />
             
             <div className={`speech-bubble-content ${message.origin}`}>
                 <ScreenReaderText origin={message.origin} text="sent an audio message" />
@@ -197,8 +234,19 @@ function _SpeechBubbleAudio({message, className, scrollToEnd, ...props}: SpeechB
     );
 }
 
-export const SpeechBubbleAudio = styled(_SpeechBubbleAudio)`
-    ${speechBubbleBaseStyle(SPEECH_BUBBLE_AUD_WIDTH)}
+export type SpeechBubbleAudioStyleAttributes = {
+    $maxWidth?: RequiredCSSProperties["maxWidth"];
+    $padding?: RequiredCSSProperties["padding"];
+    $borderRadius?: RequiredCSSProperties["borderRadius"];
+};
+export const SpeechBubbleAudio = styled(_SpeechBubbleAudio).attrs<SpeechBubbleAudioStyleAttributes>(
+    (props) => ({
+        $maxWidth: props.$maxWidth ?? "50%",
+        $padding: props.$padding ?? "10px",
+        $borderRadius: props.$borderRadius ?? "10px",
+    })
+)`
+    ${({$maxWidth, $padding, $borderRadius}) => speechBubbleBaseStyle($maxWidth!, $borderRadius!, $padding!)}
     width: 100%; // This will be capped by the max-width property
 `;
 SpeechBubbleAudio.displayName = "SpeechBubbleAudio";
@@ -207,7 +255,6 @@ export type SpeechBubbleTimestampProps = {
     text: string
 } & HTMLProps<HTMLSpanElement>;
 function _SpeechBubbleTimestamp({text, className, ...props}: SpeechBubbleTimestampProps) {
-
     return (
         <span className={clsx("speech-bubble-timestamp", className)} {...props}>
             {text}

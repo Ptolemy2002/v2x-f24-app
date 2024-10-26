@@ -13,7 +13,7 @@ function _Header({ onMenuClick, ...props }: HeaderProps) {
     return (
         <Row as="header" {...props}>
             <BSMediaQuery breakpoint="xl" comparison="max">
-                <Button variant="primary" id="menu-button" onClick={onMenuClick}>
+                <Button id="menu-button" onClick={onMenuClick}>
                     <MenuIcon />
                 </Button>
             </BSMediaQuery>
@@ -36,7 +36,7 @@ const Header = styled(_Header)`
 
     > * {
         flex-grow: 1;
-        // !important is used to override the default Bootstrap styles
+        // important is used to override the default Bootstrap styles
         ${important({width: "fit-content"})}
 
         margin: 0;
@@ -49,6 +49,9 @@ const Header = styled(_Header)`
     > #menu-button {
         flex-grow: 0;
         width: 2em;
+        // important is used to override the default Bootstrap styles
+        ${({theme}) => important({backgroundColor: theme.senderColor})}
+        border: none;
     }
 `;
 Header.displayName = "Header";

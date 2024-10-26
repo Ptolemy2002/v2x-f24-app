@@ -17,8 +17,11 @@ createRoot(document.getElementById('root')!).render(
         inputColor: "#555",
         inputTextColor: "white",
         recepientTextColor: "white",
-        audioPlayerProgressColor: "red",
-        audioPlayerBackgroundColor: "black",
+        audioPlayerProgressColor: "white",
+        audioPlayerBackgroundColor: "#343541",
+        borderThickness: "1px",
+        borderColor: "white",
+        borderStyle: "solid",
     }}>
       <App />
     </ThemeProvider>

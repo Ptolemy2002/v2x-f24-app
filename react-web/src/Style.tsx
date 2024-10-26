@@ -1,50 +1,10 @@
+import { Breakpoint, breakpointMap, breakpoints, breakpointToIndex } from "@ptolemy2002/react-bs-media-queries";
 import { CSSProperties as _CSSProperties } from "react";
-import { css } from "styled-components";
+import { css, Interpolation } from "styled-components";
 
 // Remove undefined from CSSProperties, as all these constants are guaranteed to
 // exist.
-type CSSProperties = {
-    [K in keyof _CSSProperties]-?: _CSSProperties[K];
-};
-
-export const BORDER_THICKNESS: CSSProperties["borderWidth"] = "1px";
-export const BORDER_STYLE: CSSProperties["borderStyle"] = "solid";
-export const BORDER_COLOR: CSSProperties["borderColor"] = "white";
-
-export const CONTENT_PADDING: CSSProperties["padding"] = "10px";
-
-export const SIDEBAR_PADDING_X: CSSProperties["paddingLeft"] = "10px";
-export const SIDEBAR_PADDING_Y: CSSProperties["paddingTop"] = "10px";
-
-export const SIDEBAR_ITEM_PADDING: CSSProperties["padding"] = "5px";
-export const SIDEBAR_ITEM_MARGIN: CSSProperties["margin"] = "0.5em";
-
-export const CONVERSATION_PADDING: CSSProperties["padding"] = "10px";
-export const SPEECH_CONTAINER_MARGIN_BOTTOM: CSSProperties["marginBottom"] = "20px";
-export const SPEECH_CONTAINER_GAP: CSSProperties["gap"] = "10px";
-
-export const SPEECH_BUBBLE_MAX_WIDTH: CSSProperties["maxWidth"] = "75%";
-export const SPEECH_BUBBLE_RADIUS: CSSProperties["borderRadius"] = "10px";
-export const SPEECH_BUBBLE_PADDING: CSSProperties["padding"] = "10px";
-
-export const SPEECH_BUBBLE_IMG_MAX_WIDTH: CSSProperties["maxWidth"] = "50%";
-
-export const SPEECH_BUBBLE_IMG_BORDER_THICKNESS: CSSProperties["borderWidth"] = "1px";
-export const SPEECH_BUBBLE_IMG_BORDER_STYLE: CSSProperties["borderStyle"] = "solid";
-export const SPEECH_BUBBLE_IMG_BORDER_COLOR: CSSProperties["borderColor"] = "black";
-
-export const SPEECH_BUBBLE_AUD_WIDTH: CSSProperties["width"] = "50%";
-
-export const AUDIO_PLAYER_GAP: CSSProperties["gap"] = "20px";
-
-export const INPUT_CONTAINER_GAP: CSSProperties["gap"] = "10px";
-export const INPUT_RADIUS: CSSProperties["borderRadius"] = "10px";
-export const INPUT_PADDING: CSSProperties["padding"] = "5px";
-export const INPUT_MIN_HEIGHT: CSSProperties["minHeight"] = "50px";
-export const INPUT_MAX_HEIGHT: CSSProperties["maxHeight"] = "50%";
-
-export const SEND_BUTTON_RADIUS: CSSProperties["borderRadius"] = "5px";
-export const SEND_BUTTON_PADDING: CSSProperties["padding"] = "5px";
+export type RequiredCSSProperties = Required<_CSSProperties>;
 
 export function alignLeft() {
     return css`
@@ -65,30 +25,64 @@ export function centerVertical() {
     `;
 }
 
-export function paddingX(x: CSSProperties["paddingLeft"]) {
+export function paddingX(x: RequiredCSSProperties["paddingLeft"]) {
     return css`
         padding-left: ${x};
         padding-right: ${x};
     `;
 }
 
-export function paddingY(y: CSSProperties["paddingTop"]) {
+export function paddingY(y: RequiredCSSProperties["paddingTop"]) {
     return css`
         padding-top: ${y};
         padding-bottom: ${y};
     `;
 }
 
-export function marginX(x: CSSProperties["marginLeft"]) {
+export function marginX(x: RequiredCSSProperties["marginLeft"]) {
     return css`
         margin-left: ${x};
         margin-right: ${x};
     `;
 }
 
-export function marginY(y: CSSProperties["marginTop"]) {
+export function marginY(y: RequiredCSSProperties["marginTop"]) {
     return css`
         margin-top: ${y};
         margin-bottom: ${y};
     `;
+}
+
+export function bsBreakpointMin(breakpoint: Breakpoint, content: Interpolation<object>) {
+    return css`
+        @media (min-width: ${breakpointMap.get(breakpoint)}px) {
+            ${content}
+        }
+    `;
+
+}
+
+export function bsBreakpointMax(breakpoint: Breakpoint, content: Interpolation<object>) {
+    const breakpointIndex = breakpointToIndex(breakpoint);
+    const isLastBreakpoint = breakpointIndex === breakpoints.length - 1;
+    return css`
+        @media (max-width: ${isLastBreakpoint ? "100%" : breakpointMap.get(breakpoints[breakpointIndex + 1])! - 1 + "px"}) {
+            ${content}
+        }
+    `;
+
+}
+
+export function bsBreakpointSame(breakpoint: Breakpoint, content: Interpolation<object>) {
+    const breakpointIndex = breakpointToIndex(breakpoint);
+    return css`
+        @media (
+            min-width: ${breakpointMap.get(breakpoint)}px
+        ) and (
+            max-width: ${breakpointIndex === breakpoints.length - 1 ? "100%" : breakpointMap.get(breakpoints[breakpointIndex + 1])! - 1 + "px"}
+        ) {
+            ${content}
+        }
+    `;
+
 }

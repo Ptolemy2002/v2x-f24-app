@@ -5,7 +5,6 @@ import Sidebar from 'src/components/Sidebar';
 import ConversationContainer from 'src/components/ConversationContainer';
 import Header from 'src/components/Header';
 import styled from 'styled-components';
-import { BORDER_COLOR, BORDER_STYLE, BORDER_THICKNESS, CONTENT_PADDING } from 'src/Style';
 import { border } from 'polished';
 
 function _App({className}: {className?: string}) {
@@ -39,11 +38,13 @@ function _App({className}: {className?: string}) {
 
 export type AppStyleAttributes = {
     $padding?: CSSProperties["padding"];
+    $borderThickness?: CSSProperties["borderWidth"];
 }
 
 const App = styled(_App).attrs<AppStyleAttributes>(
     (props) => ({
-        $padding: props.$padding ?? CONTENT_PADDING
+        $padding: props.$padding ?? "10px",
+        $borderThickness: props.$borderThickness ?? "1px",
     })
 )`
     display: flex;
@@ -55,7 +56,7 @@ const App = styled(_App).attrs<AppStyleAttributes>(
     }
 
     header, main {
-        padding: ${({$padding}) => $padding};
+        padding: ${({$padding}) => $padding!};
     }
 
     main {
@@ -68,7 +69,7 @@ const App = styled(_App).attrs<AppStyleAttributes>(
         > .col {
             max-height: 100%;
             margin: 0;
-            ${border(BORDER_THICKNESS, BORDER_STYLE, BORDER_COLOR)};
+            ${({theme}) => border(theme.borderThickness, theme.borderStyle, theme.borderColor)};
         }
     }
 `;

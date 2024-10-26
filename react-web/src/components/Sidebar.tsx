@@ -2,7 +2,7 @@ import clsx from "clsx";
 import { Col } from "react-bootstrap";
 import { HTMLProps } from "react";
 import styled, { css } from "styled-components";
-import { marginX, marginY, paddingX, paddingY, SIDEBAR_ITEM_MARGIN, SIDEBAR_ITEM_PADDING, SIDEBAR_PADDING_X, SIDEBAR_PADDING_Y } from "src/Style";
+import { marginX, marginY, paddingX, paddingY, RequiredCSSProperties } from "src/Style";
 import { lighten } from "polished";
 
 export type SidebarProps = {
@@ -24,7 +24,16 @@ function _Sidebar({className, colSize=1, ...props}: SidebarProps) {
     );
 }
 
-const Sidebar = styled(_Sidebar)`
+export type SidebarStyleAttributes = {
+    $paddingX?: RequiredCSSProperties["paddingLeft"];
+    $paddingY?: RequiredCSSProperties["paddingTop"];
+};
+const Sidebar = styled(_Sidebar).attrs<SidebarStyleAttributes>(
+    (props) => ({
+        $paddingX: props.$paddingX ?? "10px",
+        $paddingY: props.$paddingY ?? "10px",
+    })
+)`
     // Remove the right border, as it's already on the conversation-container element.
     // This could also be accomplished by removing the left border on the conversation-container.
     border-right: none;
@@ -32,19 +41,19 @@ const Sidebar = styled(_Sidebar)`
     // Scroll if the content is too tall, but don't show the scrollbar if it's not needed.
     overflow-y: auto;
 
-    ${paddingX(SIDEBAR_PADDING_X)}
-    ${paddingY(SIDEBAR_PADDING_Y)}
+    ${({$paddingX}) => paddingX($paddingX!)}
+    ${({$paddingY}) => paddingY($paddingY!)}
 
     list-style: none;
 `;
 Sidebar.displayName = "Sidebar";
 export default Sidebar;
 
-export function baseSidebarItemStyle() {
+export function baseSidebarItemStyle(margin: RequiredCSSProperties["marginLeft"], padding: RequiredCSSProperties["padding"]) {
     return css`
-        ${marginX(SIDEBAR_ITEM_MARGIN)}
+        ${marginX(margin)}
         ${marginY(0)}
-        padding: ${SIDEBAR_ITEM_PADDING};
+        padding: ${padding};
     `;
 }
 
@@ -63,9 +72,18 @@ function _TimeLabel({text, screenReaderText="Last Accessed", className, ...props
     );
 }
 
-export const TimeLabel = styled(_TimeLabel)`
+export type TimeLabelStyleAttributes = {
+    $margin?: RequiredCSSProperties["marginLeft"];
+    $padding?: RequiredCSSProperties["padding"];
+};
+export const TimeLabel = styled(_TimeLabel).attrs<TimeLabelStyleAttributes>(
+    (props) => ({
+        $margin: props.$margin ?? "0.5em",
+        $padding: props.$padding ?? "5px",
+    })
+)`
     text-decoration: underline;
-    ${baseSidebarItemStyle()}
+    ${({$margin, $padding}) => baseSidebarItemStyle($margin!, $padding!)}
 `;
 TimeLabel.displayName = "TimeLabel";
 
@@ -86,8 +104,17 @@ function _ChatLink({text, href, active=false, className, ...props}: ChatLinkProp
     );
 }
 
-export const ChatLink = styled(_ChatLink)`
-    ${baseSidebarItemStyle()}
+export type ChatLinkStyleAttributes = {
+    $margin?: RequiredCSSProperties["marginLeft"];
+    $padding?: RequiredCSSProperties["padding"];
+};
+export const ChatLink = styled(_ChatLink).attrs<ChatLinkStyleAttributes>(
+    (props) => ({
+        $margin: props.$margin ?? "0.5em",
+        $padding: props.$padding ?? "5px",
+    })
+)`
+    ${({$margin, $padding}) => baseSidebarItemStyle($margin!, $padding!)}
 
     border-radius: 3px;
 

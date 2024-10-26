@@ -5,7 +5,7 @@ import PauseIcon from "src/components/icons/PauseIcon";
 import { Button } from "react-bootstrap";
 import { intervalToDuration, Duration } from "date-fns";
 import RestartIcon from "src/components/icons/RestartIcon";
-import { AUDIO_PLAYER_GAP, centerVertical } from "src/Style";
+import {centerVertical, RequiredCSSProperties } from "src/Style";
 import styled from "styled-components";
 
 function formatDuration(duration: Duration) {
@@ -111,10 +111,17 @@ function _AudioPlayer({src, onAudioLoaded, className, ...props}: AudioPlayerProp
     );
 }
 
-const AudioPlayer = styled(_AudioPlayer)`
+export type AudioPlayerStyleAttributes = {
+    $gap?: RequiredCSSProperties["gap"];
+};
+const AudioPlayer = styled(_AudioPlayer).attrs<AudioPlayerStyleAttributes>(
+    (props) => ({
+        $gap: props.$gap ?? "20px",
+    })
+)`
     display: flex;
     flex-direction: row;
-    gap: ${AUDIO_PLAYER_GAP};
+    gap: ${({$gap}) => $gap};
     width: 100%;
 
     > .progress-label {

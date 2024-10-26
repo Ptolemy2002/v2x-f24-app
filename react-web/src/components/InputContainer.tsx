@@ -1,9 +1,10 @@
 import { Dispatch, HTMLProps, SetStateAction, KeyboardEvent, useCallback, useRef } from "react";
 import { SpeechBubbleMessage, SpeechBubbleMessageExclusiveProps, SpeechBubbleMessageOfType } from "src/components/SpeechBubble";
 import { Button } from "react-bootstrap";
-import RightArrowIcon from "./icons/RightArrowIcon";
+import RightArrowIcon from "src/components/icons/RightArrowIcon";
 import styled from "styled-components";
-import { centerVertical, INPUT_CONTAINER_GAP, INPUT_MAX_HEIGHT, INPUT_MIN_HEIGHT, INPUT_PADDING, INPUT_RADIUS, SEND_BUTTON_PADDING, SEND_BUTTON_RADIUS } from "src/Style";
+import { centerVertical, RequiredCSSProperties } from "src/Style";
+import { important } from "polished";
 
 function addMessage<T extends SpeechBubbleMessage["type"]>(
     messages: SpeechBubbleMessage[],
@@ -116,30 +117,51 @@ function _InputContainer({setMessages, ...props}: InputContainerProps) {
     );
 }
 
-const InputContainer = styled(_InputContainer)`
+export type InputContainerStyleAttributes = {
+    $gap?: RequiredCSSProperties["gap"];
+    $maxHeight?: RequiredCSSProperties["maxHeight"];
+    $minHeight?: RequiredCSSProperties["minHeight"];
+    $borderRadius?: RequiredCSSProperties["borderRadius"];
+    $padding?: RequiredCSSProperties["padding"];
+    $sendButtonRadius?: RequiredCSSProperties["borderRadius"];
+    $sendButtonPadding?: RequiredCSSProperties["padding"];
+};
+const InputContainer = styled(_InputContainer).attrs<InputContainerStyleAttributes>(
+    (props) => ({
+        $gap: props.$gap ?? "10px",
+        $maxHeight: props.$maxHeight ?? "50%",
+        $minHeight: props.$minHeight ?? "50px",
+        $borderRadius: props.$borderRadius ?? "10px",
+        $padding: props.$padding ?? "5px",
+        $sendButtonRadius: props.$sendButtonRadius ?? "5px",
+        $sendButtonPadding: props.$sendButtonPadding ?? "5px",
+    })
+)`
     display: flex;
     flex-direction: row;
-    gap: ${INPUT_CONTAINER_GAP};
-    max-height: ${INPUT_MAX_HEIGHT};
+    gap: ${({$gap}) => $gap};
+    max-height: ${({$maxHeight}) => $maxHeight};
 
     > .input {
         background-color: ${({theme}) => theme.inputColor};
         color: ${({theme}) => theme.inputTextColor};
         border: none;
 
-        min-height: ${INPUT_MIN_HEIGHT};
+        min-height: ${({$minHeight}) => $minHeight};
         max-height: 100%;
         flex-grow: 1;
 
-        border-radius: ${INPUT_RADIUS};
-        padding: ${INPUT_PADDING};
+        border-radius: ${({$borderRadius}) => $borderRadius};
+        padding: ${({$padding}) => $padding};
     }
 
     > .send-button {
-        background-color: ${({theme}) => theme.senderColor};
+        // important is used to override the default Bootstrap styles.
+        ${({theme}) => important({backgroundColor: theme.senderColor})}
         color: ${({theme}) => theme.senderTextColor};
-        border-radius: ${SEND_BUTTON_RADIUS};
-        padding: ${SEND_BUTTON_PADDING};
+        border: none;
+        border-radius: ${({$sendButtonRadius}) => $sendButtonRadius};
+        padding: ${({$sendButtonPadding}) => $sendButtonPadding};
 
         height: fit-content;
         ${centerVertical()}
