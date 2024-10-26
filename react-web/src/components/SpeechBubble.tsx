@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { HTMLProps } from "react";
+import { HTMLProps, useRef, useState, useEffect } from "react";
 import styled, {css} from "styled-components";
 import AudioPlayer from "src/components/AudioPlayer";
 import { alignLeft, alignRight, bsBreakpointMax, bsBreakpointMin } from "src/Style";
@@ -63,6 +63,24 @@ export function ScreenReaderText({text="said", origin}: ScreenReaderTextProps) {
 export type SpeechBubbleTextProps = {
     message: SpeechBubbleTextMessage;
 } & HTMLProps<HTMLParagraphElement>;
+
+export function addMessage<T extends SpeechBubbleMessage["type"]>(
+    messages: SpeechBubbleMessage[],
+    type: T,
+    origin: SpeechBubbleMessageOrigin,
+    createMessage: () => SpeechBubbleMessageExclusiveProps<T>
+): SpeechBubbleMessage[] {
+    const newMessages = [...messages];
+
+    newMessages.push({
+        ...createMessage(),
+        origin,
+        type,
+        date: new Date()
+    } as SpeechBubbleMessageOfType<T>); // We use "as" to tell TypeScript that the type is correct because it can't be inferred.
+
+    return newMessages;
+}
 
 export function speechBubbleBaseStyle(
     maxWidth: RequiredCSSProperties["maxWidth"],
@@ -270,3 +288,67 @@ export const SpeechBubbleTimestamp = styled(_SpeechBubbleTimestamp)`
     min-width: fit-content;
 `;
 SpeechBubbleTimestamp.displayName = "SpeechBubbleTimestamp";
+
+export type SpeechBubbleTypingProps = {
+    origin: SpeechBubbleMessageOrigin;
+    interval?: number;
+    maxDots?: number;
+    startDots?: number;
+} & HTMLProps<HTMLDivElement>;
+
+function _SpeechBubbleTyping({origin, className, interval=500, maxDots=3, startDots=1, ...props}: SpeechBubbleTypingProps) {
+    const [dots, setDots] = useState(startDots);
+    const intervalRef = useRef<number | null>(null);
+
+    useEffect(() => {
+        if (intervalRef.current !== null) window.clearInterval(intervalRef.current);
+        intervalRef.current = window.setInterval(() => {
+            setDots((dots) => {
+                const newDots = (dots + 1) % (maxDots + 1)
+                if (newDots === 0) return startDots;
+                return newDots;
+            });
+        }, interval);
+
+        return () => {
+            if (intervalRef.current !== null) {
+                window.clearInterval(intervalRef.current);
+            }
+        };
+    }, [interval, maxDots]);
+
+    return (
+        <div className={clsx("speech-bubble-loading", origin, className)} {...props}>
+            <div className={`speech-bubble-content ${origin}`}>
+                <ScreenReaderText origin={origin} text="is typing" />
+                <span className="typing-indicator">
+                    {
+                        // Create a string of dots with the correct number of dots.
+                        ".".repeat(dots)
+                    }
+                </span>
+            </div>
+        </div>
+    );
+}
+
+export type SpeechBubbleTypingStyleAttributes = {
+    $maxWidth?: RequiredCSSProperties["maxWidth"];
+    $padding?: RequiredCSSProperties["padding"];
+    $borderRadius?: RequiredCSSProperties["borderRadius"];
+    maxDots?: number;
+};
+
+export const SpeechBubbleTyping = styled(_SpeechBubbleTyping).attrs<SpeechBubbleTypingStyleAttributes>(
+    (props) => ({
+        $maxWidth: props.$maxWidth ?? "75%",
+        $padding: props.$padding ?? "10px",
+        $borderRadius: props.$borderRadius ?? "10px",
+        maxDots: props.maxDots ?? 3,
+    })
+)`
+    ${({$maxWidth, $padding, $borderRadius}) => speechBubbleBaseStyle($maxWidth!, $borderRadius!, $padding!)}
+
+    // Adjust the width of the typing indicator based on the max number of dots.
+    min-width: ${({maxDots}) => `${maxDots! * 10}px`};
+`;

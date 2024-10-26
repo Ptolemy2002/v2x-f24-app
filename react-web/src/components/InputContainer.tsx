@@ -1,37 +1,10 @@
 import { Dispatch, HTMLProps, SetStateAction, KeyboardEvent, useCallback, useRef } from "react";
-import { SpeechBubbleMessage, SpeechBubbleMessageExclusiveProps, SpeechBubbleMessageOfType } from "src/components/SpeechBubble";
+import { SpeechBubbleMessage, addMessage } from "src/components/SpeechBubble";
 import { Button } from "react-bootstrap";
 import RightArrowIcon from "src/components/icons/RightArrowIcon";
 import styled from "styled-components";
 import { centerVertical, RequiredCSSProperties } from "src/Style";
 import { important } from "polished";
-
-function addMessage<T extends SpeechBubbleMessage["type"]>(
-    messages: SpeechBubbleMessage[],
-    type: T,
-    createMessage: () => SpeechBubbleMessageExclusiveProps<T>
-): SpeechBubbleMessage[] {
-    const newMessages = [...messages];
-
-    // If the current message is even, the sender is the recipient. Otherwise, the sender is the user.
-    if (newMessages.length % 2 === 0) {
-        newMessages.push({
-            ...createMessage(),
-            origin: "recepient",
-            type,
-            date: new Date()
-        } as SpeechBubbleMessageOfType<T>); // We use "as" to tell TypeScript that the type is correct because it can't be inferred.
-    } else {
-        newMessages.push({
-            ...createMessage(),
-            origin: "sender",
-            type,
-            date: new Date()
-        } as SpeechBubbleMessageOfType<T>); // We use "as" to tell TypeScript that the type is correct because it can't be inferred.
-    }
-
-    return newMessages;
-}
 
 export type InputContainerProps = {
     setMessages: Dispatch<SetStateAction<SpeechBubbleMessage[]>>;
@@ -44,7 +17,7 @@ function _InputContainer({setMessages, ...props}: InputContainerProps) {
     // useCallback is used to keep a stable reference to the function.
     const addText = useCallback(() => {
         setMessages((messages) => {
-            return addMessage(messages, "text", () => {
+            return addMessage(messages, "text", "sender", () => {
                 // We do this in a timeout to fix a bug in strict mode where the text comes up empty the second time this
                 // code is run. In non-strict mode, the bug doesn't happen.
                 setTimeout(() => {
@@ -60,7 +33,7 @@ function _InputContainer({setMessages, ...props}: InputContainerProps) {
 
     const addImage = useCallback(() => {
         setMessages((messages) => {
-            return addMessage(messages, "image", () => ({
+            return addMessage(messages, "image", "sender", () => ({
                 // Just a placeholder image for now.
                 src: "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png",
                 alt: "Placeholder image"
@@ -70,7 +43,7 @@ function _InputContainer({setMessages, ...props}: InputContainerProps) {
 
     const addAudio = useCallback(() => {
         setMessages((messages) => {
-            return addMessage(messages, "audio", () => ({
+            return addMessage(messages, "audio", "sender", () => ({
                 // Just a placeholder audio for now.
                 src: "/aud-test.wav"
             }));

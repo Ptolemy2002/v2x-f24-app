@@ -13,7 +13,7 @@ function _ConversationContainer({className, ...props}: HTMLProps<HTMLDivElement>
 
     return (
         <div id="conversation-container" className={clsx("col", className)} {...props}>
-            <SpeechContainer messages={messages} />
+            <SpeechContainer messages={messages} setMessages={setMessages} />
             <InputContainer setMessages={setMessages} />
         </div>
     );
