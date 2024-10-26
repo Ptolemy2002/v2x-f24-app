@@ -2,20 +2,58 @@ import { HTMLProps, useCallback, useEffect, useRef, useState, Dispatch } from "r
 import { SpeechBubbleText, SpeechBubbleImage, SpeechBubbleAudio, SpeechBubbleMessage, SpeechBubbleTyping, addMessage } from "src/components/SpeechBubble";
 import { RequiredCSSProperties } from "src/Style";
 import styled from "styled-components";
+import defaultResponses from "src/data/default-responses.json";
+
+type ResponseData = {
+    type: string;
+    text?: string;
+    src?: string;
+    alt?: string;
+};
+
+function cleanText(text: string): string {
+    // Convert to lowercase
+    text = text.toLowerCase();
+    // Replace non-alphanumeric characters with spaces
+    text = text.replace(/[^a-z0-9]/g, " ");
+    // Replace multiple spaces with a single space
+    text = text.replace(/\s+/g, " ");
+    // Remove leading and trailing whitespace
+    text = text.trim();
+    return text;
+}
 
 function respond(messages: SpeechBubbleMessage[]): SpeechBubbleMessage[] {
     const lastMessage = messages[messages.length - 1];
-    return addMessage(messages, "text", "recepient", () => {
-        if (lastMessage.type === "text") {
-            return {text: `I received your message: "${lastMessage.text}"`};
-        } else if (lastMessage.type === "image") {
-            return {text: "I received your image!"};
-        } else if (lastMessage.type === "audio") {
-            return {text: "I received your audio!"};
+    
+    let response: ResponseData = defaultResponses["[default]"];
+    if (lastMessage.type === "image") {
+        response = defaultResponses["[image]"];
+    } else if (lastMessage.type === "audio") {
+        response = defaultResponses["[audio]"];
+    } else {
+        const cleanedText = cleanText(lastMessage.text);
+        if (cleanedText in defaultResponses) {
+            response = defaultResponses[cleanedText as keyof typeof defaultResponses];
         }
+    }
 
-        return {text: "I'm not sure about that."};
-    });
+    if (response.type === "text") {
+        return addMessage<"text">(messages, "text", "recepient", () => ({
+            text: response.text ?? "[No text provided]"
+        }));
+    } else if (response.type === "image") {
+        return addMessage<"image">(messages, "image", "recepient", () => ({
+            src: response.src ?? "[No image provided]",
+            alt: response.alt ?? "[No alt text provided]"
+        }));
+    } else if (response.type === "audio") {
+        return addMessage<"audio">(messages, "audio", "recepient", () => ({
+            src: response.src ?? "[No audio provided]"
+        }));
+    }
+
+    return messages;
 }
 
 // SpeechContainer will take an array of messages as well as the default props for a div element.

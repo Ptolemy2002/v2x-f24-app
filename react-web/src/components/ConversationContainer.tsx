@@ -8,7 +8,7 @@ import styled from "styled-components";
 
 function _ConversationContainer({className, ...props}: HTMLProps<HTMLDivElement>) {
     const [messages, setMessages] = useState<SpeechBubbleMessage[]>([
-        {origin: "recepient", type: "text", text: "Hello, how are you?", date: new Date()},
+        {origin: "recepient", type: "text", text: "Hello! How can I assist you today?", date: new Date()},
     ]);
 
     return (

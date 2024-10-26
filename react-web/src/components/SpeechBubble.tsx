@@ -318,7 +318,7 @@ function _SpeechBubbleTyping({origin, className, interval=500, maxDots=3, startD
     }, [interval, maxDots]);
 
     return (
-        <div className={clsx("speech-bubble-loading", origin, className)} {...props}>
+        <div className={clsx("speech-bubble-typing", origin, className)} {...props}>
             <div className={`speech-bubble-content ${origin}`}>
                 <ScreenReaderText origin={origin} text="is typing" />
                 <span className="typing-indicator">
@@ -349,6 +349,7 @@ export const SpeechBubbleTyping = styled(_SpeechBubbleTyping).attrs<SpeechBubble
 )`
     ${({$maxWidth, $padding, $borderRadius}) => speechBubbleBaseStyle($maxWidth!, $borderRadius!, $padding!)}
 
-    // Adjust the width of the typing indicator based on the max number of dots.
-    min-width: ${({maxDots}) => `${maxDots! * 10}px`};
+    // ch is based on the width of the 0 character in the font. In monospace fonts, this is the same for all characters.
+    // In non-monospace fonts, it's good enough for a rough estimate. We add 20% to the width to give some extra space.
+    min-width: ${({maxDots}) => `${maxDots! * 1.2}ch`};
 `;
