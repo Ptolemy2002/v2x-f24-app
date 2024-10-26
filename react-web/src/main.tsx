@@ -17,7 +17,7 @@ createRoot(document.getElementById('root')!).render(
         inputColor: "#555",
         inputTextColor: "white",
         recepientTextColor: "white",
-        audioPlayerProgressColor: "white",
+        audioPlayerProgressColor: "#888",
         audioPlayerBackgroundColor: "#343541",
         borderThickness: "1px",
         borderColor: "white",

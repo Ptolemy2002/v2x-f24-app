@@ -248,6 +248,9 @@ export const SpeechBubbleAudio = styled(_SpeechBubbleAudio).attrs<SpeechBubbleAu
 )`
     ${({$maxWidth, $padding, $borderRadius}) => speechBubbleBaseStyle($maxWidth!, $borderRadius!, $padding!)}
     width: 100%; // This will be capped by the max-width property
+
+    // Override the max-width property for smaller screens.
+    ${bsBreakpointMax("sm", css`max-width: 90%;`)}
 `;
 SpeechBubbleAudio.displayName = "SpeechBubbleAudio";
 
