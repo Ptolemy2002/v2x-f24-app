@@ -6,6 +6,7 @@ import defaultResponses from "src/data/default-responses.json";
 
 type ResponseData = {
     type: string;
+    triggers?: string[];
     text?: string;
     src?: string;
     alt?: string;
@@ -23,6 +24,19 @@ function cleanText(text: string): string {
     return text;
 }
 
+function findMatchingResponse(text: string): ResponseData | null {
+    text = cleanText(text);
+    for (const response of defaultResponses.other) {
+        for (const trigger of (response.triggers ?? [])) {
+            if (text.includes(trigger)) {
+                return response;
+            }
+        }
+    }
+
+    return null;
+}
+
 function respond(messages: SpeechBubbleMessage[]): SpeechBubbleMessage[] {
     const lastMessage = messages[messages.length - 1];
     
@@ -32,25 +46,37 @@ function respond(messages: SpeechBubbleMessage[]): SpeechBubbleMessage[] {
     } else if (lastMessage.type === "audio") {
         response = defaultResponses["[audio]"];
     } else {
-        const cleanedText = cleanText(lastMessage.text);
-        if (cleanedText in defaultResponses) {
-            response = defaultResponses[cleanedText as keyof typeof defaultResponses];
+        const matchingResponse = findMatchingResponse(lastMessage.text);
+        if (matchingResponse) {
+            response = matchingResponse;
         }
     }
 
     if (response.type === "text") {
-        return addMessage<"text">(messages, "text", "recepient", () => ({
+        return addMessage(messages, "text", "recepient", () => ({
             text: response.text ?? "[No text provided]"
         }));
     } else if (response.type === "image") {
-        return addMessage<"image">(messages, "image", "recepient", () => ({
-            src: response.src ?? "[No image provided]",
-            alt: response.alt ?? "[No alt text provided]"
-        }));
+        if (!response.src) {
+            return addMessage(messages, "text", "recepient", () => ({
+                text: "I'm sorry, I had trouble sending an image."
+            }));
+        } else {
+            return addMessage(messages, "image", "recepient", () => ({
+                src: response.src!,
+                alt: response.alt ?? "[No alt text provided]"
+            }));
+        }
     } else if (response.type === "audio") {
-        return addMessage<"audio">(messages, "audio", "recepient", () => ({
-            src: response.src ?? "[No audio provided]"
-        }));
+        if (!response.src) {
+            return addMessage(messages, "text", "recepient", () => ({
+                text: "I'm sorry, I had trouble sending an audio message."
+            }));
+        } else {
+            return addMessage(messages, "audio", "recepient", () => ({
+                src: response.src!
+            }));
+        }
     }
 
     return messages;

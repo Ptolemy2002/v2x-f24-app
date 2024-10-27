@@ -1,34 +1,42 @@
 {
-    "hello": {
-        "type": "text",
-        "text": "Hi there! How can I help you today?"
-    },
+    "other": [
+        {
+            "triggers": ["hello", "hi", "hey"],
+            "type": "text",
+            "text": "Hi there! How can I help you today?"
+        },
 
-    "how are you": {
-        "type": "text",
-        "text": "I'm just code, but I'm here to assist you!"
-    },
+        {   
+            "triggers": ["how are you", "how are you doing"],
+            "type": "text",
+            "text": "I'm just code, but I'm here to assist you!"
+        },
 
-    "what is your name": {
-        "type": "text",
-        "text": "I don't have a name, but you can call me V2X Assistant!"
-    },
+        {
+            "triggers": ["what s your name", "what is your name", "who are you"],
+            "type": "text",
+            "text": "I don't have a name, but you can call me V2X Assistant!"
+        },
 
-    "bye": {
-        "type": "text",
-        "text": "Goodbye! Have a great day!"
-    },
+        {
+            "triggers": ["goodbye", "bye", "see you later"],
+            "type": "text",
+            "text": "Goodbye! Have a great day!"
+        },
 
-    "send me a picture": {
-        "type": "image",
-        "src": "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png",
-        "alt": "Placeholder image"
-    },
+        {
+            "triggers": ["send me a picture", "send me an image"],
+            "type": "image",
+            "src": "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png",
+            "alt": "Placeholder image"
+        },
 
-    "send me a song": {
-        "type": "audio",
-        "src": "/aud-test.wav"
-    },
+        {
+            "triggers": ["send me a song", "send me some music"],
+            "type": "audio",
+            "src": "/aud-test.wav"
+        }
+    ],
 
     "[image]": {
         "type": "text",
