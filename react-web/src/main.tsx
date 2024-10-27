@@ -1,8 +1,8 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from 'src/App';
-import 'src/style/main.less';
 import { ThemeProvider } from 'styled-components';
+import 'src/less/main.less';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
