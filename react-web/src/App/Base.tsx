@@ -1,11 +1,12 @@
 import { useCallback, useState, ReactNode } from 'react';
 import { Row } from 'react-bootstrap';
 import { useBreakpointQuery } from "@ptolemy2002/react-bs-media-queries";
-import Sidebar from 'src/components/Sidebar';
+import DefaultSidebar from 'src/components/Sidebar';
 import ConversationContainer from 'src/components/ConversationContainer';
-import Header from 'src/components/Header';
+import DefaultHeader from 'src/components/Header';
+import { AppProps } from './Types';
 
-export default function({className}: {className?: string}) {
+export default function({className, Header = DefaultHeader, Sidebar = DefaultSidebar}: AppProps) {
     const [showSidebar, setShowSidebar] = useState(false);
     const isMD = useBreakpointQuery("md", "min");
     const isXXL = useBreakpointQuery("xxl", "min");
