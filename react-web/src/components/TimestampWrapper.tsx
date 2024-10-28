@@ -2,14 +2,14 @@ import useForceRerender from '@ptolemy2002/react-force-rerender';
 import { secondsToMilliseconds, formatDistanceToNow, isAfter } from 'date-fns';
 import { ReactNode, useRef, useEffect, useCallback } from 'react';
 
-export type TimestampProps = {
+export type TimestampWrapperProps = {
     date: Date;
     updateInterval: number | null;
     render: (text: string) => ReactNode;
     relative?: boolean;
 }
 
-export default function TimestampWrapper({render, updateInterval, date, relative = true}: TimestampProps) {
+export default function TimestampWrapper({render, updateInterval, date, relative = true}: TimestampWrapperProps) {
     const forceRerender = useForceRerender();
     const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
