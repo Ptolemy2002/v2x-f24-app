@@ -39,6 +39,12 @@ export default function({
     // even though we don't use isAudioLoaded, we need to include it to make sure the duration calculated
     // initially is correct. Otherwise it will be stuck at 0 until we play for the first time.
 
+    const progressText = `
+        ${
+            formatDuration(isEnded ? formattedDuration : formattedProgress)
+        } / ${formatDuration(formattedDuration)}
+    `;
+
     return (
         <div className={clsx("audio-player", className)} {...props}>
             <AudioMedia
@@ -84,9 +90,7 @@ export default function({
             </Button>
             
             <span className="progress-label">
-                {
-                    formatDuration(isEnded ? formattedDuration : formattedProgress)
-                } / {formatDuration(formattedDuration)}
+                {progressText}
             </span>
             
             <ProgressBar
@@ -98,7 +102,9 @@ export default function({
                         audio.currentTime = audio.duration * percentage;
                     }
                 }}
-            />
+            >
+                {progressText}
+            </ProgressBar>
         </div>
     );
 }

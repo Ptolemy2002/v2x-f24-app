@@ -1,6 +1,6 @@
 import ProgressBar from "./ProgressBar";
-import styled from "styled-components";
-import { centerVertical } from "src/Style";
+import styled, { css } from "styled-components";
+import { bsBreakpointMax, centerVertical } from "src/Style";
 
 export default Object.assign(
     styled(ProgressBar)`
@@ -22,6 +22,11 @@ export default Object.assign(
         &::-moz-progress-bar {
             background-color: ${({theme}) => theme.audioPlayerProgressColor};
         }
+        
+        // Modify height based on screen size
+        height: 50%;
+        ${bsBreakpointMax("md", css`height: 75%;`)}
+        ${bsBreakpointMax("sm", css`height: 100%;`)}
 
         border: none;
         ${centerVertical()}

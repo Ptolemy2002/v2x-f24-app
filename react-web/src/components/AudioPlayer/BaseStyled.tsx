@@ -12,6 +12,7 @@ export default Object.assign(
         display: flex;
         flex-direction: row;
         gap: ${({$gap}) => $gap};
+        height: 100%;
         width: 100%;
 
         > .progress-label {
