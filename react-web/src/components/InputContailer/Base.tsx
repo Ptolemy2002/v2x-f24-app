@@ -1,16 +1,10 @@
-import { Dispatch, HTMLProps, SetStateAction, KeyboardEvent, useCallback, useRef } from "react";
-import { SpeechBubbleMessage, addMessage } from "src/components/SpeechBubble";
-import { Button } from "react-bootstrap";
-import RightArrowIcon from "src/components/icons/RightArrowIcon";
-import styled from "styled-components";
-import { centerVertical, RequiredCSSProperties } from "src/Style";
-import { important } from "polished";
+import { useCallback, useRef, KeyboardEvent } from 'react';
+import { Button } from 'react-bootstrap';
+import RightArrowIcon from 'src/components/icons/RightArrowIcon';
+import { addMessage } from "src/components/SpeechBubble";
+import { InputContainerProps } from './Types';
 
-export type InputContainerProps = {
-    setMessages: Dispatch<SetStateAction<SpeechBubbleMessage[]>>;
-} & HTMLProps<HTMLDivElement>;
-
-function _InputContainer({setMessages, ...props}: InputContainerProps) {
+export default function({setMessages, ...props}: InputContainerProps) {
     // This ref is used to allow access to the message content through the textarea element.
     const messageInputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -89,56 +83,3 @@ function _InputContainer({setMessages, ...props}: InputContainerProps) {
         </div>
     );
 }
-
-export type InputContainerStyleAttributes = {
-    $gap?: RequiredCSSProperties["gap"];
-    $maxHeight?: RequiredCSSProperties["maxHeight"];
-    $minHeight?: RequiredCSSProperties["minHeight"];
-    $borderRadius?: RequiredCSSProperties["borderRadius"];
-    $padding?: RequiredCSSProperties["padding"];
-    $sendButtonRadius?: RequiredCSSProperties["borderRadius"];
-    $sendButtonPadding?: RequiredCSSProperties["padding"];
-};
-const InputContainer = styled(_InputContainer).attrs<InputContainerStyleAttributes>(
-    (props) => ({
-        $gap: props.$gap ?? "10px",
-        $maxHeight: props.$maxHeight ?? "50%",
-        $minHeight: props.$minHeight ?? "50px",
-        $borderRadius: props.$borderRadius ?? "10px",
-        $padding: props.$padding ?? "5px",
-        $sendButtonRadius: props.$sendButtonRadius ?? "5px",
-        $sendButtonPadding: props.$sendButtonPadding ?? "5px",
-    })
-)`
-    display: flex;
-    flex-direction: row;
-    gap: ${({$gap}) => $gap};
-    max-height: ${({$maxHeight}) => $maxHeight};
-
-    > .input {
-        background-color: ${({theme}) => theme.inputColor};
-        color: ${({theme}) => theme.inputTextColor};
-        border: none;
-
-        min-height: ${({$minHeight}) => $minHeight};
-        max-height: 100%;
-        flex-grow: 1;
-
-        border-radius: ${({$borderRadius}) => $borderRadius};
-        padding: ${({$padding}) => $padding};
-    }
-
-    > .send-button {
-        // important is used to override the default Bootstrap styles.
-        ${({theme}) => important({backgroundColor: theme.senderColor})}
-        color: ${({theme}) => theme.senderTextColor};
-        border: none;
-        border-radius: ${({$sendButtonRadius}) => $sendButtonRadius};
-        padding: ${({$sendButtonPadding}) => $sendButtonPadding};
-
-        height: fit-content;
-        ${centerVertical()}
-    }
-`;
-InputContainer.displayName = "InputContainer";
-export default InputContainer;

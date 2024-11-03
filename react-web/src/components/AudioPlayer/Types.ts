@@ -5,8 +5,8 @@ import { MaybeForwardRefComponent } from 'src/TypeUtils';
 export type AudioPlayerProps = {
     src: string;
     onAudioLoaded?: () => void;
-    AudioMedia: MaybeForwardRefComponent<AudioMediaProps>;
-    ProgressBar: FC<ProgressBarProps>;
+    AudioMedia?: MaybeForwardRefComponent<AudioMediaProps>;
+    ProgressBar?: FC<ProgressBarProps>;
 } & HTMLProps<HTMLDivElement>;
 
 export type AudioPlayerStyleAttributes = {
