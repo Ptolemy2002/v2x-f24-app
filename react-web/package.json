@@ -20,6 +20,7 @@
   "dependencies": {
     "@ptolemy2002/react-bs-media-queries": "^1.0.0",
     "@ptolemy2002/react-force-rerender": "^2.0.0",
+    "@ptolemy2002/react-mount-effects": "^2.0.0",
     "axios": "^1.7.2",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
