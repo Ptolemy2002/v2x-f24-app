@@ -1,4 +1,4 @@
-import { RequiredCSSProperties } from "src/Style";
+import { RequiredCSSProperties, WithCSSProp } from "src/Style";
 import { FC, HTMLProps } from "react";
 import { SpeechContainerProps } from "src/components/SpeechContainer";
 import { InputContainerProps } from "src/components/InputContainer";
@@ -8,6 +8,6 @@ export type ConversationContainerProps = {
     InputContainer?: FC<InputContainerProps>;
 } & HTMLProps<HTMLDivElement>;
 
-export type ConversationContainerStyleAttributes = {
+export type ConversationContainerStyleAttributes = WithCSSProp<{
     $padding?: RequiredCSSProperties["padding"];
-};
+}>;

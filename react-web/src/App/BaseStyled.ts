@@ -2,13 +2,15 @@ import Base from "./Base";
 import { AppStyleAttributes } from "./Types";
 import styled from 'styled-components';
 import { border } from 'polished';
+import { WithCSSProp } from "src/Style";
 
 // Object.assign is used to merge the correct displayName with the styled component
 export default Object.assign(
-    styled(Base).attrs<AppStyleAttributes>(
+    styled(Base).attrs<WithCSSProp<AppStyleAttributes>>(
         (props) => ({
             $padding: props.$padding ?? "10px",
             $borderThickness: props.$borderThickness ?? "1px",
+            $css: props.$css ?? null
         })
     )`
         display: flex;
@@ -36,6 +38,8 @@ export default Object.assign(
                 ${({theme}) => border(theme.borderThickness, theme.borderStyle, theme.borderColor)};
             }
         }
+
+        ${({$css}) => $css}
     `, 
     {
         displayName: "App"

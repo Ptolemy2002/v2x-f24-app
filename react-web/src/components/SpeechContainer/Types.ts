@@ -1,6 +1,6 @@
 import { Dispatch, FC, HTMLProps } from "react";
 import { SpeechBubbleAudioProps, SpeechBubbleImageProps, SpeechBubbleMessage, SpeechBubbleTextProps, SpeechBubbleTypingProps } from "src/components/SpeechBubble";
-import { RequiredCSSProperties } from "src/Style";
+import { RequiredCSSProperties, WithCSSProp } from "src/Style";
 
 export type ResponseData = {
     type: string;
@@ -19,7 +19,7 @@ export type SpeechContainerProps = {
     SpeechBubbleTyping?: FC<SpeechBubbleTypingProps>;
 } & HTMLProps<HTMLDivElement>;
 
-export type SpeechContainerStyleAttributes = {
+export type SpeechContainerStyleAttributes = WithCSSProp<{
     $marginBottom?: RequiredCSSProperties["marginBottom"];
     $gap?: RequiredCSSProperties["gap"];
-};
+}>;

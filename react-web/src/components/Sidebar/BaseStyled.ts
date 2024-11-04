@@ -8,6 +8,7 @@ export default Object.assign(
         (props) => ({
             $paddingX: props.$paddingX ?? "10px",
             $paddingY: props.$paddingY ?? "10px",
+            $css: props.$css ?? null,
         })
     )`
         // Remove the right border, as it's already on the conversation-container element.
@@ -21,6 +22,8 @@ export default Object.assign(
         ${({$paddingY}) => paddingY($paddingY!)}
     
         list-style: none;
+
+        ${({$css}) => $css}
     `,
     {
         displayName: "Sidebar",

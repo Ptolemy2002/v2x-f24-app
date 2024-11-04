@@ -1,5 +1,5 @@
 import { HTMLProps, FC } from 'react';
-import { RequiredCSSProperties } from 'src/Style';
+import { RequiredCSSProperties, WithCSSProp } from 'src/Style';
 
 export type SidebarProps = {
     colSize?: number;
@@ -7,10 +7,10 @@ export type SidebarProps = {
 
 } & HTMLProps<HTMLUListElement>;
 
-export type SidebarStyleAttributes = {
+export type SidebarStyleAttributes = WithCSSProp<{
     $paddingX?: RequiredCSSProperties["paddingLeft"];
     $paddingY?: RequiredCSSProperties["paddingTop"];
-};
+}>;
 
 // TimeLabel will take a text string and an optional screenReaderText string as well as the default properties for a paragraph element.
 export type TimeLabelProps = {
@@ -18,10 +18,10 @@ export type TimeLabelProps = {
     screenReaderText?: string;
 } & HTMLProps<HTMLParagraphElement>;
 
-export type TimeLabelStyleAttributes = {
+export type TimeLabelStyleAttributes = WithCSSProp<{
     $margin?: RequiredCSSProperties["marginLeft"];
     $padding?: RequiredCSSProperties["padding"];
-};
+}>;
 
 // ChatLink will take a text string, an href string, and an optional active boolean as well as the default properties for a list item element.
 export type ChatLinkProps = {
@@ -30,15 +30,15 @@ export type ChatLinkProps = {
     active?: boolean;
 } & HTMLProps<HTMLLIElement>;
 
-export type ChatLinkStyleAttributes = {
+export type ChatLinkStyleAttributes = WithCSSProp<{
     $margin?: RequiredCSSProperties["marginLeft"];
     $padding?: RequiredCSSProperties["padding"];
-};
+}>;
 
-export type GenericLinksProps = {
+export type GenericLinksProps = WithCSSProp<{
     timeLabel: string;
     TimeLabel?: FC<TimeLabelProps & TimeLabelStyleAttributes>;
     ChatLink?: FC<ChatLinkProps & ChatLinkStyleAttributes>;
     count?: number;
     start?: number;
-};
+}>;

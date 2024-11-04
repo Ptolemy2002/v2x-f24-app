@@ -10,6 +10,7 @@ export default Object.assign(
             $maxWidthSm: props.$maxWidthSm ?? "90%",
             $padding: props.$padding ?? "10px",
             $borderRadius: props.$borderRadius ?? "10px",
+            $css: props.$css ?? null,
         })
     )`
         ${({$maxWidth, $padding, $borderRadius}) => speechBubbleBaseStyle($maxWidth!, $borderRadius!, $padding!)}
@@ -17,6 +18,8 @@ export default Object.assign(
 
         // Override the max-width property for smaller screens.
         ${({$maxWidthSm}) => bsBreakpointMax("sm", css`max-width: ${$maxWidthSm};`)}
+
+        ${({$css}) => $css}
     `,
     {
         displayName: "SpeechBubbleAudio",

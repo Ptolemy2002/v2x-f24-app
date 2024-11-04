@@ -1,9 +1,14 @@
 import Base from "./Base";
 import styled from "styled-components";
 import { important } from "polished";
+import { WithCSSProp } from "src/Style";
 
 export default Object.assign(
-    styled(Base)`
+    styled(Base).attrs<WithCSSProp>(
+        (props) => ({
+            $css: props.$css ?? null
+        })
+    )`
         display: flex;
         flex-direction: row;
         background-color: ${({theme}) => theme.headerBackgroundColor};
@@ -27,6 +32,8 @@ export default Object.assign(
             ${({theme}) => important({backgroundColor: theme.senderColor})}
             border: none;
         }
+
+        ${({$css}) => $css}
     `,
     {
         displayName: "Header"

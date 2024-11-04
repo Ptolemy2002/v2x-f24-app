@@ -1,9 +1,13 @@
 import ProgressBar from "./ProgressBar";
 import styled, { css } from "styled-components";
-import { bsBreakpointMax, centerVertical } from "src/Style";
+import { bsBreakpointMax, centerVertical, WithCSSProp } from "src/Style";
 
 export default Object.assign(
-    styled(ProgressBar)`
+    styled(ProgressBar).attrs<WithCSSProp>(
+        (props) => ({
+            $css: props.$css ?? null
+        })
+    )`
         flex-grow: 1;
 
         // IE10
@@ -30,6 +34,8 @@ export default Object.assign(
 
         border: none;
         ${centerVertical()}
+
+        ${({$css}) => $css}
     `,
     {
         displayName: "ProgressBar"

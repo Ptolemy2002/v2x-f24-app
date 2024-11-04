@@ -7,6 +7,7 @@ export default Object.assign(
     styled(Base).attrs<AudioPlayerStyleAttributes>(
         (props) => ({
             $gap: props.$gap ?? "20px",
+            $css: props.$css ?? null,
         })
     )`
         display: flex;
@@ -18,6 +19,8 @@ export default Object.assign(
         > .progress-label {
             ${centerVertical()}
         }
+        
+        ${({$css}) => $css}
     `,
     {
         displayName: "AudioPlayer",

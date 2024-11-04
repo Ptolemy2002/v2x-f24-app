@@ -9,9 +9,12 @@ export default Object.assign(
             $maxWidth: props.$maxWidth ?? "75%",
             $padding: props.$padding ?? "10px",
             $borderRadius: props.$borderRadius ?? "10px",
+            $css: props.$css ?? null,
         })
     )`
         ${({$maxWidth, $padding, $borderRadius}) => speechBubbleBaseStyle($maxWidth!, $borderRadius!, $padding!)}
+
+        ${({$css}) => $css}
     `,
     {
         displayName: "SpeechBubbleText",

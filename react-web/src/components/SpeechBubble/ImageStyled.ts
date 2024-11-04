@@ -13,6 +13,7 @@ export default Object.assign(
             $borderThickness: props.$borderThickness ?? "1px",
             $borderStyle: props.$borderStyle ?? "solid",
             $borderColor: props.$borderColor ?? "black",
+            $css: props.$css ?? null,
         })
     )`
         ${({$maxWidth, $padding, $borderRadius}) => speechBubbleBaseStyle($maxWidth!, $borderRadius!, $padding!)}
@@ -27,6 +28,8 @@ export default Object.assign(
                 )}
             }
         }
+
+        ${({$css}) => $css}
     `,
     {
         displayName: "SpeechBubbleImage",

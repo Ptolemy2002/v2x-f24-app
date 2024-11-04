@@ -9,6 +9,7 @@ export default Object.assign(
         (props) => ({
             $margin: props.$margin ?? "0.5em",
             $padding: props.$padding ?? "5px",
+            $css: props.$css ?? null,
         })
     )`
         ${({$margin, $padding}) => baseSidebarItemStyle($margin!, $padding!)}
@@ -25,6 +26,8 @@ export default Object.assign(
             text-decoration: none;
             color: ${({theme}) => theme.textColor};
         }
+
+        ${({$css}) => $css}
     `,
     {
         displayName: "ChatLink",

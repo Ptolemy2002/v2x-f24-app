@@ -6,6 +6,10 @@ import { css, Interpolation } from "styled-components";
 // exist.
 export type RequiredCSSProperties = Required<_CSSProperties>;
 
+// Add a prop that allows for custom CSS to be added to a styled component instance without
+// creating a new styled component.
+export type WithCSSProp<T={}> = T & { $css?: Interpolation<Omit<T, "$css">> };
+
 export function centerHorizontal() {
     return css`
         margin-left: auto;

@@ -1,5 +1,5 @@
 import { FC, HTMLProps, RefObject, PropsWithChildren, PropsWithRef } from 'react';
-import { RequiredCSSProperties } from 'src/Style';
+import { RequiredCSSProperties, WithCSSProp } from 'src/Style';
 import { MaybeForwardRefComponent } from 'src/TypeUtils';
 
 export type AudioPlayerProps = {
@@ -9,9 +9,9 @@ export type AudioPlayerProps = {
     ProgressBar?: FC<ProgressBarProps>;
 } & HTMLProps<HTMLDivElement>;
 
-export type AudioPlayerStyleAttributes = {
+export type AudioPlayerStyleAttributes = WithCSSProp<{
     $gap?: RequiredCSSProperties["gap"];
-};
+}>;
 
 export type AudioMediaProps = PropsWithRef<{
     src: string;

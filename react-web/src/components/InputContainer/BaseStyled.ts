@@ -1,11 +1,11 @@
 import { InputContainerStyleAttributes } from "./Types";
 import Base from "./Base";
 import styled from "styled-components";
-import { centerVertical } from "src/Style";
+import { centerVertical, WithCSSProp } from "src/Style";
 import { important } from "polished";
 
 export default Object.assign(
-    styled(Base).attrs<InputContainerStyleAttributes>(
+    styled(Base).attrs<WithCSSProp<InputContainerStyleAttributes>>(
         (props) => ({
             $gap: props.$gap ?? "10px",
             $maxHeight: props.$maxHeight ?? "50%",
@@ -14,6 +14,7 @@ export default Object.assign(
             $padding: props.$padding ?? "5px",
             $sendButtonRadius: props.$sendButtonRadius ?? "5px",
             $sendButtonPadding: props.$sendButtonPadding ?? "5px",
+            $css: props.$css ?? null,
         })
     )`
         display: flex;
@@ -44,6 +45,8 @@ export default Object.assign(
 
             height: fit-content;
             ${centerVertical()}
+
+            ${({$css}) => $css}
     }
     `,
     {

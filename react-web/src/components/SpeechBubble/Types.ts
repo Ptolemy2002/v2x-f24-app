@@ -1,5 +1,5 @@
 import { HTMLProps, FC } from "react";
-import { RequiredCSSProperties } from "src/Style";
+import { RequiredCSSProperties, WithCSSProp } from "src/Style";
 import { TimestampWrapperProps } from "src/components/TimestampWrapper";
 import { AudioPlayerProps } from "src/components/AudioPlayer";
 
@@ -56,11 +56,11 @@ export type SpeechBubbleTextProps = {
     SpeechBubbleTimestamp?: FC<SpeechBubbleTimestampProps>;
 } & HTMLProps<HTMLParagraphElement>;
 
-export type SpeechBubbleTextStyleAttributes = {
+export type SpeechBubbleTextStyleAttributes = WithCSSProp<{
     $maxWidth?: RequiredCSSProperties["maxWidth"];
     $padding?: RequiredCSSProperties["padding"];
     $borderRadius?: RequiredCSSProperties["borderRadius"];
-};
+}>;
 
 // SpeechBubbleImage will take a message object as well as the default properties for an image element.
 export type SpeechBubbleImageProps = {
@@ -72,14 +72,14 @@ export type SpeechBubbleImageProps = {
     SpeechBubbleTimestamp?: FC<SpeechBubbleTimestampProps>;
 } & HTMLProps<HTMLDivElement>;
 
-export type SpeechBubbleImageStyleAttributes = {
+export type SpeechBubbleImageStyleAttributes = WithCSSProp<{
     $maxWidth?: RequiredCSSProperties["maxWidth"];
     $borderThickness?: RequiredCSSProperties["borderWidth"];
     $padding?: RequiredCSSProperties["padding"];
     $borderRadius?: RequiredCSSProperties["borderRadius"];
     $borderStyle?: RequiredCSSProperties["borderStyle"];
     $borderColor?: RequiredCSSProperties["borderColor"];
-};
+}>;
 
 // SpeechBubbleAudio will take a message object as well as the default properties for an audio element.
 export type SpeechBubbleAudioProps = {
@@ -91,12 +91,12 @@ export type SpeechBubbleAudioProps = {
     AudioPlayer?: FC<AudioPlayerProps>;
 } & HTMLProps<HTMLDivElement>;
 
-export type SpeechBubbleAudioStyleAttributes = {
+export type SpeechBubbleAudioStyleAttributes = WithCSSProp<{
     $maxWidth?: RequiredCSSProperties["maxWidth"];
     $maxWidthSm?: RequiredCSSProperties["maxWidth"];
     $padding?: RequiredCSSProperties["padding"];
     $borderRadius?: RequiredCSSProperties["borderRadius"];
-};
+}>;
 
 export type SpeechBubbleTimestampProps = {
     text: string;
@@ -110,10 +110,10 @@ export type SpeechBubbleTypingProps = {
     ScreenReaderText?: FC<ScreenReaderTextProps>;
 } & HTMLProps<HTMLDivElement>;
 
-export type SpeechBubbleTypingStyleAttributes = {
+export type SpeechBubbleTypingStyleAttributes = WithCSSProp<{
     $maxWidth?: RequiredCSSProperties["maxWidth"];
     $padding?: RequiredCSSProperties["padding"];
     $borderRadius?: RequiredCSSProperties["borderRadius"];
     $fontSize?: RequiredCSSProperties["fontSize"];
     maxDots?: number;
-};
+}>;
