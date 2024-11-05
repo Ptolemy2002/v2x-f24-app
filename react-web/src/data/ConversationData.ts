@@ -110,10 +110,10 @@ export default class ConversationData extends MongoData<
         "messages"
     ];
 
-    static Context = createProxyContext<CompletedConversationData | null>("ConversationContext");
-    static Provider = MongoData.createProvider<Conversation, MongoConversation, ConversationRequests>(
+    static Context = createProxyContext<This | null>("ConversationContext");
+    static Provider = MongoData.createProvider<Conversation, MongoConversation, ConversationRequests, This>(
         ConversationData.Context,
-        ConversationData as unknown as new () => CompletedConversationData
+        ConversationData as unknown as new () => This
     );
 
     static useContext(
@@ -124,7 +124,7 @@ export default class ConversationData extends MongoData<
         return MongoData._useContext<
             Conversation, MongoConversation, ConversationRequests, This
         >(
-            ConversationData.Context as any,
+            ConversationData.Context,
             ConversationData as unknown as new () => This,
             deps,
             onChangeProp,
