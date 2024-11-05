@@ -11,7 +11,7 @@ export type MenuIconStyleAttributes = {
 
 export default styled(SVG).attrs<WithCSSProp<MenuIconStyleAttributes>>(
     (props) => ({
-        src: props.src ?? '/icons/menu.svg',
+        src: '/icons/menu.svg',
         $color: props.$color ?? null,
         $width: props.$width ?? '24px',
         $height: props.$height ?? 'auto',

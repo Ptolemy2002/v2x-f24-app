@@ -11,7 +11,7 @@ export type RightArrowIconStyleAttributes = {
 
 export default styled(SVG).attrs<WithCSSProp<RightArrowIconStyleAttributes>>(
     (props) => ({
-        src: props.src ?? '/icons/right-arrow.svg',
+        src: '/icons/right-arrow.svg',
         $color: props.$color ?? null,
         $width: props.$width ?? '24px',
         $height: props.$height ?? 'auto',

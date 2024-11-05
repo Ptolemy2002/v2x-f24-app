@@ -11,7 +11,7 @@ export type PlayIconStyleAttributes = {
 
 export default styled(SVG).attrs<WithCSSProp<PlayIconStyleAttributes>>(
     (props) => ({
-        src: props.src ?? '/icons/play.svg',
+        src: '/icons/play.svg',
         $color: props.$color ?? null,
         $width: props.$width ?? '24px',
         $height: props.$height ?? 'auto',

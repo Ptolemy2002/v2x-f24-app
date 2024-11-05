@@ -11,7 +11,7 @@ export type RestartIconStyleAttributes = {
 
 export default styled(SVG).attrs<WithCSSProp<RestartIconStyleAttributes>>(
     (props) => ({
-        src: props.src ?? '/icons/restart.svg',
+        src: '/icons/restart.svg',
         $color: props.$color ?? null,
         $width: props.$width ?? '24px',
         $height: props.$height ?? 'auto',

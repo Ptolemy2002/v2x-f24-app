@@ -11,7 +11,7 @@ export type PauseIconStyleAttributes = {
 
 export default styled(SVG).attrs<WithCSSProp<PauseIconStyleAttributes>>(
     (props) => ({
-        src: props.src ?? '/icons/pause.svg',
+        src: '/icons/pause.svg',
         $color: props.$color ?? null,
         $width: props.$width ?? '24px',
         $height: props.$height ?? 'auto',
