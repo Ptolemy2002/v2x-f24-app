@@ -1,6 +1,7 @@
 import ProgressBar from "./ProgressBar";
 import styled, { css } from "styled-components";
 import { bsBreakpointMax, centerVertical, WithCSSProp } from "src/Style";
+import { isFirefox, isChrome, isSafari, isIE } from "react-device-detect";
 
 export default Object.assign(
     styled(ProgressBar).attrs<WithCSSProp>(
@@ -10,21 +11,29 @@ export default Object.assign(
     )`
         flex-grow: 1;
 
-        // IE10
-        background-color: ${({theme}) => theme.audioPlayerBackgroundColor};
-        color: ${({theme}) => theme.audioPlayerProgressColor};
-
-        // Chrome and Safari
-        &::-webkit-progress-value {
-            background-color: ${({theme}) => theme.audioPlayerProgressColor};
-        }
-        &::-webkit-progress-bar {
-            background-color: ${({theme}) => theme.audioPlayerBackgroundColor};
+        ${
+            (isIE || isFirefox) && css`
+                background-color: ${({theme}) => theme.audioPlayerBackgroundColor};
+                color: ${({theme}) => theme.audioPlayerProgressColor};
+            `
         }
 
-        // Firefox
-        &::-moz-progress-bar {
-            background-color: ${({theme}) => theme.audioPlayerProgressColor};
+        ${
+            (isChrome || isSafari) && css`
+                &::-webkit-progress-value {
+                    background-color: ${({theme}) => theme.audioPlayerProgressColor};
+                }
+                
+                &::-webkit-progress-bar {
+                    background-color: ${({theme}) => theme.audioPlayerBackgroundColor};
+                }
+            `
+        }
+
+        ${isFirefox && css`
+            &::-moz-progress-bar {
+                background-color: ${({theme}) => theme.audioPlayerProgressColor};
+            }`
         }
         
         // Modify height based on screen size

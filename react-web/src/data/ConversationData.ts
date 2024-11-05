@@ -65,7 +65,7 @@ export type ConversationRequests = {
     queryBot: () => Promise<void>;
 };
 
-export type CompletedConversationData = CompletedMongoData<
+export type CompletedConversationData = ConversationData & CompletedMongoData<
     Conversation,
     MongoConversation,
     ConversationRequests
@@ -96,10 +96,6 @@ function findMatchingResponse(text: string): DefaultResponseData | null {
     return null;
 }
 
-// We're not exporting this type because it's only used internally.
-// It's just a shortcut.
-type This = ConversationData & CompletedConversationData;
-
 export default class ConversationData extends MongoData<
     Conversation,
     MongoConversation,
@@ -110,10 +106,15 @@ export default class ConversationData extends MongoData<
         "messages"
     ];
 
-    static Context = createProxyContext<This | null>("ConversationContext");
-    static Provider = MongoData.createProvider<Conversation, MongoConversation, ConversationRequests, This>(
+    static Context = createProxyContext<CompletedConversationData | null>("ConversationContext");
+    static Provider = MongoData.createProvider<
+        Conversation,
+        MongoConversation,
+        ConversationRequests,
+        CompletedConversationData
+    >(
         ConversationData.Context,
-        ConversationData as unknown as new () => This
+        ConversationData as unknown as new () => CompletedConversationData
     );
 
     static useContext(
@@ -122,10 +123,10 @@ export default class ConversationData extends MongoData<
         onChangeReinit?: OnChangeReinitCallback<CompletedConversationData>
     ) {
         return MongoData._useContext<
-            Conversation, MongoConversation, ConversationRequests, This
+            Conversation, MongoConversation, ConversationRequests, CompletedConversationData
         >(
             ConversationData.Context,
-            ConversationData as unknown as new () => This,
+            ConversationData as unknown as new () => CompletedConversationData,
             deps,
             onChangeProp,
             onChangeReinit
@@ -136,7 +137,7 @@ export default class ConversationData extends MongoData<
     // adding the properties and request types in a fluent way.
     // constructors don't allow for different return types.
     static create() {
-        return new ConversationData() as This;
+        return new ConversationData() as CompletedConversationData;
     }
 
     constructor() {
@@ -156,15 +157,15 @@ export default class ConversationData extends MongoData<
             }))
         });
 
-        this.defineRequestType("queryBot", async function(this: This) {
-            // This is all just to simulate an API call. The actual implementation
+        this.defineRequestType("queryBot", async function(this: CompletedConversationData) {
+            // CompletedConversationData is all just to simulate an API call. The actual implementation
             // would be much less code.
             await new Promise((resolve) => setTimeout(resolve, Math.random() * 4000 + 1000));
             
             const lastMessage = this.getLastMessage();
 
             if (!lastMessage) {
-                // This is the first message, so we'll just greet the user.
+                // CompletedConversationData is the first message, so we'll just greet the user.
                 this.addMessage("text", "recepient", () => ({
                     text: "Greetings! How can I help you today?"
                 }));
@@ -218,7 +219,7 @@ export default class ConversationData extends MongoData<
     }
 
     addMessage<T extends SpeechBubbleMessageType>(
-        this: This,
+        this: CompletedConversationData,
         type: T,
         origin: SpeechBubbleMessageOrigin,
         createMessage: () => SpeechBubbleMessageExclusiveProps<T>
@@ -235,7 +236,7 @@ export default class ConversationData extends MongoData<
         });
     }
 
-    getLastMessage(this: This) {
+    getLastMessage(this: CompletedConversationData) {
         if (this.messages.length === 0) return null;
         return this.messages[this.messages.length - 1];
     }

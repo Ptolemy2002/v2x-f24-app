@@ -1,20 +1,15 @@
-import React, { MouseEvent, useCallback } from 'react';
+import { MouseEvent, useCallback } from 'react';
 import { ProgressBarProps } from './Types';
 
 export default function({progress, duration, onSeek, children, ...props}: ProgressBarProps) {
     const seekHandler = useCallback((
-        e: MouseEvent<HTMLProgressElement> | React.TouchEvent<HTMLProgressElement>
+        e: MouseEvent<HTMLProgressElement>
     ) => {
         const rect = e.currentTarget.getBoundingClientRect();
 
         let x: number;
-        if (e instanceof TouchEvent) {
-            const touch = e.touches[0];
-            x = touch.clientX - rect.left;
-        } else {
-            e = e as MouseEvent<HTMLProgressElement>;
-            x = e.clientX - rect.left;
-        }
+        e = e as MouseEvent<HTMLProgressElement>;
+        x = e.clientX - rect.left;
 
         const percentage = x / rect.width;
         onSeek(percentage);
@@ -31,9 +26,6 @@ export default function({progress, duration, onSeek, children, ...props}: Progre
                 if (e.buttons === 1) {
                     seekHandler(e);
                 }
-            }}
-            onTouchMove={(e) => {
-                seekHandler(e);
             }}
             {...props}
         >
