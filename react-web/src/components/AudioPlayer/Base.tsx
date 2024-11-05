@@ -96,10 +96,20 @@ export default function({
             <ProgressBar
                 progress={progress}
                 duration={audioRef.current?.duration ?? 0}
-                onSeek={(percentage) => {
+                onSeek={(x) => {
                     const audio = audioRef.current;
                     if (audio) {
-                        audio.currentTime = audio.duration * percentage;
+                        audioRef.current.currentTime = x * audio.duration;
+                        setProgress(audio.currentTime);
+                        if (x !== 1) setIsEnded(false);
+                    }
+                }}
+
+                setProgress={(progress) => {
+                    const audio = audioRef.current;
+                    if (audio) {
+                        audio.currentTime = progress * audio.duration
+                        setProgress(progress);
                     }
                 }}
             >

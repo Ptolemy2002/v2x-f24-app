@@ -1,31 +1,44 @@
-import { MouseEvent, useCallback } from 'react';
+import { useRef } from 'react';
+import { useMountEffect, useUnmountEffect } from '@ptolemy2002/react-mount-effects';
 import { ProgressBarProps } from './Types';
+import { handleSeekDesktop } from './Other';
 
-export default function({progress, duration, onSeek, children, ...props}: ProgressBarProps) {
-    const seekHandler = useCallback((
-        e: MouseEvent<HTMLProgressElement>
-    ) => {
-        const rect = e.currentTarget.getBoundingClientRect();
+export default function({progress, duration, onSeek, setProgress, children, ...props}: ProgressBarProps) {
+    const touchedRef = useRef(false);
+    const mouseUpEventListenerRef = useRef<() => void>();
+    const mouseMoveEventListenerRef = useRef<(e: MouseEvent) => void>();
+    const progressRef = useRef<HTMLProgressElement>(null);
 
-        let x: number;
-        e = e as MouseEvent<HTMLProgressElement>;
-        x = e.clientX - rect.left;
+    useMountEffect(() => {
+        mouseUpEventListenerRef.current = () => {
+            touchedRef.current = false;
+        };
+        window.addEventListener("mouseup", mouseUpEventListenerRef.current);
 
-        const percentage = x / rect.width;
-        onSeek(percentage);
-    }, [progress, duration, onSeek]);
+        mouseMoveEventListenerRef.current = (e) => {
+            if (touchedRef.current) {
+                handleSeekDesktop(e, progressRef.current!, onSeek);
+            }
+        };
+        window.addEventListener("mousemove", mouseMoveEventListenerRef.current);
+    });
+
+    useUnmountEffect(() => {
+        window.removeEventListener("mouseup", mouseUpEventListenerRef.current!);
+        window.removeEventListener("mousemove", mouseMoveEventListenerRef.current!);
+    });
 
     return (
         <progress
+            ref={progressRef}
             value={progress}
             max={duration}
-            onMouseDown={seekHandler}
-            onMouseMove={(e) => {
-                // This means left mouse button is pressed
-                // https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/buttons
-                if (e.buttons === 1) {
-                    seekHandler(e);
-                }
+            onMouseDown={(e) => {
+                touchedRef.current = true;
+
+                const rect = e.currentTarget.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                setProgress(x / rect.width);
             }}
             {...props}
         >

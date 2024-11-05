@@ -12,3 +12,24 @@ export function formatDuration(duration: Duration) {
         return result;
     }
 }
+
+export function handleSeekDesktop(e: MouseEvent, target: HTMLProgressElement, onSeek: (x: number) => void) {
+    // Get the left position of the progress bar
+    const rect = target.getBoundingClientRect();
+
+    // If the mouse is to the left, return 0
+    if (e.clientX < rect.left) {
+        onSeek(0);
+        return;
+    }
+
+    // If the mouse is to the right, return 1
+    if (e.clientX > rect.right) {
+        onSeek(1);
+        return;
+    }
+
+    // Calculate the progress
+    const x = e.clientX - rect.left;
+    onSeek(x / rect.width);
+}
