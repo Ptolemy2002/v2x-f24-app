@@ -1,51 +1,59 @@
 import { useCallback, useRef, KeyboardEvent } from 'react';
 import { Button } from 'react-bootstrap';
 import RightArrowIcon from 'src/components/icons/RightArrowIcon';
-import { addMessage } from "src/components/SpeechBubble";
 import { InputContainerProps } from './Types';
+import ConversationData from 'src/data/ConversationData';
 
-export default function({setMessages, ...props}: InputContainerProps) {
+export default function({...props}: InputContainerProps) {
     // This ref is used to allow access to the message content through the textarea element.
     const messageInputRef = useRef<HTMLTextAreaElement>(null);
 
+    const [_conversationData] = ConversationData.useContext(["requestInProgress"]);
+    const conversationData = _conversationData!;
+
     // useCallback is used to keep a stable reference to the function.
     const addText = useCallback(() => {
-        setMessages((messages) => {
-            return addMessage(messages, "text", "sender", () => {
-                // We do this in a timeout to fix a bug in strict mode where the text comes up empty the second time this
-                // code is run. In non-strict mode, the bug doesn't happen.
-                setTimeout(() => {
-                    // The ! here tells TypeScript that messageInputRef.current will not be null in this context.
-                    // It doesn't see that we have the ref set to the textarea element in JSX.
-                    messageInputRef.current!.value = "";
-                }, 0);
+        conversationData.addMessage("text", "sender", () => {
+            // We do this in a timeout to fix a bug in strict mode where the text comes up empty the second time this
+            // code is run. In non-strict mode, the bug doesn't happen.
+            setTimeout(() => {
+                // The ! here tells TypeScript that messageInputRef.current will not be null in this context.
+                // It doesn't see that we have the ref set to the textarea element in JSX.
+                messageInputRef.current!.value = "";
+            }, 0);
 
-                return { text: messageInputRef.current!.value };
-            });
+            return { text: messageInputRef.current!.value };
         });
-    }, [setMessages]); // Recreate the function only when setMessages changes.
+
+        // Start the bot's response
+        conversationData.queryBot();
+    }, [conversationData]);
 
     const addImage = useCallback(() => {
-        setMessages((messages) => {
-            return addMessage(messages, "image", "sender", () => ({
-                // Just a placeholder image for now.
-                src: "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png",
-                alt: "Placeholder image"
-            }));
-        });
-    }, [setMessages]);
+        conversationData.addMessage("image", "sender", () => ({
+            // Just a placeholder image for now.
+            src: "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png",
+            alt: "Placeholder image"
+        }));
+
+        // Start the bot's response
+        conversationData.queryBot();
+    }, [conversationData]);
 
     const addAudio = useCallback(() => {
-        setMessages((messages) => {
-            return addMessage(messages, "audio", "sender", () => ({
-                // Just a placeholder audio for now.
-                src: "/aud-test.wav"
-            }));
-        });
-    }, [setMessages]);
+        conversationData.addMessage("audio", "sender", () => ({
+            // Just a placeholder audio for now.
+            src: "/aud-test.wav"
+        }));
+
+        // Start the bot's response
+        conversationData.queryBot();
+    }, [conversationData]);
 
     // useCallback is used to keep a stable reference to the function.
     const handleKeyDown = useCallback((event: KeyboardEvent<HTMLTextAreaElement>) => {
+        if (conversationData.hasInProgressRequest("queryBot")) return;
+
         if (event.key === 'Enter' && !event.shiftKey) {
             event.preventDefault();
             addText();
@@ -59,7 +67,7 @@ export default function({setMessages, ...props}: InputContainerProps) {
                 addAudio();
             }
         }
-    }, [addText, addImage, addAudio]);
+    }, [addText, addImage, addAudio, conversationData.requestInProgress]);
 
     return (
         <div id="input-container" {...props}>
@@ -77,6 +85,7 @@ export default function({setMessages, ...props}: InputContainerProps) {
                 as="button"
                 aria-label="Send Message"
                 onClick={addText}
+                disabled={conversationData.hasInProgressRequest("queryBot")}
             >
                 <RightArrowIcon />
             </Button>

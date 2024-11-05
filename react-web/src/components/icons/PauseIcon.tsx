@@ -3,6 +3,7 @@ import { RequiredCSSProperties, WithCSSProp } from 'src/Style';
 import styled from 'styled-components';
 
 export type PauseIconStyleAttributes = {
+    src?: string;
     $color?: RequiredCSSProperties['fill'] | null;
     $width?: RequiredCSSProperties['width'];
     $height?: RequiredCSSProperties['height'];
@@ -10,7 +11,7 @@ export type PauseIconStyleAttributes = {
 
 export default styled(SVG).attrs<WithCSSProp<PauseIconStyleAttributes>>(
     (props) => ({
-        src: '/icons/pause.svg',
+        src: props.src ?? '/icons/pause.svg',
         $color: props.$color ?? null,
         $width: props.$width ?? '24px',
         $height: props.$height ?? 'auto',

@@ -1,4 +1,4 @@
-import {useRef, useState, useEffect, useCallback} from "react";
+import {useRef, useEffect, useCallback} from "react";
 import {
     SpeechBubbleText as DefaultSpeechBubbleText,
     SpeechBubbleImage as DefaultSpeechBubbleImage,
@@ -6,11 +6,9 @@ import {
     SpeechBubbleTyping as DefaultSpeechBubbleTyping,
 } from "src/components/SpeechBubble";
 import { SpeechContainerProps } from "./Types";
-import { respond } from "./Other";
+import ConversationData from "src/data/ConversationData";
 
 export default function({
-    messages=[],
-    setMessages,
     SpeechBubbleText=DefaultSpeechBubbleText,
     SpeechBubbleImage=DefaultSpeechBubbleImage,
     SpeechBubbleAudio=DefaultSpeechBubbleAudio,
@@ -18,7 +16,9 @@ export default function({
     ...props
 }: SpeechContainerProps) {
     const speechContainerRef = useRef<HTMLDivElement>(null);
-    const [showTypingBubbles, setShowTypingBubbles] = useState(false);
+
+    const [_conversationData] = ConversationData.useContext(["messages", "requestInProgress"]);
+    const conversationData = _conversationData!;
 
     // useCallback is used to keep a stable reference to the function.
     const scrollToEnd = useCallback(() => {
@@ -30,39 +30,24 @@ export default function({
     // When a text message is added, scroll to the end automatically. The onLoad solution used for images
     // and audio messages doesn't work for text messages, so this is necessary.
     useEffect(() => {
-        if (messages.length > 0 && messages[messages.length - 1].type === "text") {
+        if (conversationData.messages.length > 0 && conversationData.getLastMessage()?.type === "text") {
             scrollToEnd();
         }
-    }, [messages, scrollToEnd]);
+    }, [conversationData.messages, scrollToEnd]);
 
-    // When the sender adds a message, start responding with typing bubbles.
+    // When queryBot is in progress, scroll to the end automatically.
     useEffect(() => {
-        const lastMessage = messages[messages.length - 1];
-        if (messages.length > 0 && lastMessage.origin === "sender") {
-            setShowTypingBubbles(true);
-
-            // Use setTimeout here to simulate a delay in the response.
-            // We're waiting between 1 and 5 seconds before responding.
-            setTimeout(() => {
-                setShowTypingBubbles(false);
-                setMessages(respond(messages));
-            }, Math.random() * 4000 + 1000);
-        }
-    }, [messages]);
-
-    // When showTypingBubbles changes to true, scroll to the end of the container.
-    useEffect(() => {
-        if (showTypingBubbles) {
+        if (conversationData.hasInProgressRequest("queryBot")) {
             scrollToEnd();
         }
-    }, [showTypingBubbles, scrollToEnd]);
+    }, [conversationData.requestInProgress, scrollToEnd]);
 
     return (
         <div id="speech-container" ref={speechContainerRef} {...props}>
             {
                 // map here will iterate over each message in the messages array, returning a new array with the
                 // results of the function applied to each element.
-                messages.map((message, i) => {
+                conversationData.messages.map((message, i) => {
                     if (message.type === "text") {
                         return <SpeechBubbleText key={`text-${i}`} message={message} />;
                     } else if (message.type === "image") {
@@ -73,7 +58,7 @@ export default function({
                 })
             }
 
-            {showTypingBubbles && <SpeechBubbleTyping origin="recepient" />}
+            {conversationData.hasInProgressRequest("queryBot") && <SpeechBubbleTyping origin="recepient" />}
         </div>
     );
 }

@@ -9,7 +9,7 @@ export default Object.assign(
             $maxWidth: props.$maxWidth ?? "75%",
             $padding: props.$padding ?? "10px",
             $borderRadius: props.$borderRadius ?? "10px",
-            $fontSize: props.$fontSize ?? "3rem",
+            $fontSize: props.$fontSize ?? "inherit",
             maxDots: props.maxDots ?? 3,
             $css: props.$css ?? null,
         })

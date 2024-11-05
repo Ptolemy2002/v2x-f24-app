@@ -1,5 +1,7 @@
-import { Dispatch, FC, HTMLProps } from "react";
-import { SpeechBubbleAudioProps, SpeechBubbleImageProps, SpeechBubbleMessage, SpeechBubbleTextProps, SpeechBubbleTypingProps } from "src/components/SpeechBubble";
+import { FC, HTMLProps } from "react";
+import {
+    SpeechBubbleAudioProps, SpeechBubbleImageProps, SpeechBubbleTextProps, SpeechBubbleTypingProps
+} from "src/components/SpeechBubble";
 import { RequiredCSSProperties, WithCSSProp } from "src/Style";
 
 export type ResponseData = {
@@ -11,8 +13,6 @@ export type ResponseData = {
 };
 
 export type SpeechContainerProps = {
-    messages: SpeechBubbleMessage[];
-    setMessages: Dispatch<SpeechBubbleMessage[]>;
     SpeechBubbleText?: FC<SpeechBubbleTextProps>;
     SpeechBubbleImage?: FC<SpeechBubbleImageProps>;
     SpeechBubbleAudio?: FC<SpeechBubbleAudioProps>;

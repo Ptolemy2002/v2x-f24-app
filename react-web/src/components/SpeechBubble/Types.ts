@@ -2,46 +2,10 @@ import { HTMLProps, FC } from "react";
 import { RequiredCSSProperties, WithCSSProp } from "src/Style";
 import { TimestampWrapperProps } from "src/components/TimestampWrapper";
 import { AudioPlayerProps } from "src/components/AudioPlayer";
-
-// The message can only originate from the sender or the recipient.
-export type SpeechBubbleMessageOrigin = "sender" | "recepient";
-
-// Define the base separately to reduce repetition.
-export type SpeechBubbleMessageBase<T extends string> = {
-    origin: SpeechBubbleMessageOrigin;
-    type: T;
-    date: Date;
-};
-
-// SpeechBubbleText will take a message object as well as the default properties for a speech bubble.
-export type SpeechBubbleTextMessage = {
-    text: string;
-} & SpeechBubbleMessageBase<"text">;
-
-// SpeechBubbleImage will take a src and alt attribute as well as the default properties for a speech bubble.
-export type SpeechBubbleImageMessage = {
-    src: string;
-    alt?: string;
-} & SpeechBubbleMessageBase<"image">;
-
-// SpeechBubbleAudio will take a src attribute as well as the default properties for a speech bubble.
-export type SpeechBubbleAudioMessage = {
-    src: string;
-} & SpeechBubbleMessageBase<"audio">;
-
-// Combined type for any speech bubble message.
-export type SpeechBubbleMessage = SpeechBubbleTextMessage | SpeechBubbleImageMessage | SpeechBubbleAudioMessage;
-
-// Combined type for all different types options for speech bubble messages.
-export type SpeechBubbleMessageType = SpeechBubbleMessage["type"];
-
-// Get the message object of the specified type where the type is just a string.
-export type SpeechBubbleMessageOfType<T extends SpeechBubbleMessageType> = Extract<SpeechBubbleMessage, {type: T}>;
-
-// Get the properties that are exclusive to the speech bubble of specified type
-// (i.e. included in the specified speech bubble type but not in the base type).
-export type SpeechBubbleMessageExclusiveProps<T extends SpeechBubbleMessageType> =
-    Omit<SpeechBubbleMessageOfType<T>, keyof SpeechBubbleMessageBase<T>>;
+import {
+    SpeechBubbleMessageOrigin, SpeechBubbleTextMessage, SpeechBubbleImageMessage,
+    SpeechBubbleAudioMessage
+} from "src/data/ConversationData";
 
 export type ScreenReaderTextProps = {
     text?: string;

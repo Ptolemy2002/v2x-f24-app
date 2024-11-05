@@ -1,24 +1,5 @@
-import { SpeechBubbleMessage, SpeechBubbleMessageOrigin, SpeechBubbleMessageOfType, SpeechBubbleMessageExclusiveProps } from "./Types";
 import { RequiredCSSProperties, alignLeft, alignRight, bsBreakpointMax, bsBreakpointMin } from "src/Style";
 import { css } from "styled-components";
-
-export function addMessage<T extends SpeechBubbleMessage["type"]>(
-    messages: SpeechBubbleMessage[],
-    type: T,
-    origin: SpeechBubbleMessageOrigin,
-    createMessage: () => SpeechBubbleMessageExclusiveProps<T>
-): SpeechBubbleMessage[] {
-    const newMessages = [...messages];
-
-    newMessages.push({
-        ...createMessage(),
-        origin,
-        type,
-        date: new Date()
-    } as SpeechBubbleMessageOfType<T>); // We use "as" to tell TypeScript that the type is correct because it can't be inferred.
-
-    return newMessages;
-}
 
 export function speechBubbleBaseStyle(
     maxWidth: RequiredCSSProperties["maxWidth"],

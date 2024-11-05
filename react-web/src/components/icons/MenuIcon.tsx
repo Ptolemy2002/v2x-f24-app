@@ -3,6 +3,7 @@ import { RequiredCSSProperties, WithCSSProp } from 'src/Style';
 import styled from 'styled-components';
 
 export type MenuIconStyleAttributes = {
+    src?: string;
     $color?: RequiredCSSProperties['fill'] | null;
     $width?: RequiredCSSProperties['width'];
     $height?: RequiredCSSProperties['height'];
@@ -10,7 +11,7 @@ export type MenuIconStyleAttributes = {
 
 export default styled(SVG).attrs<WithCSSProp<MenuIconStyleAttributes>>(
     (props) => ({
-        src: '/icons/menu.svg',
+        src: props.src ?? '/icons/menu.svg',
         $color: props.$color ?? null,
         $width: props.$width ?? '24px',
         $height: props.$height ?? 'auto',

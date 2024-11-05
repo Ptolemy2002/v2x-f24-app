@@ -1,10 +1,7 @@
-import { Dispatch, SetStateAction, HTMLProps } from 'react';
-import { SpeechBubbleMessage } from 'src/components/SpeechBubble';
+import { HTMLProps } from 'react';
 import { RequiredCSSProperties } from 'src/Style';
 
-export type InputContainerProps = {
-    setMessages: Dispatch<SetStateAction<SpeechBubbleMessage[]>>;
-} & HTMLProps<HTMLDivElement>;
+export type InputContainerProps = HTMLProps<HTMLDivElement>;
 
 export type InputContainerStyleAttributes = {
     $gap?: RequiredCSSProperties["gap"];
