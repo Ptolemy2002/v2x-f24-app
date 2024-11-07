@@ -16,6 +16,6 @@ export default Object.assign(styled(TimeLabel).attrs<TimeLabelStyleAttributes>(
         ${({$css}) => $css}
     `, 
     {
-        displayName: "TimeLabel",
+        displayName: "styled(TimeLabel)",
     }
 );

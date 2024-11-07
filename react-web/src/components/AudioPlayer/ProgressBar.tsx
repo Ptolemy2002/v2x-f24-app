@@ -3,7 +3,7 @@ import { useMountEffect, useUnmountEffect } from '@ptolemy2002/react-mount-effec
 import { ProgressBarProps } from './Types';
 import { handleSeekDesktop } from './Other';
 
-export default function({progress, duration, onSeek, setProgress, children, ...props}: ProgressBarProps) {
+export default function ProgressBar({progress, duration, onSeek, setProgress, children, ...props}: ProgressBarProps) {
     const touchedRef = useRef(false);
     const mouseUpEventListenerRef = useRef<() => void>();
     const mouseMoveEventListenerRef = useRef<(e: MouseEvent) => void>();

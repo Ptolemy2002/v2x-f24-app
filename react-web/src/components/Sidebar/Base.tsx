@@ -3,7 +3,7 @@ import { Col } from "react-bootstrap";
 import DefaultGenericLinks from "./GenericLinks";
 import clsx from "clsx";
 
-export default function({className, colSize=1, GenericLinks = DefaultGenericLinks, ...props}: SidebarProps) {
+export default function Sidebar({className, colSize=1, GenericLinks = DefaultGenericLinks, ...props}: SidebarProps) {
     return (
         // We need to explicitly set the "col" class here so LESS can recognize it as a column.
         // We also need to set the "as" prop after spreading the others to make sure it doesn't get overridden.

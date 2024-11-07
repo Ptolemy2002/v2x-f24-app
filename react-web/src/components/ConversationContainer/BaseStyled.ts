@@ -16,6 +16,6 @@ export default Object.assign(
         ${({$css}) => $css}
     `,
     {
-        displayName: "ConversationContainer",
+        displayName: "styled(ConversationContainer)",
     }
 );

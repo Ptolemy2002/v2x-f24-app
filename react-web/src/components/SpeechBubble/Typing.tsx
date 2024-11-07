@@ -3,7 +3,7 @@ import {SpeechBubbleTypingProps} from "./Types";
 import DefaultScreenReaderText from "./ScreenReaderText";
 import clsx from "clsx";
 
-export default function({
+export default function SpeechBubbleTyping({
     origin,
     className,
     interval=500,

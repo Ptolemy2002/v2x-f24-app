@@ -42,6 +42,6 @@ export default Object.assign(
         ${({$css}) => $css}
     `, 
     {
-        displayName: "App"
+        displayName: "styled(App)"
     }
 );

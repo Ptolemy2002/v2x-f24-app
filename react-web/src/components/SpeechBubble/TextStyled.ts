@@ -17,6 +17,6 @@ export default Object.assign(
         ${({$css}) => $css}
     `,
     {
-        displayName: "SpeechBubbleText",
+        displayName: "styled(SpeechBubbleText)",
     }
 );

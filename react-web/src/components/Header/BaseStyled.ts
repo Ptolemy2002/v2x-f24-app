@@ -36,6 +36,6 @@ export default Object.assign(
         ${({$css}) => $css}
     `,
     {
-        displayName: "Header"
+        displayName: "styled(Header)"
     }
 );

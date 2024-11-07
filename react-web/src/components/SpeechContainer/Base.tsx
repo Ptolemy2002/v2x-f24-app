@@ -8,7 +8,7 @@ import {
 import { SpeechContainerProps } from "./Types";
 import ConversationData from "src/data/ConversationData";
 
-export default function({
+export default function SpeechContainer({
     SpeechBubbleText=DefaultSpeechBubbleText,
     SpeechBubbleImage=DefaultSpeechBubbleImage,
     SpeechBubbleAudio=DefaultSpeechBubbleAudio,

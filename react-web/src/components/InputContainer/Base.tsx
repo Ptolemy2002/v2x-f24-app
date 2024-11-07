@@ -4,7 +4,7 @@ import RightArrowIcon from 'src/components/icons/RightArrowIcon';
 import { InputContainerProps } from './Types';
 import ConversationData from 'src/data/ConversationData';
 
-export default function({...props}: InputContainerProps) {
+export default function InputContainer({...props}: InputContainerProps) {
     // This ref is used to allow access to the message content through the textarea element.
     const messageInputRef = useRef<HTMLTextAreaElement>(null);
 

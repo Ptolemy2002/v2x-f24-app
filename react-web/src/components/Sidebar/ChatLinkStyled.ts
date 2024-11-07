@@ -30,6 +30,6 @@ export default Object.assign(
         ${({$css}) => $css}
     `,
     {
-        displayName: "ChatLink",
+        displayName: "styled(ChatLink)",
     }
 );

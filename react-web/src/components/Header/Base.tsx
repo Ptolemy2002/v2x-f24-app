@@ -3,7 +3,7 @@ import { Button, Row } from "react-bootstrap";
 import { BSMediaQuery } from "@ptolemy2002/react-bs-media-queries";
 import MenuIcon from "src/components/icons/MenuIcon";
 
-export default function({ onMenuClick, ...props }: HeaderProps) {
+export default function Header({ onMenuClick, ...props }: HeaderProps) {
     // The "as" prop allows you to specify the HTML element that the Row component should render as.
     return (
         <Row as="header" {...props}>

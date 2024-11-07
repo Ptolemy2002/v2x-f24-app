@@ -26,6 +26,6 @@ export default Object.assign(
         ${({$css}) => $css}
     `,
     {
-        displayName: "Sidebar",
+        displayName: "styled(Sidebar)",
     }
 );

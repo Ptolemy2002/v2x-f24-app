@@ -47,6 +47,6 @@ export default Object.assign(
         ${({$css}) => $css}
     `,
     {
-        displayName: "ProgressBar"
+        displayName: "styled(ProgressBar)"
     }
 );

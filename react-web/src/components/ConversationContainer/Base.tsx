@@ -4,7 +4,7 @@ import DefaultSpeechContainer from "src/components/SpeechContainer";
 import DefaultInputContainer from "src/components/InputContainer";
 import { ConversationContainerProps } from "./Types";
 
-export default function({
+export default function ConversationContainer({
     className,
     SpeechContainer = DefaultSpeechContainer,
     InputContainer = DefaultInputContainer,

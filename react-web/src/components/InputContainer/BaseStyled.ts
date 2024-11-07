@@ -50,6 +50,6 @@ export default Object.assign(
     }
     `,
     {
-        displayName: "InputContainer",
+        displayName: "styled(InputContainer)",
     }
 );

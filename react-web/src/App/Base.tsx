@@ -6,7 +6,7 @@ import ConversationContainer from 'src/components/ConversationContainer';
 import DefaultHeader from 'src/components/Header';
 import { AppProps } from './Types';
 
-export default function({className, Header = DefaultHeader, Sidebar = DefaultSidebar}: AppProps) {
+export default function App({className, Header = DefaultHeader, Sidebar = DefaultSidebar}: AppProps) {
     const [showSidebar, setShowSidebar] = useState(false);
     const isMD = useBreakpointQuery("md", "min");
     const isXXL = useBreakpointQuery("xxl", "min");

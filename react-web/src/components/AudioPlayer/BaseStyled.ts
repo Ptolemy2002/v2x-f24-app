@@ -23,6 +23,6 @@ export default Object.assign(
         ${({$css}) => $css}
     `,
     {
-        displayName: "AudioPlayer",
+        displayName: "styled(AudioPlayer)",
     }
 );
