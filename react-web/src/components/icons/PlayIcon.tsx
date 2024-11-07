@@ -1,18 +1,20 @@
-import SVG from 'react-inlinesvg';
+import StaticSrcSVG, { StaticSrcSVGProps } from './Base';
 import { RequiredCSSProperties, WithCSSProp } from 'src/Style';
 import styled from 'styled-components';
 
 export type PlayIconStyleAttributes = {
-    src?: string;
     $color?: RequiredCSSProperties['fill'] | null;
     $width?: RequiredCSSProperties['width'];
     $height?: RequiredCSSProperties['height'];
 };
 
+export type PlayIconProps = WithCSSProp<PlayIconStyleAttributes> & StaticSrcSVGProps;
+
+const SVG = StaticSrcSVG('/icons/play.svg');
+
 export default Object.assign(
     styled(SVG).attrs<WithCSSProp<PlayIconStyleAttributes>>(
         (props) => ({
-            src: '/icons/play.svg',
             $color: props.$color ?? null,
             $width: props.$width ?? '24px',
             $height: props.$height ?? 'auto',

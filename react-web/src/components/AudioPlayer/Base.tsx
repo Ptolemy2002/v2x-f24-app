@@ -5,9 +5,9 @@ import { formatDuration } from './Other';
 import { intervalToDuration } from 'date-fns';
 import { useRef, useState, useMemo } from 'react';
 import { Button } from 'react-bootstrap';
-import RestartIcon from 'src/components/icons/RestartIcon';
-import PlayIcon from 'src/components/icons/PlayIcon';
-import PauseIcon from 'src/components/icons/PauseIcon';
+import DefaultRestartIcon from 'src/components/icons/RestartIcon';
+import DefaultPlayIcon from 'src/components/icons/PlayIcon';
+import DefaultPauseIcon from 'src/components/icons/PauseIcon';
 import clsx from 'clsx';
 
 export default function AudioPlayer({
@@ -16,6 +16,9 @@ export default function AudioPlayer({
     className,
     AudioMedia = DefaultAudioMedia,
     ProgressBar = DefaultProgressBar,
+    RestartIcon = DefaultRestartIcon,
+    PlayIcon = DefaultPlayIcon,
+    PauseIcon = DefaultPauseIcon,
     ...props
 }: AudioPlayerProps) {
     const audioRef = useRef<HTMLAudioElement>(null);

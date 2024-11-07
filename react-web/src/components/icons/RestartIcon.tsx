@@ -1,18 +1,20 @@
-import SVG from 'react-inlinesvg';
+import StaticSrcSVG, { StaticSrcSVGProps } from './Base';
 import { RequiredCSSProperties, WithCSSProp } from 'src/Style';
 import styled from 'styled-components';
 
 export type RestartIconStyleAttributes = {
-    src?: string;
     $color?: RequiredCSSProperties['fill'] | null;
     $width?: RequiredCSSProperties['width'];
     $height?: RequiredCSSProperties['height'];
 };
 
+export type RestartIconProps = WithCSSProp<RestartIconStyleAttributes> & StaticSrcSVGProps;
+
+const SVG = StaticSrcSVG('/icons/restart.svg');
+
 export default Object.assign(
-    styled(SVG).attrs<WithCSSProp<RestartIconStyleAttributes>>(
+    styled(SVG).attrs<RestartIconProps>(
         (props) => ({
-            src: '/icons/restart.svg',
             $color: props.$color ?? null,
             $width: props.$width ?? '24px',
             $height: props.$height ?? 'auto',

@@ -38,12 +38,18 @@ export type MongoSpeechBubbleMessage = SpeechBubbleTextMessage<true> | SpeechBub
 export type SpeechBubbleMessageType = SpeechBubbleMessage["type"];
 
 // Get the message object of the specified type where the type is just a string.
-export type SpeechBubbleMessageOfType<T extends SpeechBubbleMessageType> = Extract<SpeechBubbleMessage, {type: T}>;
+export type SpeechBubbleMessageOfType<
+    T extends SpeechBubbleMessageType,
+    Mongo extends boolean = false
+> = Extract<
+    Mongo extends true ? MongoSpeechBubbleMessage : SpeechBubbleMessage,
+    { type: T }
+>;
 
 // Get the properties that are exclusive to the speech bubble of specified type
 // (i.e. included in the specified speech bubble type but not in the base type).
-export type SpeechBubbleMessageExclusiveProps<T extends SpeechBubbleMessageType> =
-    Omit<SpeechBubbleMessageOfType<T>, keyof SpeechBubbleMessageBase<T>>;
+export type SpeechBubbleMessageExclusiveProps<T extends SpeechBubbleMessageType, Mongo extends boolean = false> =
+    Omit<SpeechBubbleMessageOfType<T, Mongo>, keyof SpeechBubbleMessageBase<T, Mongo>>;
 
 export type DefaultResponseData = {
     type: string;
@@ -165,7 +171,7 @@ export default class ConversationData extends MongoData<
             const lastMessage = this.getLastMessage();
 
             if (!lastMessage) {
-                // CompletedConversationData is the first message, so we'll just greet the user.
+                // This is the first message, so we'll just greet the user.
                 this.addMessage("text", "recepient", () => ({
                     text: "Greetings! How can I help you today?"
                 }));

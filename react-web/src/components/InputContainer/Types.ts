@@ -1,7 +1,10 @@
-import { HTMLProps } from 'react';
+import { FC, HTMLProps } from 'react';
 import { RequiredCSSProperties } from 'src/Style';
+import { RightArrowIconProps } from '../icons/RightArrowIcon';
 
-export type InputContainerProps = HTMLProps<HTMLDivElement>;
+export type InputContainerProps = HTMLProps<HTMLDivElement> & {
+    RightArrowIcon?: FC<RightArrowIconProps>;
+};
 
 export type InputContainerStyleAttributes = {
     $gap?: RequiredCSSProperties["gap"];
