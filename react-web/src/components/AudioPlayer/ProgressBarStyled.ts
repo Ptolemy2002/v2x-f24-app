@@ -1,7 +1,7 @@
 import ProgressBar from "./ProgressBar";
 import styled, { css } from "styled-components";
 import { bsBreakpointMax, centerVertical, WithCSSProp } from "src/Style";
-import { isFirefox, isChrome, isSafari, isIE } from "react-device-detect";
+import { isFirefox, isChrome, isSafari } from "react-device-detect";
 
 export default Object.assign(
     styled(ProgressBar).attrs<WithCSSProp>(
@@ -11,13 +11,8 @@ export default Object.assign(
     )`
         flex-grow: 1;
 
-        ${
-            (isIE || isFirefox) && css`
-                background-color: ${({theme}) => theme.audioPlayerBackgroundColor};
-                color: ${({theme}) => theme.audioPlayerProgressColor};
-            `
-        }
-
+        background-color: ${({theme}) => theme.audioPlayerBackgroundColor};
+        color: ${({theme}) => theme.audioPlayerProgressColor};
         ${
             (isChrome || isSafari) && css`
                 &::-webkit-progress-value {

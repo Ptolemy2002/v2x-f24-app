@@ -28,6 +28,5 @@ export type AudioMediaProps = PropsWithRef<{
 export type ProgressBarProps = PropsWithChildren<{
     progress: number;
     duration: number;
-    onSeek: (x: number) => void;
-    setProgress: (progress: number) => void;
+    onSeek: (progress: number) => void;
 }> & HTMLProps<HTMLProgressElement>;

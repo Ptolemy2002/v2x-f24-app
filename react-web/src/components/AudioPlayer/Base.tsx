@@ -3,7 +3,7 @@ import DefaultProgressBar from './ProgressBarStyled';
 import { AudioPlayerProps } from './Types';
 import { formatDuration } from './Other';
 import { intervalToDuration } from 'date-fns';
-import { useRef, useState, useMemo } from 'react';
+import { useRef, useState, useMemo, useCallback } from 'react';
 import { Button } from 'react-bootstrap';
 import DefaultRestartIcon from 'src/components/icons/RestartIcon';
 import DefaultPlayIcon from 'src/components/icons/PlayIcon';
@@ -26,10 +26,18 @@ export default function AudioPlayer({
 
     const [isPaused, setIsPaused] = useState(true);
     const [isEnded, setIsEnded] = useState(false);
-    const [progress, setProgress] = useState(0);
+    const [progress, _setProgress] = useState(0);
 
-    const formattedProgress = intervalToDuration({start: 0, end: progress * 1000});
-    const formattedDuration = useMemo(() => {
+    const setProgress = useCallback((progress: number) => {
+        const audio = audioRef.current;
+        if (audio) {
+            audio.currentTime = progress * audio.duration;
+            _setProgress(progress * audio.duration);
+        }
+    }, []);
+
+    const progressDuration = intervalToDuration({start: 0, end: progress * 1000});
+    const totalDuration = useMemo(() => {
         const audio = audioRef.current;
         if (!audio) {
             return {hours: 0, minutes: 0, seconds: 0};
@@ -44,8 +52,8 @@ export default function AudioPlayer({
 
     const progressText = `
         ${
-            formatDuration(isEnded ? formattedDuration : formattedProgress)
-        } / ${formatDuration(formattedDuration)}
+            formatDuration(isEnded ? totalDuration : progressDuration)
+        } / ${formatDuration(totalDuration)}
     `;
 
     return (
@@ -99,22 +107,7 @@ export default function AudioPlayer({
             <ProgressBar
                 progress={progress}
                 duration={audioRef.current?.duration ?? 0}
-                onSeek={(x) => {
-                    const audio = audioRef.current;
-                    if (audio) {
-                        audioRef.current.currentTime = x * audio.duration;
-                        setProgress(audio.currentTime);
-                        if (x !== 1) setIsEnded(false);
-                    }
-                }}
-
-                setProgress={(progress) => {
-                    const audio = audioRef.current;
-                    if (audio) {
-                        audio.currentTime = progress * audio.duration
-                        setProgress(progress);
-                    }
-                }}
+                onSeek={setProgress}
             >
                 {progressText}
             </ProgressBar>
