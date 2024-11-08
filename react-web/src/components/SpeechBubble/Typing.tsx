@@ -39,7 +39,7 @@ export default function SpeechBubbleTyping({
                 <span className="typing-indicator">
                     {
                         // Create a string of dots with the correct number of dots.
-                        ".".repeat(dots)
+                        "·".repeat(dots)
                     }
                 </span>
             </div>

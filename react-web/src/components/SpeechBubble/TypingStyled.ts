@@ -9,17 +9,17 @@ export default Object.assign(
             $maxWidth: props.$maxWidth ?? "75%",
             $padding: props.$padding ?? "10px",
             $borderRadius: props.$borderRadius ?? "10px",
-            $fontSize: props.$fontSize ?? "inherit",
-            maxDots: props.maxDots ?? 3,
+            $fontSize: props.$fontSize ?? "3rem",
+            // ch is based on the width of the 0 character in the font. In monospace fonts, this is the same for all characters.
+            // In non-monospace fonts, it's good enough for a rough estimate.
+            $minWidth: props.$minWidth ?? ((props.maxDots ?? 3) - 1) + "ch",
             $css: props.$css ?? null,
         })
     )`
         ${({$maxWidth, $padding, $borderRadius}) => speechBubbleBaseStyle($maxWidth!, $borderRadius!, $padding!)}
 
         font-size: ${({$fontSize}) => $fontSize};
-        // ch is based on the width of the 0 character in the font. In monospace fonts, this is the same for all characters.
-        // In non-monospace fonts, it's good enough for a rough estimate. We add 20% to the width to give some extra space.
-        min-width: ${({maxDots}) => `${maxDots! * 1.2}ch`};
+        min-width: ${({$minWidth}) => $minWidth};
 
         ${({$css}) => $css}
     `,

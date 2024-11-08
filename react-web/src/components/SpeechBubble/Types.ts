@@ -76,8 +76,8 @@ export type SpeechBubbleTypingProps = {
 
 export type SpeechBubbleTypingStyleAttributes = WithCSSProp<{
     $maxWidth?: RequiredCSSProperties["maxWidth"];
+    $minWidth?: RequiredCSSProperties["minWidth"];
     $padding?: RequiredCSSProperties["padding"];
     $borderRadius?: RequiredCSSProperties["borderRadius"];
     $fontSize?: RequiredCSSProperties["fontSize"];
-    maxDots?: number;
 }>;

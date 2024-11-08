@@ -20,7 +20,7 @@ export default Object.assign(
 
             margin: 0;
 
-            // Vertically center the span
+            // Vertically center the span within the header element
             display: flex;
             align-items: center;
         }
