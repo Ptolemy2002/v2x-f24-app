@@ -2,6 +2,7 @@ import MongoData, { CompletedMongoData } from "@ptolemy2002/react-mongo-data";
 import {
     Dependency, createProxyContext, OnChangePropCallback, OnChangeReinitCallback
 } from "@ptolemy2002/react-proxy-context";
+import { nanoid } from "nanoid";
 import defaultResponses from "src/data/default-responses.json";
 
 // The message can only originate from the sender or the recipient.
@@ -9,6 +10,7 @@ export type SpeechBubbleMessageOrigin = "sender" | "recepient";
 
 // Define the base separately to reduce repetition.
 export type SpeechBubbleMessageBase<T extends string, Mongo extends boolean = false> = {
+    id: string,
     origin: SpeechBubbleMessageOrigin;
     type: T;
     date: Mongo extends true ? string : Date;
@@ -102,6 +104,23 @@ function findMatchingResponse(text: string): DefaultResponseData | null {
     return null;
 }
 
+export function createMessage<T extends SpeechBubbleMessageType, Mongo extends boolean = false>(
+    type: T,
+    origin: SpeechBubbleMessageOrigin,
+    constructMessage: () => SpeechBubbleMessageExclusiveProps<T>,
+    mongo?: Mongo,
+    id?: string
+) {
+    return ({
+                ...constructMessage(),
+                id: id ?? nanoid(),
+                origin,
+                type,
+                date: mongo ? new Date().toISOString() : new Date()
+            } as SpeechBubbleMessageOfType<T, Mongo>
+    );
+}
+
 export default class ConversationData extends MongoData<
     Conversation,
     MongoConversation,
@@ -172,9 +191,9 @@ export default class ConversationData extends MongoData<
 
             if (!lastMessage) {
                 // This is the first message, so we'll just greet the user.
-                this.addMessage("text", "recepient", () => ({
+                this.addMessage(createMessage("text", "recepient", () => ({
                     text: "Greetings! How can I help you today?"
-                }));
+                })));
                 return;
             }
             
@@ -191,54 +210,44 @@ export default class ConversationData extends MongoData<
             }
 
             if (response.type === "text") {
-                this.addMessage("text", "recepient", () => ({
+                this.addMessage(createMessage("text", "recepient", () => ({
                     text: response.text ?? "[No text provided]"
-                }));
+                })));
                 return;
             } else if (response.type === "image") {
                 if (!response.src) {
-                    this.addMessage("text", "recepient", () => ({
+                    this.addMessage(createMessage("text", "recepient", () => ({
                         text: "I'm sorry, I had trouble sending an image."
-                    }));
+                    })));
                     return;
                 } else {
-                    this.addMessage("image", "recepient", () => ({
+                    this.addMessage(createMessage("image", "recepient", () => ({
                         src: response.src!,
                         alt: response.alt ?? "[No alt text provided]"
-                    }));
+                    })));
                     return;
                 }
             } else if (response.type === "audio") {
                 if (!response.src) {
-                    this.addMessage("text", "recepient", () => ({
+                    this.addMessage(createMessage("text", "recepient", () => ({
                         text: "I'm sorry, I had trouble sending an audio message."
-                    }));
+                    })));
                     return;
                 } else {
-                    this.addMessage("audio", "recepient", () => ({
+                    this.addMessage(createMessage("audio", "recepient", () => ({
                         src: response.src!
-                    }));
+                    })));
                     return;
                 }
             }
         });
     }
 
-    addMessage<T extends SpeechBubbleMessageType>(
-        this: CompletedConversationData,
-        type: T,
-        origin: SpeechBubbleMessageOrigin,
-        createMessage: () => SpeechBubbleMessageExclusiveProps<T>
-    ) {
+    addMessage(this: CompletedConversationData, message: SpeechBubbleMessage) {
         // updateProp ensures we create a new object so that the proxy recognizes the change.
         // It is not necessary for primitive values, but it is necessary for objects and arrays.
         return this.updateProp("messages", (messages) => {
-            messages.push({
-                ...createMessage(),
-                origin,
-                type,
-                date: new Date()
-            } as SpeechBubbleMessageOfType<T>);
+            messages.push(message);
         });
     }
 

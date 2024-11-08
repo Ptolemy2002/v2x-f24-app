@@ -2,7 +2,7 @@ import { useCallback, useRef, KeyboardEvent } from 'react';
 import { Button } from 'react-bootstrap';
 import DefaultRightArrowIcon from 'src/components/icons/RightArrowIcon';
 import { InputContainerProps } from './Types';
-import ConversationData from 'src/data/ConversationData';
+import ConversationData, { createMessage } from 'src/data/ConversationData';
 
 export default function InputContainer({
     RightArrowIcon = DefaultRightArrowIcon,
@@ -16,7 +16,7 @@ export default function InputContainer({
 
     // useCallback is used to keep a stable reference to the function.
     const addText = useCallback(() => {
-        conversationData.addMessage("text", "sender", () => {
+        conversationData.addMessage(createMessage("text", "sender", () => {
             // We do this in a timeout to fix a bug in strict mode where the text comes up empty the second time this
             // code is run. In non-strict mode, the bug doesn't happen.
             setTimeout(() => {
@@ -26,28 +26,28 @@ export default function InputContainer({
             }, 0);
 
             return { text: messageInputRef.current!.value };
-        });
+        }));
 
         // Start the bot's response
         conversationData.queryBot();
     }, [conversationData]);
 
     const addImage = useCallback(() => {
-        conversationData.addMessage("image", "sender", () => ({
+        conversationData.addMessage(createMessage("image", "sender", () => ({
             // Just a placeholder image for now.
             src: "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png",
             alt: "Placeholder image"
-        }));
+        })));
 
         // Start the bot's response
         conversationData.queryBot();
     }, [conversationData]);
 
     const addAudio = useCallback(() => {
-        conversationData.addMessage("audio", "sender", () => ({
+        conversationData.addMessage(createMessage("audio", "sender", () => ({
             // Just a placeholder audio for now.
             src: "/aud-test.wav"
-        }));
+        })));
 
         // Start the bot's response
         conversationData.queryBot();

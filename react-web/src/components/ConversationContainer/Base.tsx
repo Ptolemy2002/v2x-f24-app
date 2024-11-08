@@ -1,8 +1,12 @@
 import clsx from "clsx";
-import ConversationData from "src/data/ConversationData";
+import ConversationData, { createMessage } from "src/data/ConversationData";
 import DefaultSpeechContainer from "src/components/SpeechContainer";
 import DefaultInputContainer from "src/components/InputContainer";
 import { ConversationContainerProps } from "./Types";
+
+const defaultFirstMessage = createMessage("text", "recepient", () => ({
+    text: "Hello! How can I assist you today?"
+}), true);
 
 export default function ConversationContainer({
     className,
@@ -12,14 +16,7 @@ export default function ConversationContainer({
 }: ConversationContainerProps) {
     return (
         <ConversationData.Provider value={{
-                messages: [
-                    {
-                        origin: "recepient",
-                        type: "text",
-                        text: "Hello! How can I assist you today?",
-                        date: (new Date()).toISOString()
-                    }
-                ]
+                messages: [defaultFirstMessage]
             }}
 
             // This is necessary so that the children are re-evaluated when any values affecting
