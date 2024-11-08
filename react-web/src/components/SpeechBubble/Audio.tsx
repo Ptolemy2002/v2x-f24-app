@@ -24,7 +24,7 @@ export default function SpeechBubbleAudio({
 
                 <AudioPlayer
                     src={message.src}
-                    onAudioLoaded={scrollToEnd}
+                    onLoadedMetadata={scrollToEnd}
                 />
             </div>
         </div>

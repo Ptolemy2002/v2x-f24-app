@@ -21,11 +21,10 @@ export default function ProgressBar({
     const mouseDownEventListener = useCallback((e: React.MouseEvent | React.TouchEvent) => {
         touchedRef.current = true;
 
-        if (e instanceof MouseEvent) {
-            handleSeek(e.clientX, progressRef.current!, onSeek);
+        if (e.nativeEvent instanceof MouseEvent) {
+            handleSeek(e.nativeEvent.clientX, progressRef.current!, onSeek);
         } else {
-            e = e as React.TouchEvent;
-            const touch = e.touches[0];
+            const touch = e.nativeEvent.touches[0];
             handleSeek(touch.clientX, progressRef.current!, onSeek);
         }
     }, []);

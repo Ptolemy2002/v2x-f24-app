@@ -12,7 +12,8 @@ import clsx from 'clsx';
 
 export default function AudioPlayer({
     src,
-    onAudioLoaded,
+    onCanPlay,
+    onLoadedMetadata,
     className,
     AudioMedia = DefaultAudioMedia,
     ProgressBar = DefaultProgressBar,
@@ -22,7 +23,7 @@ export default function AudioPlayer({
     ...props
 }: AudioPlayerProps) {
     const audioRef = useRef<HTMLAudioElement>(null);
-    const [isAudioLoaded, setIsAudioLoaded] = useState(false);
+    const [canPlay, setCanPlay] = useState(false);
 
     const [isPaused, setIsPaused] = useState(true);
     const [isEnded, setIsEnded] = useState(false);
@@ -46,8 +47,8 @@ export default function AudioPlayer({
         // Since the audio should definitely not be longer than 24 hours, we can safely
         // use this duration, as the amount of hours will always be accurate.
         return intervalToDuration({start: 0, end: audio.duration * 1000});
-    }, [audioRef.current?.duration, isAudioLoaded]);
-    // even though we don't use isAudioLoaded, we need to include it to make sure the duration calculated
+    }, [audioRef.current?.duration, canPlay]);
+    // even though we don't use canPlay, we need to include it to make sure the duration calculated
     // initially is correct. Otherwise it will be stuck at 0 until we play for the first time.
 
     const progressText = `
@@ -61,10 +62,12 @@ export default function AudioPlayer({
             <AudioMedia
                 ref={audioRef}
                 src={src}
-                onAudioLoaded={() => {
-                    setIsAudioLoaded(true);
-                    onAudioLoaded?.();
+                onCanPlay={() => {
+                    setCanPlay(true);
+                    onCanPlay?.();
                 }}
+
+                onLoadedMetadata={onLoadedMetadata}
 
                 onPause={() => setIsPaused(true)}
                 onPlay={() => {
@@ -79,7 +82,8 @@ export default function AudioPlayer({
                     // only when the difference between the current time and the progress is
                     // greater than or equal to 1 second.
                     if (Math.abs(progress - currentTime) >= 1) {
-                        setProgress(currentTime);
+                        // bypass the setter to avoid skipping in the audio playback
+                        _setProgress(currentTime);
                     }
                 }}
             />

@@ -7,7 +7,8 @@ import { PauseIconProps } from '../icons/PauseIcon';
 
 export type AudioPlayerProps = {
     src: string;
-    onAudioLoaded?: () => void;
+    onCanPlay?: () => void;
+    onLoadedMetadata?: () => void;
     AudioMedia?: MaybeForwardRefComponent<AudioMediaProps>;
     ProgressBar?: FC<ProgressBarProps>;
     RestartIcon?: FC<RestartIconProps>;
@@ -21,7 +22,9 @@ export type AudioPlayerStyleAttributes = WithCSSProp<{
 
 export type AudioMediaProps = PropsWithRef<{
     src: string;
-    onAudioLoaded?: () => void;
+    mobileTimeUpdateInterval?: number;
+    onCanPlay?: () => void;
+    onTimeUpdate?: () => void;
     ref?: RefObject<HTMLAudioElement>;
 }> & HTMLProps<HTMLAudioElement>;
 
