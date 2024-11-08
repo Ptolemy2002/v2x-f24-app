@@ -14,6 +14,8 @@ export default Object.assign(
             // ch is based on the width of the 0 character in the font. In monospace fonts, this is the same for all characters.
             // In non-monospace fonts, it's good enough for a rough estimate.
             $minWidth: props.$minWidth ?? ((props.maxDots ?? 3) / 2.5) + "ch",
+            $lineHeightScale: props.$lineHeightScale ?? 0.5,
+
             $css: props.$css ?? null,
         })
     )`
@@ -25,7 +27,7 @@ export default Object.assign(
             > .typing-indicator {
                 display: inline-block;
                 font-size: ${({$fontSize}) => $fontSize};
-                line-height: ${({$fontSize}) => math(`${$fontSize} / 2`)};
+                line-height: ${({$fontSize, $lineHeightScale}) => math(`${$fontSize} * ${$lineHeightScale}`)};
                 min-width: ${({$minWidth}) => $minWidth};   
             }
         }

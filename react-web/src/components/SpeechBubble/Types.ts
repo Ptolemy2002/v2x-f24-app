@@ -80,4 +80,5 @@ export type SpeechBubbleTypingStyleAttributes = WithCSSProp<{
     $padding?: RequiredCSSProperties["padding"];
     $borderRadius?: RequiredCSSProperties["borderRadius"];
     $fontSize?: RequiredCSSProperties["fontSize"];
+    $lineHeightScale?: number;
 }>;
