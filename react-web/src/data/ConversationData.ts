@@ -95,7 +95,7 @@ function findMatchingResponse(text: string): DefaultResponseData | null {
     text = cleanText(text);
     for (const response of defaultResponses.other) {
         for (const trigger of (response.triggers ?? [])) {
-            if (text.includes(trigger)) {
+            if (text === cleanText(trigger)) {
                 return response;
             }
         }

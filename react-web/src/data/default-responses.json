@@ -35,6 +35,36 @@
             "triggers": ["send me a song", "send me some music"],
             "type": "audio",
             "src": "/aud-test.wav"
+        },
+
+        {
+            "triggers": ["what can you do"],
+            "type": "text",
+            "text": "Currently, I am only able to provide static responses to predefined queries. However, some sample aircraft-related queries are available for you to try."
+        },
+
+        {
+            "triggers": ["what actions are recommended to take off in significant wind shear on a boeing 727"],
+            "type": "text",
+            "text": "Consider taking off in a different direction or delaying the takeoff until conditions are more favorable. If sheer suspected and takeoff is not obstacle-limited, use speed greater than V2+10 for the initial climb to provide additional protection from decreasing headwinds or downdrafts."
+        },
+
+        {
+            "triggers": ["an airbus a310 is experiencing an apu fire how should i respond"],
+            "type": "text",
+            "text": "Fire Handle -> PULL. Agent After 10 Seconds -> DISCHARGE. Master Switch -> OFF. If fire warning persists land as soon as possible."
+        },
+
+        {
+            "triggers": ["i see a blue colored diamond symbol on the right center of my ivsi with the number 0.7 below it what does this mean"],
+            "type": "text",
+            "text": "This is a standard indication as per the A310 Operating Manual. Please refer to the manual for more details."
+        },
+
+        {
+            "triggers": ["my airspeed indicator is warning me of low airspeed. what actions should i take"],
+            "type": "text",
+            "text": "Be sure to maintain a safe airspeed as per the appropriate aircraft operating procedures. If needed, decrease the pitch attitude to lower the angle of attack and regain proper airspeed."
         }
     ],
 
