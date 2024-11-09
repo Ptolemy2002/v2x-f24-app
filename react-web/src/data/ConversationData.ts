@@ -179,7 +179,19 @@ export default class ConversationData extends MongoData<
             fromMongo: (messages) => messages.map((message) => ({
                 ...message,
                 date: new Date(message.date)
-            }))
+            })),
+
+            validate: (messages) => {
+                // Ensure there are no messages with the same ID.
+                const ids = new Set<string>();
+                for (const message of messages) {
+                    if (ids.has(message.id)) {
+                        return "Duplicate message IDs found.";
+                    }
+                    ids.add(message.id);
+                }
+                return true;
+            }
         });
 
         this.defineRequestType("queryBot", async function(this: CompletedConversationData) {
