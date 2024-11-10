@@ -1,6 +1,6 @@
 import Timestamp from './Timestamp';
 import styled from 'styled-components';
-import { WithCSSProp } from 'src/Style';
+import { WithCSSProp } from '@ptolemy2002/react-styled-component-utils';
 
 export default Object.assign(
     styled(Timestamp).attrs<WithCSSProp>(

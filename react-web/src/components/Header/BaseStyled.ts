@@ -1,7 +1,7 @@
 import Base from "./Base";
 import styled from "styled-components";
 import { important } from "polished";
-import { WithCSSProp } from "src/Style";
+import { WithCSSProp } from "@ptolemy2002/react-styled-component-utils";
 
 export default Object.assign(
     styled(Base).attrs<WithCSSProp>(

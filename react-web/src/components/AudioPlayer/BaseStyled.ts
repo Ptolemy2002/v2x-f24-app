@@ -1,7 +1,6 @@
 import Base from "./Base";
 import { AudioPlayerStyleAttributes } from "./Types";
 import styled from "styled-components";
-import { centerVertical } from "src/Style";
 
 export default Object.assign(
     styled(Base).attrs<AudioPlayerStyleAttributes>(
@@ -17,7 +16,8 @@ export default Object.assign(
         width: 100%;
 
         > .progress-label {
-            ${centerVertical()}
+            margin-top: auto;
+            margin-bottom: auto;
         }
         
         ${({$css}) => $css}

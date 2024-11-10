@@ -1,4 +1,4 @@
-import { RequiredCSSProperties, alignLeft, alignRight, bsBreakpointMax, bsBreakpointMin } from "src/Style";
+import { RequiredCSSProperties, alignLeft, alignRight, bsBreakpointMax, bsBreakpointMin } from "@ptolemy2002/react-styled-component-utils";
 import { css } from "styled-components";
 
 export function speechBubbleBaseStyle(

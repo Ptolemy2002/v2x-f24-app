@@ -1,5 +1,5 @@
 import StaticSrcSVG, { StaticSrcSVGProps } from './Base';
-import { RequiredCSSProperties, WithCSSProp } from 'src/Style';
+import { RequiredCSSProperties, WithCSSProp } from '@ptolemy2002/react-styled-component-utils';
 import styled from 'styled-components';
 
 export type MenuIconStyleAttributes = {

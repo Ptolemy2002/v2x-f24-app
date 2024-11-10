@@ -1,4 +1,4 @@
-import { RequiredCSSProperties, WithCSSProp } from "src/Style";
+import { RequiredCSSProperties, WithCSSProp } from "@ptolemy2002/react-styled-component-utils";
 import { FC, HTMLProps } from "react";
 import { SpeechContainerProps } from "src/components/SpeechContainer";
 import { InputContainerProps } from "src/components/InputContainer";

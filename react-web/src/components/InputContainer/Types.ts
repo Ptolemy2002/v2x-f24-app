@@ -1,5 +1,5 @@
 import { FC, HTMLProps } from 'react';
-import { RequiredCSSProperties } from 'src/Style';
+import { RequiredCSSProperties } from '@ptolemy2002/react-styled-component-utils';
 import { RightArrowIconProps } from '../icons/RightArrowIcon';
 
 export type InputContainerProps = HTMLProps<HTMLDivElement> & {

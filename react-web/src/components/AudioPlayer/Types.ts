@@ -1,5 +1,5 @@
 import { FC, HTMLProps, RefObject, PropsWithChildren, PropsWithRef } from 'react';
-import { RequiredCSSProperties, WithCSSProp } from 'src/Style';
+import { RequiredCSSProperties, WithCSSProp } from '@ptolemy2002/react-styled-component-utils';
 import { MaybeForwardRefComponent } from 'src/TypeUtils';
 import { RestartIconProps } from 'src/components/icons/RestartIcon';
 import { PlayIconProps } from 'src/components/icons/PlayIcon';

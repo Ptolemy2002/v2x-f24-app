@@ -2,7 +2,7 @@ import { speechBubbleBaseStyle } from "./Other";
 import { SpeechBubbleAudioStyleAttributes } from "./Types";
 import Audio from "./Audio";
 import styled, { css } from "styled-components";
-import { bsBreakpointMax } from "src/Style";
+import { bsBreakpointMax } from "@ptolemy2002/react-styled-component-utils";
 export default Object.assign(
     styled(Audio).attrs<SpeechBubbleAudioStyleAttributes>(
         (props) => ({

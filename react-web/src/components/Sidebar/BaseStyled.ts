@@ -1,6 +1,6 @@
 import { SidebarStyleAttributes } from "./Types";
 import Base from "./Base";
-import { paddingX, paddingY } from "src/Style";
+import { paddingX, paddingY } from "@ptolemy2002/react-styled-component-utils";
 import styled from "styled-components";
 
 export default Object.assign(

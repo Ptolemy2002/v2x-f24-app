@@ -1,6 +1,6 @@
 import ProgressBar from "./ProgressBar";
 import styled, { css } from "styled-components";
-import { bsBreakpointMax, centerVertical, WithCSSProp } from "src/Style";
+import { bsBreakpointMax, WithCSSProp } from "@ptolemy2002/react-styled-component-utils";
 import { isFirefox, isChrome, isSafari } from "react-device-detect";
 
 export default Object.assign(
@@ -37,7 +37,8 @@ export default Object.assign(
         ${bsBreakpointMax("sm", css`height: 100%;`)}
 
         border: none;
-        ${centerVertical()}
+        margin-top: auto;
+        margin-bottom: auto;
 
         ${({$css}) => $css}
     `,

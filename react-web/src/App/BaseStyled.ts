@@ -2,7 +2,7 @@ import Base from "./Base";
 import { AppStyleAttributes } from "./Types";
 import styled from 'styled-components';
 import { border } from 'polished';
-import { WithCSSProp } from "src/Style";
+import { WithCSSProp } from "@ptolemy2002/react-styled-component-utils";
 
 // Object.assign is used to merge the correct displayName with the styled component
 export default Object.assign(

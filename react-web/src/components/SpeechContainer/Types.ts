@@ -2,7 +2,7 @@ import { FC, HTMLProps } from "react";
 import {
     SpeechBubbleAudioProps, SpeechBubbleImageProps, SpeechBubbleTextProps, SpeechBubbleTypingProps
 } from "src/components/SpeechBubble";
-import { RequiredCSSProperties, WithCSSProp } from "src/Style";
+import { RequiredCSSProperties, WithCSSProp } from "@ptolemy2002/react-styled-component-utils";
 
 export type ResponseData = {
     type: string;

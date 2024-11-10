@@ -1,20 +1,20 @@
 import { HTMLProps, FC } from "react";
-import { RequiredCSSProperties, WithCSSProp } from "src/Style";
+import { RequiredCSSProperties, WithCSSProp } from "@ptolemy2002/react-styled-component-utils";
 import { TimestampWrapperProps } from "src/components/TimestampWrapper";
 import { AudioPlayerProps } from "src/components/AudioPlayer";
 import {
-    SpeechBubbleMessageOrigin, SpeechBubbleTextMessage, SpeechBubbleImageMessage,
-    SpeechBubbleAudioMessage
+    MessageOrigin, TextMessage, ImageMessage,
+    AudioMessage
 } from "src/data/ConversationData";
 
 export type ScreenReaderTextProps = {
     text?: string;
-    origin: SpeechBubbleMessageOrigin;
+    origin: MessageOrigin;
 } & HTMLProps<HTMLSpanElement>;
 
 // SpeechBubbleText will take a message object as well as the default properties for a paragraph element.
 export type SpeechBubbleTextProps = {
-    message: SpeechBubbleTextMessage;
+    message: TextMessage;
     TimestampWrapper?: FC<TimestampWrapperProps>;
     ScreenReaderText?: FC<ScreenReaderTextProps>;
     SpeechBubbleTimestamp?: FC<SpeechBubbleTimestampProps>;
@@ -28,7 +28,7 @@ export type SpeechBubbleTextStyleAttributes = WithCSSProp<{
 
 // SpeechBubbleImage will take a message object as well as the default properties for an image element.
 export type SpeechBubbleImageProps = {
-    message: SpeechBubbleImageMessage;
+    message: ImageMessage;
     scrollToEnd: () => void; // Function type definitions have similar syntax to JavaScript arrow functions.
     // void just means that the function doesn't return anything.
     TimestampWrapper?: FC<TimestampWrapperProps>;
@@ -47,7 +47,7 @@ export type SpeechBubbleImageStyleAttributes = WithCSSProp<{
 
 // SpeechBubbleAudio will take a message object as well as the default properties for an audio element.
 export type SpeechBubbleAudioProps = {
-    message: SpeechBubbleAudioMessage;
+    message: AudioMessage;
     scrollToEnd: () => void; // Function type definitions have similar syntax to JavaScript arrow functions.
     TimestampWrapper?: FC<TimestampWrapperProps>;
     ScreenReaderText?: FC<ScreenReaderTextProps>;
@@ -67,7 +67,7 @@ export type SpeechBubbleTimestampProps = {
 } & HTMLProps<HTMLSpanElement>;
 
 export type SpeechBubbleTypingProps = {
-    origin: SpeechBubbleMessageOrigin;
+    origin: MessageOrigin;
     interval?: number;
     maxDots?: number;
     startDots?: number;

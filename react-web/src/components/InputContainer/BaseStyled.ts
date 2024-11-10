@@ -1,7 +1,7 @@
 import { InputContainerStyleAttributes } from "./Types";
 import Base from "./Base";
 import styled from "styled-components";
-import { centerVertical, WithCSSProp } from "src/Style";
+import { WithCSSProp } from "@ptolemy2002/react-styled-component-utils";
 import { important } from "polished";
 
 export default Object.assign(
@@ -44,7 +44,8 @@ export default Object.assign(
             padding: ${({$sendButtonPadding}) => $sendButtonPadding};
 
             height: fit-content;
-            ${centerVertical()}
+            margin-top: auto;
+            margin-bottom: auto;
 
             ${({$css}) => $css}
     }

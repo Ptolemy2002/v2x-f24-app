@@ -1,5 +1,5 @@
 import { HTMLProps, FC } from 'react';
-import { RequiredCSSProperties, WithCSSProp } from 'src/Style';
+import { RequiredCSSProperties, WithCSSProp } from '@ptolemy2002/react-styled-component-utils';
 
 export type SidebarProps = {
     colSize?: number;

@@ -6,52 +6,49 @@ import { nanoid } from "nanoid";
 import defaultResponses from "src/data/default-responses.json";
 
 // The message can only originate from the sender or the recipient.
-export type SpeechBubbleMessageOrigin = "sender" | "recepient";
+export type MessageOrigin = "sender" | "recepient";
 
 // Define the base separately to reduce repetition.
-export type SpeechBubbleMessageBase<T extends string, Mongo extends boolean = false> = {
+export type MessageBase<T extends string, Mongo extends boolean = false> = {
     id: string,
-    origin: SpeechBubbleMessageOrigin;
+    origin: MessageOrigin;
     type: T;
     date: Mongo extends true ? string : Date;
 };
 
-// SpeechBubbleText will take a message object as well as the default properties for a speech bubble.
-export type SpeechBubbleTextMessage<Mongo extends boolean = false> = {
+export type TextMessage<Mongo extends boolean = false> = {
     text: string;
-} & SpeechBubbleMessageBase<"text", Mongo>;
+} & MessageBase<"text", Mongo>;
 
-// SpeechBubbleImage will take a src and alt attribute as well as the default properties for a speech bubble.
-export type SpeechBubbleImageMessage<Mongo extends boolean = false> = {
+export type ImageMessage<Mongo extends boolean = false> = {
     src: string;
     alt?: string;
-} & SpeechBubbleMessageBase<"image", Mongo>;
+} & MessageBase<"image", Mongo>;
 
-// SpeechBubbleAudio will take a src attribute as well as the default properties for a speech bubble.
-export type SpeechBubbleAudioMessage<Mongo extends boolean = false> = {
+export type AudioMessage<Mongo extends boolean = false> = {
     src: string;
-} & SpeechBubbleMessageBase<"audio", Mongo>;
+} & MessageBase<"audio", Mongo>;
 
 // Combined type for any speech bubble message.
-export type SpeechBubbleMessage = SpeechBubbleTextMessage | SpeechBubbleImageMessage | SpeechBubbleAudioMessage;
-export type MongoSpeechBubbleMessage = SpeechBubbleTextMessage<true> | SpeechBubbleImageMessage<true> | SpeechBubbleAudioMessage<true>;
+export type Message = TextMessage | ImageMessage | AudioMessage;
+export type MongoMessage = TextMessage<true> | ImageMessage<true> | AudioMessage<true>;
 
 // Combined type for all different types options for speech bubble messages.
-export type SpeechBubbleMessageType = SpeechBubbleMessage["type"];
+export type MessageType = Message["type"];
 
 // Get the message object of the specified type where the type is just a string.
-export type SpeechBubbleMessageOfType<
-    T extends SpeechBubbleMessageType,
+export type MessageOfType<
+    T extends MessageType,
     Mongo extends boolean = false
 > = Extract<
-    Mongo extends true ? MongoSpeechBubbleMessage : SpeechBubbleMessage,
+    Mongo extends true ? MongoMessage : Message,
     { type: T }
 >;
 
 // Get the properties that are exclusive to the speech bubble of specified type
 // (i.e. included in the specified speech bubble type but not in the base type).
-export type SpeechBubbleMessageExclusiveProps<T extends SpeechBubbleMessageType, Mongo extends boolean = false> =
-    Omit<SpeechBubbleMessageOfType<T, Mongo>, keyof SpeechBubbleMessageBase<T, Mongo>>;
+export type MessageExclusiveProps<T extends MessageType, Mongo extends boolean = false> =
+    Omit<MessageOfType<T, Mongo>, keyof MessageBase<T, Mongo>>;
 
 export type DefaultResponseData = {
     type: string;
@@ -62,11 +59,11 @@ export type DefaultResponseData = {
 };
 
 export type Conversation = {
-    messages: SpeechBubbleMessage[];
+    messages: Message[];
 };
 
 export type MongoConversation = {
-    messages: MongoSpeechBubbleMessage[];
+    messages: MongoMessage[];
 };
 
 export type ConversationRequests = {
@@ -104,10 +101,10 @@ function findMatchingResponse(text: string): DefaultResponseData | null {
     return null;
 }
 
-export function createMessage<T extends SpeechBubbleMessageType, Mongo extends boolean = false>(
+export function createMessage<T extends MessageType, Mongo extends boolean = false>(
     type: T,
-    origin: SpeechBubbleMessageOrigin,
-    constructMessage: () => SpeechBubbleMessageExclusiveProps<T>,
+    origin: MessageOrigin,
+    constructMessage: () => MessageExclusiveProps<T>,
     mongo?: Mongo,
     id?: string
 ) {
@@ -117,7 +114,7 @@ export function createMessage<T extends SpeechBubbleMessageType, Mongo extends b
                 origin,
                 type,
                 date: mongo ? new Date().toISOString() : new Date()
-            } as SpeechBubbleMessageOfType<T, Mongo>
+            } as MessageOfType<T, Mongo>
     );
 }
 
@@ -255,7 +252,7 @@ export default class ConversationData extends MongoData<
         });
     }
 
-    addMessage(this: CompletedConversationData, message: SpeechBubbleMessage) {
+    addMessage(this: CompletedConversationData, message: Message) {
         // updateProp ensures we create a new object so that the proxy recognizes the change.
         // It is not necessary for primitive values, but it is necessary for objects and arrays.
         return this.updateProp("messages", (messages) => {
