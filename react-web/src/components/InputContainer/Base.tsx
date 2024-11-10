@@ -2,7 +2,8 @@ import { useCallback, useRef, KeyboardEvent } from 'react';
 import { Button } from 'react-bootstrap';
 import DefaultRightArrowIcon from 'src/components/icons/RightArrowIcon';
 import { InputContainerProps } from './Types';
-import ConversationData, { createMessage } from 'src/data/ConversationData';
+import ConversationData from 'src/data/ConversationData';
+import { createMessage } from '@shared/Message';
 
 export default function InputContainer({
     RightArrowIcon = DefaultRightArrowIcon,

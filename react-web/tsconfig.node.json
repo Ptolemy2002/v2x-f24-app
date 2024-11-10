@@ -19,7 +19,8 @@
     "noFallthroughCasesInSwitch": true,
     "baseUrl": "./",
     "paths": {
-      "src/*": ["src/*"]
+      "src/*": ["src/*"],
+      "@shared/*": ["../shared/*"]
     }
   },
   "include": ["vite.config.ts", "external-libs.d.ts"]

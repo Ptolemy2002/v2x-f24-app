@@ -1,5 +1,6 @@
 import clsx from "clsx";
-import ConversationData, { createMessage } from "src/data/ConversationData";
+import { createMessage } from "@shared/Message";
+import ConversationData from "src/data/ConversationData";
 import DefaultSpeechContainer from "src/components/SpeechContainer";
 import DefaultInputContainer from "src/components/InputContainer";
 import { ConversationContainerProps } from "./Types";
