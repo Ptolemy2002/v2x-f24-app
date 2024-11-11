@@ -2,6 +2,9 @@ import StaticSrcSVG, { StaticSrcSVGProps } from './Base';
 import { RequiredCSSProperties, WithCSSProp } from '@ptolemy2002/react-styled-component-utils';
 import styled from 'styled-components';
 
+// Side effect import so that the compiler knows this is being used
+import "/icons/pause.svg";
+
 export type PauseIconStyleAttributes = {
     $color?: RequiredCSSProperties['fill'] | null;
     $width?: RequiredCSSProperties['width'];
@@ -24,7 +27,7 @@ export default Object.assign(
         width: ${({$width}) => $width};
         height: ${({$height}) => $height};
 
-        > path {
+        > line {
             stroke: ${({$color, theme}) => $color ?? theme.textColor};
         }
 
