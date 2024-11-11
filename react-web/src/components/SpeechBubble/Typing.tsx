@@ -30,7 +30,7 @@ export default function SpeechBubbleTyping({
                 window.clearInterval(intervalRef.current);
             }
         };
-    }, [interval, maxDots]);
+    }, [interval, maxDots, startDots]);
 
     return (
         <div className={clsx("speech-bubble-typing", origin, className)} {...props}>

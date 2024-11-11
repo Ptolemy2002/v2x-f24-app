@@ -33,14 +33,14 @@ export default function SpeechContainer({
         if (conversationData.messages.length > 0 && conversationData.getLastMessage()?.type === "text") {
             scrollToEnd();
         }
-    }, [conversationData.messages, scrollToEnd]);
+    }, [conversationData.messages, scrollToEnd, conversationData]);
 
     // When queryBot is in progress, scroll to the end automatically.
     useEffect(() => {
         if (conversationData.hasInProgressRequest("queryBot")) {
             scrollToEnd();
         }
-    }, [conversationData.requestInProgress, scrollToEnd]);
+    }, [conversationData.requestInProgress, scrollToEnd, conversationData]);
 
     return (
         <div id="speech-container" ref={speechContainerRef} {...props}>

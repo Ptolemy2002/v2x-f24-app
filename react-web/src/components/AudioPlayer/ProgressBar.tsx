@@ -27,7 +27,7 @@ export default function ProgressBar({
             const touch = e.nativeEvent.touches[0];
             handleSeek(touch.clientX, progressRef.current!, onSeek);
         }
-    }, []);
+    }, [onSeek]);
 
     useMountEffect(() => {
         mouseUpEventListenerRef.current = () => {

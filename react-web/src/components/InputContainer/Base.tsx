@@ -71,7 +71,7 @@ export default function InputContainer({
                 addAudio();
             }
         }
-    }, [addText, addImage, addAudio, conversationData.requestInProgress]);
+    }, [addText, addImage, addAudio, conversationData.requestInProgress, conversationData]);
 
     return (
         <div id="input-container" {...props}>

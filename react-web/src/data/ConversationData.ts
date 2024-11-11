@@ -81,8 +81,8 @@ export default class ConversationData extends MongoData<
 
     static useContext(
         deps: Dependency<CompletedConversationData>[] = ConversationData.defaultDependencies,
-        onChangeProp?: OnChangePropCallback<CompletedConversationData>,
-        onChangeReinit?: OnChangeReinitCallback<CompletedConversationData>
+        onChangeProp?: OnChangePropCallback<CompletedConversationData | null>,
+        onChangeReinit?: OnChangeReinitCallback<CompletedConversationData | null>
     ) {
         return MongoData._useContext<
             Conversation, MongoConversation, ConversationRequests, CompletedConversationData

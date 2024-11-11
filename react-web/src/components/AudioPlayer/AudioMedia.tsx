@@ -14,7 +14,7 @@ export default Object.assign(
         };
 
         // Forward the value of audioRef to the parent component.
-        useImperativeHandle(ref, () => audioRef.current!, [audioRef.current]);
+        useImperativeHandle(ref, () => audioRef.current!, [audioRef]);
 
         useMountEffect(() => {
             if (isMobile) {

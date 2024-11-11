@@ -20,7 +20,7 @@ export default function TimestampWrapper({render, updateInterval, date, relative
         
         // On unmount
         return clearIntervalIfExist;
-    }, [forceRerender, updateInterval]);
+    }, [forceRerender, updateInterval, clearIntervalIfExist]);
 
     if (relative) {
         const suffix = isAfter(date, new Date()) ? "from now" : "ago";
