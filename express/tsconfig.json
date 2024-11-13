@@ -16,7 +16,6 @@
   },
   "include": [
     "src",
-    "src/services/swagger_output.json",
     "types/**/*.d.ts"
   ]
 }

@@ -41,7 +41,8 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 app.use(cors({
-    origin: process.env.NODE_ENV === 'production' ? process.env.PROD_FRONTEND_URL : process.env.DEV_FRONTEND_URL,
+    origin: process.env.NODE_ENV === 'production' ?
+        process.env.PROD_FRONTEND_URL : process.env.DEV_FRONTEND_URL,
     credentials: true
 }));
 

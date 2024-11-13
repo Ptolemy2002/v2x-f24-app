@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "nanoid": "^5.0.8"
+    "nanoid": "^5.0.8",
+    "zod": "^3.23.8"
   }
 }

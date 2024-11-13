@@ -4,8 +4,10 @@ import {
 } from "@ptolemy2002/react-proxy-context";
 import defaultResponses from "src/data/default-responses.json";
 import {
-    Message, MongoMessage, createMessage
+    Message, Conversation, MongoConversation, createMessage,
+    UniqueMessageArraySchema
 } from "@shared/Message";
+import { zodValidateWithErrors } from "@ptolemy2002/regex-utils";
 
 export type DefaultResponseData = {
     type: string;
@@ -13,14 +15,6 @@ export type DefaultResponseData = {
     text?: string;
     src?: string;
     alt?: string;
-};
-
-export type Conversation = {
-    messages: Message[];
-};
-
-export type MongoConversation = {
-    messages: MongoMessage[];
 };
 
 export type ConversationRequests = {
@@ -118,17 +112,7 @@ export default class ConversationData extends MongoData<
                 date: new Date(message.date)
             })),
 
-            validate: (messages) => {
-                // Ensure there are no messages with the same ID.
-                const ids = new Set<string>();
-                for (const message of messages) {
-                    if (ids.has(message.id)) {
-                        return "Duplicate message IDs found.";
-                    }
-                    ids.add(message.id);
-                }
-                return true;
-            }
+            validate: zodValidateWithErrors(UniqueMessageArraySchema)
         });
 
         this.defineRequestType("queryBot", async function(this: CompletedConversationData) {
