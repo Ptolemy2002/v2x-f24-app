@@ -12,7 +12,7 @@ export type MessageBase<T extends string, Mongo extends boolean = false> = {
     type: T;
     date: Mongo extends true ? string : Date;
 };
-export const MessageBaseSchema = <T extends string, Mongo extends boolean = false>(
+export const MessageBaseSchema = <T extends string>(
     type: T
 ) => z.object({
     id: z.string(),
