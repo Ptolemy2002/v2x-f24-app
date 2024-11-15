@@ -1,6 +1,16 @@
 {
-    "compilerOptions": {
-        "lib": ["ES2020"],
-        "baseUrl": "./"
-    }
+  "compilerOptions": {
+    "baseUrl": ".",
+    "module": "commonjs",
+    "target": "es2019",
+    "declaration": true,
+    "outDir": "./dist",
+    "skipLibCheck": true,
+    "maxNodeModuleJsDepth": 0,
+    "strictNullChecks": true
+  },
+  "include": [
+    "src",
+    "types/**/*.d.ts"
+  ]
 }

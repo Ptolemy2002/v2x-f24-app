@@ -3,7 +3,7 @@ import { Button } from 'react-bootstrap';
 import DefaultRightArrowIcon from 'src/components/icons/RightArrowIcon';
 import { InputContainerProps } from './Types';
 import ConversationData from 'src/data/ConversationData';
-import { createMessage } from '@shared/Message';
+import { createMessage } from 'shared';
 
 export default function InputContainer({
     RightArrowIcon = DefaultRightArrowIcon,

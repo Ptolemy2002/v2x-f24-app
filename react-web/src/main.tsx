@@ -17,8 +17,6 @@ const GlobalStyle = createGlobalStyle`
             Arial,
             sans-serif
         ;
-
-        background-color: ${({theme}) => theme.backgroundColor};
     }
 
     // Make sure the root takes up the full height of the screen
@@ -34,6 +32,8 @@ const GlobalStyle = createGlobalStyle`
         li::marker {
             color: ${({theme}) => theme.textColor};
         }
+
+        background-color: ${({theme}) => theme.backgroundColor};
     }
 `;
 

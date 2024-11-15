@@ -1,5 +1,5 @@
 import express from 'express';
-import indexRoutes from './routes';
+import indexRoutes from './indexRoutes';
 const router = express.Router();
 
 router.use("/", indexRoutes
@@ -8,9 +8,16 @@ router.use("/", indexRoutes
         defined in the indexRoutes file for documentation.
 
         #swagger.responses[500] = {
-            description: "Internal server error.",
+            description: "Internal server error",
             schema: {
-                message: "An error occured."
+                message: "An error occured"
+            }
+        }
+
+        #swagger.responses[400] = {
+            description: "Bad request",
+            schema: {
+                message: "Bad request"
             }
         }
     */

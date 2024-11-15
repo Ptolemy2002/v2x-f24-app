@@ -5,7 +5,7 @@ import { AudioPlayerProps } from "src/components/AudioPlayer";
 import {
     MessageOrigin, TextMessage, ImageMessage,
     AudioMessage
-} from "@shared/Message";
+} from "shared";
 
 export type ScreenReaderTextProps = {
     text?: string;

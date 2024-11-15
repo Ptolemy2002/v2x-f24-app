@@ -1,6 +1,29 @@
 {
-  "dependencies": {
-    "nanoid": "^5.0.8",
-    "zod": "^3.23.8"
-  }
+    "name": "shared",
+    "version": "1.0.0",
+    "private": true,
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "files": [
+        "/dist"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Ptolemy2002/shared",
+        "directory": "lib"
+    },
+    "scripts": {
+        "build": "tsc --project ./tsconfig.json",
+        "postinstall": "npx typesync",
+        "uninstall": "bash ./scripts/uninstall.sh",
+        "reinstall": "bash ./scripts/reinstall.sh"
+    },
+    "peerDependencies": {
+        "nanoid": "^5.0.8",
+        "zod": "^3.23.8"
+    },
+    "devDependencies": {
+        "nanoid": "^5.0.8",
+        "zod": "^3.23.8"
+    }
 }

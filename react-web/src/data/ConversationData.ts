@@ -6,7 +6,7 @@ import defaultResponses from "src/data/default-responses.json";
 import {
     Message, Conversation, MongoConversation, createMessage,
     UniqueMessageArraySchema
-} from "@shared/Message";
+} from "shared";
 import { zodValidateWithErrors } from "@ptolemy2002/regex-utils";
 
 export type DefaultResponseData = {

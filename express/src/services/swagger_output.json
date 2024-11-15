@@ -24,14 +24,29 @@
           "200": {
             "description": "OK"
           },
-          "500": {
-            "description": "Internal server error.",
+          "400": {
+            "description": "Bad request",
             "schema": {
               "type": "object",
               "properties": {
                 "message": {
                   "type": "string",
-                  "example": "An error occured."
+                  "example": "Bad request"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "An error occured"
                 }
               },
               "xml": {
@@ -59,14 +74,29 @@
               }
             }
           },
-          "500": {
-            "description": "Internal server error.",
+          "400": {
+            "description": "Bad request",
             "schema": {
               "type": "object",
               "properties": {
                 "message": {
                   "type": "string",
-                  "example": "An error occured."
+                  "example": "Bad request"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "An error occured"
                 }
               },
               "xml": {
@@ -77,32 +107,51 @@
         }
       }
     },
-    "/user": {
+    "/api/v1/bot/query": {
       "post": {
         "tags": [
-          "User"
+          "Bot"
         ],
-        "description": "Create a new user.",
+        "description": "Query the bot for a response.",
         "parameters": [
           {
-            "name": "user",
+            "name": "conversation",
             "in": "body",
-            "description": "User object",
+            "description": "Conversation object",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/User"
+              "type": "object",
+              "properties": {
+                "conversation": {
+                  "$ref": "#/definitions/Conversation"
+                }
+              }
             }
           }
         ],
         "responses": {
-          "500": {
-            "description": "Internal server error.",
+          "200": {
+            "description": "Response from the bot.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "newMessage": {
+                  "$ref": "#/definitions/Message"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
             "schema": {
               "type": "object",
               "properties": {
                 "message": {
                   "type": "string",
-                  "example": "An error occured."
+                  "example": "Bad request"
                 }
               },
               "xml": {
@@ -115,12 +164,37 @@
     }
   },
   "definitions": {
-    "User": {
+    "Message": {
       "type": "object",
       "properties": {
         "id": {
-          "type": "number",
-          "example": 1
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string",
+          "required": false
+        },
+        "src": {
+          "type": "string",
+          "required": false
+        },
+        "alt": {
+          "type": "string",
+          "required": false
+        }
+      }
+    },
+    "Conversation": {
+      "type": "object",
+      "properties": {
+        "messages": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Message"
+          }
         }
       }
     }

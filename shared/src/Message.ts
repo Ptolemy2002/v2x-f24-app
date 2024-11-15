@@ -13,20 +13,34 @@ export type MessageBase<T extends string, Mongo extends boolean = false> = {
     date: Mongo extends true ? string : Date;
 };
 export const MessageBaseSchema = <T extends string, Mongo extends boolean = false>(
-    type: T,
-    mongo: Mongo
+    type: T
 ) => z.object({
     id: z.string(),
     origin: MessageOriginSchema,
     type: z.literal(type),
-    date: mongo ? z.string({message: "Mongo requires dates be represented as strings."}) : z.date()
+    date: z.date()
+});
+
+export const MongoMessageBaseSchema = <T extends string>(
+    type: T
+) => z.object({
+    id: z.string(),
+    origin: MessageOriginSchema,
+    type: z.literal(type),
+    date: z.string({message: "Mongo only supports string dates."})
 });
 
 export type TextMessage<Mongo extends boolean = false> = {
     text: string;
 } & MessageBase<"text", Mongo>;
-export const TextMessageSchema = <Mongo extends boolean = false>(mongo: Mongo) => z.intersection(
-    MessageBaseSchema("text", mongo),
+export const TextMessageSchema = z.intersection(
+    MessageBaseSchema("text"),
+    z.object({
+        text: z.string()
+    })
+);
+export const MongoTextMessageSchema = z.intersection(
+    MongoMessageBaseSchema("text"),
     z.object({
         text: z.string()
     })
@@ -36,8 +50,15 @@ export type ImageMessage<Mongo extends boolean = false> = {
     src: string;
     alt?: string;
 } & MessageBase<"image", Mongo>;
-export const ImageMessageSchema = <Mongo extends boolean = false>(mongo: Mongo) => z.intersection(
-    MessageBaseSchema("image", mongo),
+export const ImageMessageSchema = z.intersection(
+    MessageBaseSchema("image"),
+    z.object({
+        src: z.string(),
+        alt: z.string().optional()
+    })
+);
+export const MongoImageMessageSchema = z.intersection(
+    MongoMessageBaseSchema("image"),
     z.object({
         src: z.string(),
         alt: z.string().optional()
@@ -47,8 +68,14 @@ export const ImageMessageSchema = <Mongo extends boolean = false>(mongo: Mongo) 
 export type AudioMessage<Mongo extends boolean = false> = {
     src: string;
 } & MessageBase<"audio", Mongo>;
-export const AudioMessageSchema = <Mongo extends boolean = false>(mongo: Mongo) => z.intersection(
-    MessageBaseSchema("audio", mongo),
+export const AudioMessageSchema = z.intersection(
+    MessageBaseSchema("audio"),
+    z.object({
+        src: z.string()
+    })
+);
+export const MongoAudioMessageSchema = z.intersection(
+    MongoMessageBaseSchema("audio"),
     z.object({
         src: z.string()
     })
@@ -58,8 +85,8 @@ export const AudioMessageSchema = <Mongo extends boolean = false>(mongo: Mongo) 
 export type Message = TextMessage | ImageMessage | AudioMessage;
 export type MongoMessage = TextMessage<true> | ImageMessage<true> | AudioMessage<true>;
 
-export const MessageSchema = z.union([TextMessageSchema(false), ImageMessageSchema(false), AudioMessageSchema(false)]);
-export const MongoMessageSchema = z.union([TextMessageSchema(true), ImageMessageSchema(true), AudioMessageSchema(true)]);
+export const MessageSchema = z.union([TextMessageSchema, ImageMessageSchema, AudioMessageSchema]);
+export const MongoMessageSchema = z.union([MongoTextMessageSchema, MongoImageMessageSchema, MongoAudioMessageSchema]);
 
 // Combined type for all different types options for speech bubble messages.
 export type MessageType = Message["type"];
@@ -74,15 +101,25 @@ export type MessageOfType<
     { type: T }
 >;
 export const MessageOfTypeSchema = <T extends MessageType>(
-    type: T,
-    mongo: boolean = false
+    type: T
 ) => {
     if (type === "text") {
-        return TextMessageSchema(mongo);
+        return TextMessageSchema;
     } else if (type === "image") {
-        return ImageMessageSchema(mongo);
+        return ImageMessageSchema;
     } else if (type === "audio") {
-        return AudioMessageSchema(mongo);
+        return AudioMessageSchema;
+    }
+}
+export const MongoMessageOfTypeSchema = <T extends MessageType>(
+    type: T
+) => {
+    if (type === "text") {
+        return MongoTextMessageSchema;
+    } else if (type === "image") {
+        return MongoImageMessageSchema;
+    } else if (type === "audio") {
+        return MongoAudioMessageSchema;
     }
 }
 
@@ -118,7 +155,7 @@ export type MongoConversation = {
     messages: MongoMessage[];
 };
 
-function refineUniqueMessages(messages: Message[]) {
+function refineUniqueMessages(messages: Message[] | MongoMessage[]) {
     const seenIds = new Set<string>();
     for (const message of messages) {
         if (seenIds.has(message.id)) {

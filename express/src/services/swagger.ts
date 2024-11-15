@@ -1,11 +1,12 @@
 import swaggerAutogen from "swagger-autogen";
+import getEnv from "../env";
+const env = getEnv();
 
 const outputFile = './swagger_output.json';
 const endpointFiles = ['src/routes/index.ts'];
 
 const url = (
-    (process.env.NODE_ENV === 'production' && process.env.PROD_BACKEND_URL)
-    || (process.env.DEV_BACKEND_URL ?? 'http://localhost:8080')
+    (env.isProd && env.prodApiUrl) || env.devApiUrl
 ).split('://').slice(1).join('://');
 const baseUrl = url.endsWith('/api/v1') ? url.slice(0, -7) : url;
 
@@ -20,10 +21,45 @@ const doc = {
 	consumes: ["application/json"],
 	produces: ["application/json"],
 
-	definitions: {
-		User: {
-			id: 1,
+	"@definitions": {
+		Message: {
+			type: "object",
+			properties: {
+				id: {
+					type: "string"
+				},
+				type: {
+					type: "string"
+				},
+
+				text: {
+					type: "string",
+					required: false
+				},
+
+				src: {
+					type: "string",
+					required: false
+				},
+
+				alt: {
+					type: "string",
+					required: false
+				}
+			}
 		},
+
+		Conversation: {
+			type: "object",
+			properties: {
+				messages: {
+					type: "array",
+					items: {
+						$ref: "#/definitions/Message"
+					}
+				}
+			}
+		}
 	}
 };
 

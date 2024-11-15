@@ -5,6 +5,8 @@ import DefaultSidebar from 'src/components/Sidebar';
 import ConversationContainer from 'src/components/ConversationContainer';
 import DefaultHeader from 'src/components/Header';
 import { AppProps } from './Types';
+import { EnvProvider } from 'src/Env';
+import { ErrorBoundary } from 'react-error-boundary';
 
 export default function App({className, Header = DefaultHeader, Sidebar = DefaultSidebar}: AppProps) {
     const [showSidebar, setShowSidebar] = useState(false);
@@ -24,13 +26,20 @@ export default function App({className, Header = DefaultHeader, Sidebar = Defaul
     }
 
     return (
-        <div className={className}>
-            <Header onMenuClick={toggleSidebar} />
+        // ErrorBoundary will catch any errors that occur in the children of this component and display the fallback
+        // if they happen. ErrorBoundaries can be defined below this one, causing them to catch errors in their children
+        // instead of this one at the top level.
+        <ErrorBoundary fallback={<p>Fatal Error</p>}>
+            <div className={className}>
+                <EnvProvider>
+                    <Header onMenuClick={toggleSidebar} />
 
-            <Row as="main">
-                {sidebar}
-                <ConversationContainer />
-            </Row>
-        </div>
+                    <Row as="main">
+                        {sidebar}
+                        <ConversationContainer />
+                    </Row>
+                </EnvProvider>
+            </div>
+        </ErrorBoundary>
     );
 }

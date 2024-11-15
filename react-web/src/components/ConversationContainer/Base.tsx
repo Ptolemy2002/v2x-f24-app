@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { createMessage } from "@shared/Message";
+import { createMessage } from "shared";
 import ConversationData from "src/data/ConversationData";
 import DefaultSpeechContainer from "src/components/SpeechContainer";
 import DefaultInputContainer from "src/components/InputContainer";
