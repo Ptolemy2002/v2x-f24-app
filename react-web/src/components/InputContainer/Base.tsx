@@ -12,7 +12,7 @@ export default function InputContainer({
     // This ref is used to allow access to the message content through the textarea element.
     const messageInputRef = useRef<HTMLTextAreaElement>(null);
 
-    const [_conversationData] = ConversationData.useContext(["requestInProgress"]);
+    const [_conversationData] = ConversationData.useContext(["requestInProgress", "requestFailed"]);
     const conversationData = _conversationData!;
 
     // useCallback is used to keep a stable reference to the function.
@@ -89,7 +89,9 @@ export default function InputContainer({
                 as="button"
                 aria-label="Send Message"
                 onClick={addText}
-                disabled={conversationData.hasInProgressRequest("queryBot")}
+                disabled={
+                    conversationData.hasInProgressRequest("queryBot") || conversationData.hasFailedRequest("queryBot")
+                }
             >
                 <RightArrowIcon />
             </Button>
