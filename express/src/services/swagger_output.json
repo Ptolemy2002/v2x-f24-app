@@ -29,6 +29,10 @@
             "schema": {
               "type": "object",
               "properties": {
+                "ok": {
+                  "type": "boolean",
+                  "example": false
+                },
                 "message": {
                   "type": "string",
                   "example": "Bad request"
@@ -44,6 +48,10 @@
             "schema": {
               "type": "object",
               "properties": {
+                "ok": {
+                  "type": "boolean",
+                  "example": false
+                },
                 "message": {
                   "type": "string",
                   "example": "An error occured"
@@ -79,6 +87,10 @@
             "schema": {
               "type": "object",
               "properties": {
+                "ok": {
+                  "type": "boolean",
+                  "example": false
+                },
                 "message": {
                   "type": "string",
                   "example": "Bad request"
@@ -94,6 +106,10 @@
             "schema": {
               "type": "object",
               "properties": {
+                "ok": {
+                  "type": "boolean",
+                  "example": false
+                },
                 "message": {
                   "type": "string",
                   "example": "An error occured"
@@ -149,6 +165,10 @@
             "schema": {
               "type": "object",
               "properties": {
+                "ok": {
+                  "type": "boolean",
+                  "example": false
+                },
                 "message": {
                   "type": "string",
                   "example": "Bad request"

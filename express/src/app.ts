@@ -1,5 +1,6 @@
 import appModulePath from 'app-module-path';
-appModulePath.addPath(__dirname);
+console.log("Adding current directory to module path:", process.cwd());
+appModulePath.addPath(process.cwd());
 
 import ms from 'ms';
 import express, { Request, Response, NextFunction } from 'express';

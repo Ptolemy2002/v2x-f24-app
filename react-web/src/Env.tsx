@@ -78,7 +78,6 @@ export const EnvContext = createContext<EnvType | undefined>(undefined);
 
 export function EnvProvider({ children }: { children: React.ReactNode }) {
     const env = getEnv();
-    console.log(env);
     return <EnvContext.Provider value={env}>{children}</EnvContext.Provider>;
 }
 

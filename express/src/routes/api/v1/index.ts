@@ -9,6 +9,7 @@ router.use("/bot", botRouter
         #swagger.responses[400] = {
             description: "Bad request",
             schema: {
+                ok: false,
                 message: "Bad request"
             }
         }
