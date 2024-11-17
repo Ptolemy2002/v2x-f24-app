@@ -6,6 +6,7 @@ import {
     MessageOrigin, TextMessage, ImageMessage,
     AudioMessage
 } from "shared";
+import { DangerIconProps } from "src/components/icons/DangerIcon";
 
 export type ScreenReaderTextProps = {
     text?: string;
@@ -49,9 +50,9 @@ export type SpeechBubbleImageStyleAttributes = WithCSSProp<{
 export type SpeechBubbleAudioProps = {
     message: AudioMessage;
     scrollToEnd: () => void; // Function type definitions have similar syntax to JavaScript arrow functions.
-    TimestampWrapper?: FC<TimestampWrapperProps>;
-    ScreenReaderText?: FC<ScreenReaderTextProps>;
-    SpeechBubbleTimestamp?: FC<SpeechBubbleTimestampProps>;
+    TimestampWrapper?: FC<TimestampWrapperProps & WithCSSProp>;
+    ScreenReaderText?: FC<ScreenReaderTextProps & WithCSSProp>;
+    SpeechBubbleTimestamp?: FC<SpeechBubbleTimestampProps & WithCSSProp>;
     AudioPlayer?: FC<AudioPlayerProps>;
 } & HTMLProps<HTMLDivElement>;
 
@@ -71,7 +72,7 @@ export type SpeechBubbleTypingProps = {
     interval?: number;
     maxDots?: number;
     startDots?: number;
-    ScreenReaderText?: FC<ScreenReaderTextProps>;
+    ScreenReaderText?: FC<ScreenReaderTextProps & WithCSSProp>;
 } & HTMLProps<HTMLDivElement>;
 
 export type SpeechBubbleTypingStyleAttributes = WithCSSProp<{
@@ -82,3 +83,24 @@ export type SpeechBubbleTypingStyleAttributes = WithCSSProp<{
     $fontSize?: RequiredCSSProperties["fontSize"];
     $lineHeightScale?: number;
 }>;
+
+export type SpeechBubbleDangerProps = {
+    origin: MessageOrigin;
+    date: Date
+    iconWidth?: RequiredCSSProperties["width"];
+    iconHeight?: RequiredCSSProperties["height"];
+    TimestampWrapper?: FC<TimestampWrapperProps & WithCSSProp>;
+    ScreenReaderText?: FC<ScreenReaderTextProps & WithCSSProp>;
+    SpeechBubbleTimestamp?: FC<SpeechBubbleTimestampProps & WithCSSProp>;
+    RetryLink?: FC<SpeechBubbleRetryLinkProps & SpeechBubbleRetryLinkStyleAttributes>;
+    Icon?: FC<DangerIconProps>;
+} & HTMLProps<HTMLParagraphElement>;
+
+export type SpeechBubbleDangerStyleAttributes = WithCSSProp<{
+    $maxWidth?: RequiredCSSProperties["maxWidth"];
+    $padding?: RequiredCSSProperties["padding"];
+    $borderRadius?: RequiredCSSProperties["borderRadius"];
+}>;
+
+export type SpeechBubbleRetryLinkProps = Omit<HTMLProps<HTMLAnchorElement>, "onClick">;
+export type SpeechBubbleRetryLinkStyleAttributes = WithCSSProp<{$cursor?: RequiredCSSProperties["cursor"]}>;

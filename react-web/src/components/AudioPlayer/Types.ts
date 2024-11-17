@@ -10,7 +10,7 @@ export type AudioPlayerProps = {
     onCanPlay?: () => void;
     onLoadedMetadata?: () => void;
     AudioMedia?: MaybeForwardRefComponent<AudioMediaProps>;
-    ProgressBar?: FC<ProgressBarProps>;
+    ProgressBar?: FC<ProgressBarProps & WithCSSProp>;
     RestartIcon?: FC<RestartIconProps>;
     PlayIcon?: FC<PlayIconProps>;
     PauseIcon?: FC<PauseIconProps>;

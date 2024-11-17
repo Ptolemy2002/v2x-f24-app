@@ -53,6 +53,8 @@ createRoot(document.getElementById('root')!).render(
           recepientTextColor: "white",
           audioPlayerProgressColor: "#888",
           audioPlayerBackgroundColor: "#343541",
+          dangerIconColor: "white",
+          dangerIconBackgroundColor: "red",
           borderThickness: "1px",
           borderColor: "white",
           borderStyle: "solid",

@@ -4,6 +4,7 @@ import {
     SpeechBubbleImage as DefaultSpeechBubbleImage,
     SpeechBubbleAudio as DefaultSpeechBubbleAudio,
     SpeechBubbleTyping as DefaultSpeechBubbleTyping,
+    SpeechBubbleDanger as DefaultSpeechBubbleDanger
 } from "src/components/SpeechBubble";
 import { SpeechContainerProps } from "./Types";
 import ConversationData from "src/data/ConversationData";
@@ -13,11 +14,12 @@ export default function SpeechContainer({
     SpeechBubbleImage=DefaultSpeechBubbleImage,
     SpeechBubbleAudio=DefaultSpeechBubbleAudio,
     SpeechBubbleTyping=DefaultSpeechBubbleTyping,
+    SpeechBubbleDanger=DefaultSpeechBubbleDanger,
     ...props
 }: SpeechContainerProps) {
     const speechContainerRef = useRef<HTMLDivElement>(null);
 
-    const [_conversationData] = ConversationData.useContext(["messages", "requestInProgress"]);
+    const [_conversationData] = ConversationData.useContext(["messages", "requestInProgress", "requestFailed"]);
     const conversationData = _conversationData!;
 
     // useCallback is used to keep a stable reference to the function.
@@ -59,6 +61,7 @@ export default function SpeechContainer({
             }
 
             {conversationData.hasInProgressRequest("queryBot") && <SpeechBubbleTyping origin="recepient" />}
+            {conversationData.hasFailedRequest("queryBot") && <SpeechBubbleDanger origin="recepient" date={new Date()} />}
         </div>
     );
 }
