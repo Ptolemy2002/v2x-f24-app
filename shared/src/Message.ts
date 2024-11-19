@@ -190,7 +190,7 @@ export function createMessage<T extends MessageType, Mongo extends boolean = fal
     constructMessage: () => MessageExclusiveProps<T>,
     mongo?: Mongo,
     id?: string
-) {
+): MessageOfType<T, Mongo> {
     return ({
         ...constructMessage(),
         id: id ?? nanoid(),
@@ -198,4 +198,22 @@ export function createMessage<T extends MessageType, Mongo extends boolean = fal
         type,
         date: mongo ? new Date().toISOString() : new Date()
     } as MessageOfType<T, Mongo>);
+}
+
+export function isMongoMessage(message: Message | MongoMessage): message is MongoMessage {
+    return typeof message.date === "string";
+}
+
+export function toMongoMessage(message: Message): MongoMessage {
+    return {
+        ...message,
+        date: message.date.toISOString()
+    };
+}
+
+export function toMessage(message: MongoMessage): Message {
+    return {
+        ...message,
+        date: new Date(message.date)
+    };
 }

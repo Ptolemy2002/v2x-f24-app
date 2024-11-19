@@ -6,7 +6,8 @@ import {
     Message, Conversation, MongoConversation,
     UniqueMessageArraySchema,
     BotQueryResponseBody,
-    MongoMessage
+    MongoMessage, isMongoMessage,
+    toMessage, toMongoMessage
 } from "shared";
 import { zodValidateWithErrors } from "@ptolemy2002/regex-utils";
 import getApi from "src/Api";
@@ -79,16 +80,8 @@ export default class ConversationData extends MongoData<
         this.defineProperty("messages", {
             mongoName: "messages",
             initial: [],
-            toMongo: (messages) => messages.map((message) => ({
-                ...message,
-                date: message.date.toISOString()
-            })),
-
-            fromMongo: (messages) => messages.map((message) => ({
-                ...message,
-                date: new Date(message.date)
-            })),
-
+            toMongo: (messages) => messages.map((message) => toMongoMessage(message)),
+            fromMongo: (messages) => messages.map((message) => toMessage(message)),
             validate: zodValidateWithErrors(UniqueMessageArraySchema)
         });
 
@@ -110,8 +103,8 @@ export default class ConversationData extends MongoData<
         // updateProp ensures we create a new object so that the proxy recognizes the change.
         // It is not necessary for primitive values, but it is necessary for objects and arrays.
         return this.updateProp("messages", (messages) => {
-            if (typeof message.date === "string") message.date = new Date(message.date);
-            messages.push(message as Message);
+            if (isMongoMessage(message)) message = toMessage(message);
+            messages.push(message);
         });
     }
 
