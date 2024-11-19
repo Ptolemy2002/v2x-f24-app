@@ -53,8 +53,8 @@ app.use('/', indexRouter);
 app.use(function(err: HttpError, req: Request, res: Response, next: NextFunction) {
     console.error(err.stack);
 
-    res.status(err.status || 500);
-    res.json({ message: err.message });
+    res.status(err.status ?? 500);
+    res.json({ ok: false, message: err.message });
 });
 
 export default app;

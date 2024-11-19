@@ -55,9 +55,22 @@ export const EnvSchema = z.object({
     // Additional environment variables here
 });
 
+export type EnvType = {
+    nodeEnv: "development" | "production" | "test",
+    isProd: boolean,
+    isDev: boolean,
+    isTest: boolean,
+    port: number,
+    devApiUrl: string,
+    prodApiUrl: string | null,
+    devClientUrl: string,
+    prodClientUrl: string | null,
+
+    // Additional environment variables here
+};
 let Env: z.infer<typeof EnvSchema> | null = null;
 
-export default function getEnv() {
+export default function getEnv(): EnvType {
     if (Env === null) Env = EnvSchema.parse(process.env);
     return Object.freeze({
         nodeEnv: Env.NODE_ENV,
