@@ -148,10 +148,12 @@ export const MessageExclusivePropsSchema = <T extends MessageType>(
 }
 
 export type Conversation = {
+    id: string;
     messages: Message[];
 };
 
 export type MongoConversation = {
+    _id: string;
     messages: MongoMessage[];
 };
 
@@ -177,10 +179,12 @@ export const UniqueMongoMessageArraySchema = z.array(MongoMessageSchema).refine(
 );
 
 export const ConversationSchema = z.object({
+    id: z.string(),
     messages: UniqueMessageArraySchema
 });
 
 export const MongoConversationSchema = z.object({
+    _id: z.string(),
     messages: UniqueMongoMessageArraySchema
 });
 

@@ -69,18 +69,23 @@ export type EnvType = {
     // Additional environment variables here
 };
 let Env: z.infer<typeof EnvSchema> | null = null;
+let EnvInstance: EnvType | null = null;
 
 export default function getEnv(): EnvType {
     if (Env === null) Env = EnvSchema.parse(process.env);
-    return Object.freeze({
-        nodeEnv: Env.NODE_ENV,
-        isProd: Env.NODE_ENV === "production",
-        isDev: Env.NODE_ENV === "development",
-        isTest: Env.NODE_ENV === "test",
-        port: Env.PORT,
-        devApiUrl: Env.DEV_API_URL,
-        prodApiUrl: Env.PROD_API_URL,
-        devClientUrl: Env.DEV_CLIENT_URL,
-        prodClientUrl: Env.PROD_CLIENT_URL
-    });
+    if (!EnvInstance) {
+        EnvInstance = Object.freeze({
+            port: Env.PORT,
+            nodeEnv: Env.NODE_ENV,
+            isProd: Env.NODE_ENV === "production",
+            isDev: Env.NODE_ENV === "development",
+            isTest: Env.NODE_ENV === "test",
+            devApiUrl: Env.DEV_API_URL,
+            prodApiUrl: Env.PROD_API_URL,
+            devClientUrl: Env.DEV_CLIENT_URL,
+            prodClientUrl: Env.PROD_CLIENT_URL
+        });
+    }
+
+    return EnvInstance;
 }

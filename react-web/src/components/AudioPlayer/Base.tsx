@@ -34,6 +34,10 @@ export default function AudioPlayer({
         if (audio) {
             audio.currentTime = progress * audio.duration;
             _setProgress(progress * audio.duration);
+            
+            if (progress < 1) {
+                setIsEnded(false);
+            }
         }
     }, []);
 

@@ -8,6 +8,8 @@ import {
 } from "src/components/SpeechBubble";
 import { SpeechContainerProps } from "./Types";
 import ConversationData from "src/data/ConversationData";
+import { useMountEffect } from "@ptolemy2002/react-mount-effects";
+import useAppSearchParamState from "src/SearchParams";
 
 export default function SpeechContainer({
     SpeechBubbleText=DefaultSpeechBubbleText,
@@ -21,6 +23,13 @@ export default function SpeechContainer({
 
     const [_conversationData] = ConversationData.useContext(["messages", "requestInProgress", "requestFailed"]);
     const conversationData = _conversationData!;
+
+    const { convo: convoId } = useAppSearchParamState();
+
+    // If there is no last request, pull the initial data.
+    useMountEffect(() => {
+        if (!conversationData.hasLastRequest()) conversationData.pull(convoId);
+    });
 
     // useCallback is used to keep a stable reference to the function.
     const scrollToEnd = useCallback(() => {
@@ -46,6 +55,11 @@ export default function SpeechContainer({
 
     return (
         <div id="speech-container" ref={speechContainerRef} {...props}>
+            {
+                conversationData.hasInProgressRequest("pull")
+                && <p>Loading Conversation Data...</p>
+            }
+
             {
                 // map here will iterate over each message in the messages array, returning a new array with the
                 // results of the function applied to each element.

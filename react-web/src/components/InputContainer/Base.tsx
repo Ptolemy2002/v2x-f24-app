@@ -1,4 +1,4 @@
-import { useCallback, useRef, KeyboardEvent } from 'react';
+import { useCallback, useRef, KeyboardEvent, useMemo } from 'react';
 import { Button } from 'react-bootstrap';
 import DefaultRightArrowIcon from 'src/components/icons/RightArrowIcon';
 import { InputContainerProps } from './Types';
@@ -42,7 +42,7 @@ export default function InputContainer({
 
         // Start the bot's response
         conversationData.queryBot();
-    }, [conversationData]);
+    }, [conversationData, conversationData.requestInProgress, conversationData.requestFailed]);
 
     const addAudio = useCallback(() => {
         conversationData.addMessage(createMessage("audio", "sender", () => ({
@@ -54,21 +54,31 @@ export default function InputContainer({
         conversationData.queryBot();
     }, [conversationData]);
 
+    const sendDisabled = useMemo(() => {
+        return (
+            conversationData.hasInProgressRequest("queryBot")
+            || conversationData.hasFailedRequest("queryBot")
+        );
+    }, [
+        conversationData,
+        conversationData.requestInProgress,
+        conversationData.requestFailed,
+        messageInputRef.current?.value
+    ]);
+
     // useCallback is used to keep a stable reference to the function.
     const handleKeyDown = useCallback((event: KeyboardEvent<HTMLTextAreaElement>) => {
-        if (conversationData.hasInProgressRequest("queryBot")) return;
-
         if (event.key === 'Enter' && !event.shiftKey) {
             event.preventDefault();
-            addText();
+            if (!sendDisabled) addText();
         } else if (event.ctrlKey) {
             // Send an image when the user presses Control + I and an audio when the user presses Control + M.
             if (event.key === 'i') {
                 event.preventDefault();
-                addImage();
+                if (!sendDisabled) addImage();
             } else if (event.key === 'm') {
                 event.preventDefault();
-                addAudio();
+                if (!sendDisabled) addAudio();
             }
         }
     }, [addText, addImage, addAudio, conversationData.requestInProgress, conversationData]);
@@ -89,9 +99,7 @@ export default function InputContainer({
                 as="button"
                 aria-label="Send Message"
                 onClick={addText}
-                disabled={
-                    conversationData.hasInProgressRequest("queryBot") || conversationData.hasFailedRequest("queryBot")
-                }
+                disabled={sendDisabled}
             >
                 <RightArrowIcon />
             </Button>

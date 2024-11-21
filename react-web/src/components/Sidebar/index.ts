@@ -10,8 +10,6 @@ export {default as TimeLabel} from "./TimeLabelStyled";
 export {default as UnstyledChatLink} from "./ChatLink";
 export {default as ChatLink} from "./ChatLinkStyled";
 
-export {default as GenericLinks} from "./GenericLinks";
-
 // Export the types and other resources.
 export * from "./Types";
 export * from "./Other";

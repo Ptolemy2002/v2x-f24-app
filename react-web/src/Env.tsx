@@ -59,19 +59,24 @@ export type EnvType = {
     prodClientUrl: string | null
 };
 let Env: z.infer<typeof EnvSchema> | null = null;
+let EnvInstance: EnvType | null = null;
 
 export default function getEnv(): EnvType {
     if (Env === null) Env = EnvSchema.parse(import.meta.env);
-    return Object.freeze({
-        nodeEnv: Env.NODE_ENV,
-        isProd: Env.NODE_ENV === "production",
-        isDev: Env.NODE_ENV === "development",
-        isTest: Env.NODE_ENV === "test",
-        devApiUrl: Env.VITE_DEV_API_URL,
-        prodApiUrl: Env.VITE_PROD_API_URL,
-        devClientUrl: Env.VITE_DEV_CLIENT_URL,
-        prodClientUrl: Env.VITE_PROD_CLIENT_URL
-    });
+    if (!EnvInstance) {
+        EnvInstance = Object.freeze({
+            nodeEnv: Env.NODE_ENV,
+            isProd: Env.NODE_ENV === "production",
+            isDev: Env.NODE_ENV === "development",
+            isTest: Env.NODE_ENV === "test",
+            devApiUrl: Env.VITE_DEV_API_URL,
+            prodApiUrl: Env.VITE_PROD_API_URL,
+            devClientUrl: Env.VITE_DEV_CLIENT_URL,
+            prodClientUrl: Env.VITE_PROD_CLIENT_URL
+        });
+    }
+
+    return EnvInstance;
 }
 
 export const EnvContext = createContext<EnvType | undefined>(undefined);

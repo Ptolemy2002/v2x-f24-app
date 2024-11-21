@@ -25,6 +25,11 @@ export default Object.assign(
             display: block;
             text-decoration: none;
             color: ${({theme}) => theme.textColor};
+            cursor: pointer;
+        }
+
+        &.active {
+            color: ${({theme}) => theme.activeTextColor};
         }
 
         ${({$css}) => $css}

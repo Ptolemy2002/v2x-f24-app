@@ -3,8 +3,8 @@ import { RequiredCSSProperties, WithCSSProp } from '@ptolemy2002/react-styled-co
 
 export type SidebarProps = {
     colSize?: number;
-    GenericLinks?: FC<GenericLinksProps>;
-
+    TimeLabel?: FC<TimeLabelProps & TimeLabelStyleAttributes>;
+    ChatLink?: FC<ChatLinkProps & ChatLinkStyleAttributes>;
 } & HTMLProps<HTMLUListElement>;
 
 export type SidebarStyleAttributes = WithCSSProp<{
@@ -25,20 +25,11 @@ export type TimeLabelStyleAttributes = WithCSSProp<{
 
 // ChatLink will take a text string, an href string, and an optional active boolean as well as the default properties for a list item element.
 export type ChatLinkProps = {
+    id: string;
     text: string;
-    href: string;
-    active?: boolean;
 } & HTMLProps<HTMLLIElement>;
 
 export type ChatLinkStyleAttributes = WithCSSProp<{
     $margin?: RequiredCSSProperties["marginLeft"];
     $padding?: RequiredCSSProperties["padding"];
-}>;
-
-export type GenericLinksProps = WithCSSProp<{
-    timeLabel: string;
-    TimeLabel?: FC<TimeLabelProps & TimeLabelStyleAttributes>;
-    ChatLink?: FC<ChatLinkProps & ChatLinkStyleAttributes>;
-    count?: number;
-    start?: number;
 }>;

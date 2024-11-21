@@ -7,7 +7,8 @@ import {
     UniqueMessageArraySchema,
     BotQueryResponseBody,
     MongoMessage, isMongoMessage,
-    toMessage, toMongoMessage
+    toMessage, toMongoMessage,
+    createMessage
 } from "shared";
 import { zodValidateWithErrors } from "@ptolemy2002/regex-utils";
 import getApi from "src/Api";
@@ -22,6 +23,7 @@ export type DefaultResponseData = {
 
 export type ConversationRequests = {
     queryBot: () => Promise<void>;
+    pull: (convoId: string | null) => Promise<void>;
 };
 
 export type CompletedConversationData = ConversationData & CompletedMongoData<
@@ -77,6 +79,14 @@ export default class ConversationData extends MongoData<
     constructor() {
         super();
 
+        this.defineProperty("id", {
+            mongoName: "_id",
+            toMongo: (id) => id,
+            fromMongo: (id) => id,
+            
+            initial: ""
+        });
+
         this.defineProperty("messages", {
             mongoName: "messages",
             initial: [],
@@ -85,17 +95,35 @@ export default class ConversationData extends MongoData<
             validate: zodValidateWithErrors(UniqueMessageArraySchema)
         });
 
-        this.defineRequestType("queryBot", async function(this: CompletedConversationData) {
+        this.defineRequestType("queryBot", async function(this: CompletedConversationData, ac) {
             const api = getApi();
-            const { status, data } = await api.post<BotQueryResponseBody>("/bot/query", {
+            const { data } = await api.post<BotQueryResponseBody>("/bot/query", {
                 conversation: this.toJSON()
+            }, {
+                signal: ac.signal
             });
 
             if (data.ok) {
                 this.addMessage(data.newMessage);
-            } else {
-                console.error("Failed to query bot with status", status, "and data", data);
             }
+        });
+
+        // This will be handled client-side for now, but will be moved to the server in the future.
+        this.defineRequestType("pull", async function(this: CompletedConversationData, _, convoId) {
+            // Wait between 1 and 5 seconds to simulate a real API call.
+            await new Promise(r => setTimeout(r, Math.random() * 4000 + 1000));
+
+            if (convoId === "demo") {
+                this.messages = [
+                    createMessage("text", "recepient", () => ({
+                        text: "Hello! How can I assist you today?"
+                    }))
+                ];
+                return;
+            }
+
+            // Empty if not found.
+            this.messages = [];
         });
     }
 
