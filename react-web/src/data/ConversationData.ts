@@ -106,6 +106,8 @@ export default class ConversationData extends MongoData<
             if (data.ok) {
                 this.addMessage(data.newMessage);
             }
+        }, {
+            undoOnFail: false
         });
 
         // This will be handled client-side for now, but will be moved to the server in the future.
@@ -124,6 +126,8 @@ export default class ConversationData extends MongoData<
 
             // Empty if not found.
             this.messages = [];
+        }, {
+            undoOnFail: false
         });
     }
 
