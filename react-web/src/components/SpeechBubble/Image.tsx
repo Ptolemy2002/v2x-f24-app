@@ -4,7 +4,7 @@ import DefaultSpeechBubbleTimestamp from "./TimestampStyled";
 import DefaultScreenReaderText from "./ScreenReaderText";
 import clsx from "clsx";
 
-export default function SpeechBubbleImage({
+export default function SpeechBubbleImageBase({
     message,
     scrollToEnd,
     className,

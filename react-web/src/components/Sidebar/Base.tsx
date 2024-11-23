@@ -4,7 +4,7 @@ import DefaultTimeLabel from "./TimeLabelStyled";
 import DefaultChatLink from "./ChatLinkStyled";
 import clsx from "clsx";
 
-export default function Sidebar({
+export default function SidebarBase({
     className,
     colSize=1,
     TimeLabel = DefaultTimeLabel,

@@ -3,7 +3,7 @@ import { Button, Row } from "react-bootstrap";
 import { BSMediaQuery } from "@ptolemy2002/react-bs-media-queries";
 import DefaultMenuIcon from "src/components/icons/MenuIcon";
 
-export default function Header({
+export default function HeaderBase({
     onMenuClick,
     MenuIcon = DefaultMenuIcon,
     ...props

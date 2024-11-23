@@ -5,7 +5,7 @@ import DefaultTimestampWrapper from "src/components/TimestampWrapper";
 import DefaultSpeechBubbleTimestamp from "./Timestamp";
 import clsx from "clsx";
 
-export default function SpeechBubbleAudio({
+export default function SpeechBubbleAudioBase({
     message,
     className,
     scrollToEnd,

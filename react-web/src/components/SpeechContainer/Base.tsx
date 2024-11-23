@@ -10,8 +10,9 @@ import { SpeechContainerProps } from "./Types";
 import ConversationData from "src/data/ConversationData";
 import { useMountEffect } from "@ptolemy2002/react-mount-effects";
 import useAppSearchParamState from "src/SearchParams";
+import clsx from "clsx";
 
-export default function SpeechContainer({
+export default function SpeechContainerBase({
     SpeechBubbleText=DefaultSpeechBubbleText,
     SpeechBubbleImage=DefaultSpeechBubbleImage,
     SpeechBubbleAudio=DefaultSpeechBubbleAudio,
@@ -53,13 +54,16 @@ export default function SpeechContainer({
         }
     }, [conversationData.requestInProgress, scrollToEnd, conversationData]);
 
+    if (conversationData.hasInProgressRequest("pull")) {
+        return (
+            <div id="speech-container" ref={speechContainerRef} {...props} className={clsx("loading", props.className)}>
+                Loading Conversation Data...
+            </div>
+        );
+    }
+
     return (
         <div id="speech-container" ref={speechContainerRef} {...props}>
-            {
-                conversationData.hasInProgressRequest("pull")
-                && <p>Loading Conversation Data...</p>
-            }
-
             {
                 // map here will iterate over each message in the messages array, returning a new array with the
                 // results of the function applied to each element.

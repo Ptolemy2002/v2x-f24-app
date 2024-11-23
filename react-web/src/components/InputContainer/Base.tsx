@@ -5,7 +5,7 @@ import { InputContainerProps } from './Types';
 import ConversationData from 'src/data/ConversationData';
 import { createMessage } from 'shared';
 
-export default function InputContainer({
+export default function InputContainerBase({
     RightArrowIcon = DefaultRightArrowIcon,
     ...props
 }: InputContainerProps) {

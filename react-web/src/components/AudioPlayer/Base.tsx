@@ -10,7 +10,7 @@ import DefaultPlayIcon from 'src/components/icons/PlayIcon';
 import DefaultPauseIcon from 'src/components/icons/PauseIcon';
 import clsx from 'clsx';
 
-export default function AudioPlayer({
+export default function AudioPlayerBase({
     src,
     onCanPlay,
     onLoadedMetadata,

@@ -4,7 +4,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { router } from 'src/Browser';
 import { RouterProvider } from 'react-router-dom';
 
-export default function App({className}: AppProps) {
+export default function AppBase({className}: AppProps) {
 
     return (
         // ErrorBoundary will catch any errors that occur in the children of this component and display the fallback

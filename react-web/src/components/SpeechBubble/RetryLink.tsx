@@ -2,7 +2,7 @@ import clsx from "clsx";
 import { SpeechBubbleRetryLinkProps } from "./Types";
 import ConversationData from "src/data/ConversationData";
 
-export default function SpeechBubbleRetryLink(
+export default function SpeechBubbleRetryLinkBase(
     {
         className,
         children,

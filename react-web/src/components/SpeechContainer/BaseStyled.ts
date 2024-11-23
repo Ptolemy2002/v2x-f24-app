@@ -19,6 +19,13 @@ export default Object.assign(
         flex-direction: column;
         gap: ${({$gap}) => $gap};
 
+        &.loading {
+            // Center the loading text.
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
         ${({$css}) => $css}
     `,
     {

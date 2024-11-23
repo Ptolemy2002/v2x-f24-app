@@ -2,7 +2,7 @@ import useAppSearchParamState from "src/SearchParams";
 import {ChatLinkProps} from "./Types";
 import clsx from "clsx";
 
-export default function ChatLink({text, id, className, ...props}: ChatLinkProps) {
+export default function ChatLinkBase({text, id, className, ...props}: ChatLinkProps) {
     const {convo, setConvo} = useAppSearchParamState();
 
     return (

@@ -3,7 +3,7 @@ import {useRef, useEffect, useCallback} from "react";
 import useForceRerender from "@ptolemy2002/react-force-rerender";
 import {TimestampWrapperProps} from "./Types";
 
-export default function TimestampWrapper({render, updateInterval, date, relative = true}: TimestampWrapperProps) {
+export default function TimestampWrapperBase({render, updateInterval, date, relative = true}: TimestampWrapperProps) {
     const forceRerender = useForceRerender();
     const intervalRef = useRef<NodeJS.Timeout | null>(null);
 

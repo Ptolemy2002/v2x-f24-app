@@ -4,7 +4,7 @@ import DefaultSpeechBubbleTimestamp from "./TimestampStyled";
 import DefaultScreenReaderText from "./ScreenReaderText";
 import clsx from "clsx";
 
-export default function SpeechBubbleText({
+export default function SpeechBubbleTextBase({
     message,
     className,
     TimestampWrapper = DefaultTimestampWrapper,

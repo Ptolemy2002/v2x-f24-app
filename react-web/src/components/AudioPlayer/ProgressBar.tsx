@@ -4,7 +4,7 @@ import { ProgressBarProps } from './Types';
 import { handleSeek } from './Other';
 import { isMobile } from 'react-device-detect';
 
-export default function ProgressBar({
+export default function ProgressBarBase({
     progress,
     duration,
     onSeek,

@@ -5,7 +5,7 @@ import DefaultInputContainer from "src/components/InputContainer";
 import { ConversationContainerProps } from "./Types";
 import useAppSearchParamState from "src/SearchParams";
 
-export default function ConversationContainer({
+export default function ConversationContainerBase({
     className,
     SpeechContainer = DefaultSpeechContainer,
     InputContainer = DefaultInputContainer,
@@ -15,7 +15,7 @@ export default function ConversationContainer({
 
     if (convoId === null) {
         return (
-            <div id="conversation-container" className={clsx("col", className)} {...props}>
+            <div id="conversation-container" className={clsx("col", "not-selected", className)} {...props}>
                 No conversation selected.
             </div>
         );

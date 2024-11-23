@@ -6,7 +6,7 @@ import DefaultRetryLink from "./RetryLinkStyled";
 import DefaultIcon from "src/components/icons/DangerIcon";
 import clsx from "clsx";
 
-export default function SpeechBubbleDanger({
+export default function SpeechBubbleDangerBase({
     origin,
     date,
     className,
