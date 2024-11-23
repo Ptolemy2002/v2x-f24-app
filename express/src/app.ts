@@ -54,7 +54,7 @@ app.use(function(err: HttpError, req: Request, res: Response, next: NextFunction
     console.error(err.stack);
 
     res.status(err.status ?? 500);
-    res.json({ ok: false, message: err.message });
+    res.json({ ok: false, code: err.code ?? "UNKNOWN", message: err.message });
 });
 
 export default app;

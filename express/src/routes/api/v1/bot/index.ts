@@ -78,6 +78,7 @@ router.post<
         if (!success) {
             res.status(400).json({
                 ok: false,
+                code: "BAD_INPUT",
                 message: error.message
             });
             return;
@@ -161,6 +162,7 @@ router.post<
 
         res.status(500).json({
             ok: false,
+            code: "INTERNAL",
             message: "Unknown response type."
         });
     })

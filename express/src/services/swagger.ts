@@ -29,7 +29,8 @@ const doc = {
 					type: "string"
 				},
 				type: {
-					type: "string"
+					type: "string",
+					enum: ["text", "image", "audio"]
 				},
 
 				text: {
@@ -45,6 +46,32 @@ const doc = {
 				alt: {
 					type: "string",
 					required: false
+				}
+			}
+		},
+
+		ErrorCode: {
+			type: "string",
+			enum: [
+				"UNKNOWN",
+				"BAD_INPUT",
+				"INTERNAL"
+			]
+		},
+
+		ErrorResponse: {
+			type: "object",
+			properties: {
+				ok: {
+					type: "boolean",
+					enum: [false]
+				},
+				// Code is either an error code or null
+				code: {
+					$ref: "#/definitions/ErrorCode"
+				},
+				message: {
+					type: "string"
 				}
 			}
 		},

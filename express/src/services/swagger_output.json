@@ -27,39 +27,13 @@
           "400": {
             "description": "Bad request",
             "schema": {
-              "type": "object",
-              "properties": {
-                "ok": {
-                  "type": "boolean",
-                  "example": false
-                },
-                "message": {
-                  "type": "string",
-                  "example": "Bad request"
-                }
-              },
-              "xml": {
-                "name": "main"
-              }
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "500": {
             "description": "Internal server error",
             "schema": {
-              "type": "object",
-              "properties": {
-                "ok": {
-                  "type": "boolean",
-                  "example": false
-                },
-                "message": {
-                  "type": "string",
-                  "example": "An error occured"
-                }
-              },
-              "xml": {
-                "name": "main"
-              }
+              "$ref": "#/definitions/ErrorResponse"
             }
           }
         }
@@ -85,39 +59,13 @@
           "400": {
             "description": "Bad request",
             "schema": {
-              "type": "object",
-              "properties": {
-                "ok": {
-                  "type": "boolean",
-                  "example": false
-                },
-                "message": {
-                  "type": "string",
-                  "example": "Bad request"
-                }
-              },
-              "xml": {
-                "name": "main"
-              }
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "500": {
             "description": "Internal server error",
             "schema": {
-              "type": "object",
-              "properties": {
-                "ok": {
-                  "type": "boolean",
-                  "example": false
-                },
-                "message": {
-                  "type": "string",
-                  "example": "An error occured"
-                }
-              },
-              "xml": {
-                "name": "main"
-              }
+              "$ref": "#/definitions/ErrorResponse"
             }
           }
         }
@@ -163,20 +111,13 @@
           "400": {
             "description": "Bad request",
             "schema": {
-              "type": "object",
-              "properties": {
-                "ok": {
-                  "type": "boolean",
-                  "example": false
-                },
-                "message": {
-                  "type": "string",
-                  "example": "Bad request"
-                }
-              },
-              "xml": {
-                "name": "main"
-              }
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
             }
           }
         }
@@ -191,7 +132,12 @@
           "type": "string"
         },
         "type": {
-          "type": "string"
+          "type": "string",
+          "enum": [
+            "text",
+            "image",
+            "audio"
+          ]
         },
         "text": {
           "type": "string",
@@ -204,6 +150,31 @@
         "alt": {
           "type": "string",
           "required": false
+        }
+      }
+    },
+    "ErrorCode": {
+      "type": "string",
+      "enum": [
+        "UNKNOWN",
+        "BAD_INPUT",
+        "INTERNAL"
+      ]
+    },
+    "ErrorResponse": {
+      "type": "object",
+      "properties": {
+        "ok": {
+          "type": "boolean",
+          "enum": [
+            false
+          ]
+        },
+        "code": {
+          "$ref": "#/definitions/ErrorCode"
+        },
+        "message": {
+          "type": "string"
         }
       }
     },
