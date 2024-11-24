@@ -116,11 +116,13 @@ export default class ConversationData extends MongoData<
             await new Promise(r => setTimeout(r, Math.random() * 4000 + 1000));
 
             if (convoId === "demo") {
-                this.messages = [
-                    createMessage("text", "recepient", () => ({
-                        text: "Hello! How can I assist you today?"
-                    }))
-                ];
+                this.fromJSON({
+                    messages: [
+                        createMessage("text", "recepient", () => ({
+                            text: "Hello! How can I assist you today?"
+                        }), true)
+                    ]
+                });
                 return;
             }
 
