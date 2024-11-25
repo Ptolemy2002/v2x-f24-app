@@ -71,9 +71,9 @@ export type EnvType = {
 let Env: z.infer<typeof EnvSchema> | null = null;
 let EnvInstance: EnvType | null = null;
 
-export default function getEnv(): EnvType {
-    if (Env === null) Env = EnvSchema.parse(process.env);
-    if (!EnvInstance) {
+export default function getEnv(createNew=false): EnvType {
+    if (createNew || Env === null) Env = EnvSchema.parse(process.env);
+    if (createNew || !EnvInstance) {
         EnvInstance = Object.freeze({
             port: Env.PORT,
             nodeEnv: Env.NODE_ENV,
