@@ -10,19 +10,22 @@ export function DefaultLoader({className, ...props}: DefaultLoaderProps) {
 
 export type StaticSrcSVGProps = Omit<ComponentProps<typeof SVG>, 'src'>;
 export default function StaticSrcSVG(src: string, Loader: FC<DefaultLoaderProps> = DefaultLoader) {
-    const env = getEnv();
-
     return Object.assign(
-        ({cacheRequests=env.isProd, className, ...props}: StaticSrcSVGProps) => <>
-            <HTMLComment text={`[SVG] ${src}`} />
-            <SVG
-                className={className}
-                cacheRequests={cacheRequests}
-                src={src}
-                loader={<Loader className={className} {...props} />}
-                {...props}
-            />
-        </>,
+        ({cacheRequests, className, ...props}: StaticSrcSVGProps) => {
+            const env = getEnv();
+            if(cacheRequests === undefined) cacheRequests = env.isProd;
+            
+            return <>
+                <HTMLComment text={`[SVG] ${src}`} />
+                <SVG
+                    className={className}
+                    cacheRequests={cacheRequests}
+                    src={src}
+                    loader={<Loader className={className} {...props} />}
+                    {...props}
+                />
+            </>
+        },
         { 
             displayName: `${src}(SVG)`
         }

@@ -3,7 +3,9 @@ import { createRoot } from 'react-dom/client';
 import App from 'src/App';
 import { createGlobalStyle } from 'styled-components';
 import CacheProvider from "react-inlinesvg/provider";
-import { NamedThemeProvider } from './NamedTheme';
+import { NamedThemeProvider } from 'src/NamedTheme';
+import { ErrorBoundary } from 'react-error-boundary';
+import { EnvProvider } from 'src/Env';
 
 export const GlobalStyle = createGlobalStyle`
     :root {
@@ -43,7 +45,16 @@ createRoot(document.getElementById('root')!).render(
     <CacheProvider>
         <NamedThemeProvider initial="dark">
           <GlobalStyle />
-          <App />
+          {/*
+            ErrorBoundary will catch any errors that occur in the children of this component and display the fallback
+            if they happen. ErrorBoundaries can be defined below this one, causing them to catch errors in their children
+            instead of this one at the top level.
+          */}
+          <ErrorBoundary fallback={<p>Fatal Error</p>}>
+            <EnvProvider>
+              <App />
+            </EnvProvider>
+          </ErrorBoundary>
         </NamedThemeProvider>
       </CacheProvider>
   </StrictMode>,
