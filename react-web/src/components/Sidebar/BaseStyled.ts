@@ -20,6 +20,8 @@ export default Object.assign(
     
         ${({$paddingX}) => paddingX($paddingX!)}
         ${({$paddingY}) => paddingY($paddingY!)}
+
+        height: 100%;
     
         list-style: none;
 

@@ -3,6 +3,7 @@ import { Col } from "react-bootstrap";
 import DefaultTimeLabel from "./TimeLabelStyled";
 import DefaultChatLink from "./ChatLinkStyled";
 import clsx from "clsx";
+import getEnv from "src/Env";
 
 export default function SidebarBase({
     className,
@@ -11,12 +12,18 @@ export default function SidebarBase({
     ChatLink = DefaultChatLink,
     ...props
 }: SidebarProps) {
+    const env = getEnv();
+
     return (
         // We need to explicitly set the "col" class here so LESS can recognize it as a column.
         // We also need to set the "as" prop after spreading the others to make sure it doesn't get overridden.
         <Col id="sidebar" xs={colSize} className={clsx("col", className)} {...props} as="ul">
-            <TimeLabel text="Today" />
-            <ChatLink text="Demo" id="demo" />
+            {
+                env.isDev && <>
+                    <TimeLabel text="Development" />
+                    <ChatLink text="Demo" id="demo" />
+                </>
+            }
         </Col>
     );
 }

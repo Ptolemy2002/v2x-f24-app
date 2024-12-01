@@ -31,6 +31,12 @@ export default Object.assign(
             stroke: ${({$color, theme}) => $color ?? theme.textColor};
         }
 
+        &.loader {
+            > path {
+                fill: ${({$color, theme}) => $color ?? theme.textColor};
+            }
+        }
+
         ${({$css}) => $css}
     `,
     {

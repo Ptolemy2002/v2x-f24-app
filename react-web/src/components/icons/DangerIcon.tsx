@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import "/icons/danger.svg";
 
 export type DangerIconStyleAttributes = {
+    $loaderColor?: RequiredCSSProperties['fill'] | null;
     $color?: RequiredCSSProperties['fill'] | null;
     $backgroundColor?: RequiredCSSProperties['fill'] | null;
     $width?: RequiredCSSProperties['width'];
@@ -19,6 +20,7 @@ const SVG = StaticSrcSVG('/icons/danger.svg');
 export default Object.assign(
     styled(SVG).attrs<DangerIconProps>(
         (props) => ({
+            $loaderColor: props.$loaderColor ?? null,
             $color: props.$color ?? null,
             $width: props.$width ?? '24px',
             $height: props.$height ?? 'auto',
@@ -34,6 +36,12 @@ export default Object.assign(
 
         > #mark-line, > #mark-dot {
             fill: ${({$color, theme}) => $color ?? theme.dangerIconColor};
+        }
+
+        &.loader {
+            > path {
+                fill: ${({$loaderColor, theme}) => $loaderColor ?? theme.textColor};
+            }
         }
 
         ${({$css}) => $css}

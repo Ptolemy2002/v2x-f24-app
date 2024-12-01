@@ -27,10 +27,16 @@ export default Object.assign(
     )`
         width: ${({$width}) => $width};
         height: ${({$height}) => $height};
-
+        
         > path {
             fill: ${({$color, theme}) => $color ?? theme.textColor};
             stroke: ${({$color, theme}) => $color ?? theme.textColor};
+        }
+
+        &.loader {
+            > path {
+                fill: ${({$color, theme}) => $color ?? theme.textColor};
+            }
         }
 
         ${({$css}) => $css}

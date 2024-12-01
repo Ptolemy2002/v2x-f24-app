@@ -29,7 +29,9 @@ export default function SpeechContainerBase({
 
     // If there is no last request, pull the initial data.
     useMountEffect(() => {
-        if (!conversationData.hasLastRequest()) conversationData.pull(convoId);
+        if (!conversationData.hasLastRequest()) {
+            conversationData.pull(convoId);
+        }
     });
 
     // useCallback is used to keep a stable reference to the function.

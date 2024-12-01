@@ -56,14 +56,13 @@ export default function InputContainerBase({
 
     const sendDisabled = useMemo(() => {
         return (
-            conversationData.hasInProgressRequest("queryBot")
+            conversationData.requestInProgress
             || conversationData.hasFailedRequest("queryBot")
         );
     }, [
         conversationData,
         conversationData.requestInProgress,
-        conversationData.requestFailed,
-        messageInputRef.current?.value
+        conversationData.requestFailed
     ]);
 
     // useCallback is used to keep a stable reference to the function.
@@ -81,7 +80,7 @@ export default function InputContainerBase({
                 if (!sendDisabled) addAudio();
             }
         }
-    }, [addText, addImage, addAudio, conversationData.requestInProgress, conversationData]);
+    }, [addText, addImage, addAudio, sendDisabled]);
 
     return (
         <div id="input-container" {...props}>

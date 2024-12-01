@@ -3,20 +3,20 @@ import { RequiredCSSProperties, WithCSSProp } from '@ptolemy2002/react-styled-co
 import styled from 'styled-components';
 
 // Side effect import so that the compiler knows this is being used
-import "/icons/restart.svg";
+import "/icons/hourglass.svg";
 
-export type RestartIconStyleAttributes = {
+export type HourglassIconStyleAttributes = {
     $color?: RequiredCSSProperties['fill'] | null;
     $width?: RequiredCSSProperties['width'];
     $height?: RequiredCSSProperties['height'];
 };
 
-export type RestartIconProps = WithCSSProp<RestartIconStyleAttributes> & StaticSrcSVGProps;
+export type HourglassIconProps = WithCSSProp<HourglassIconStyleAttributes> & StaticSrcSVGProps;
 
-const SVG = StaticSrcSVG('/icons/restart.svg');
+const SVG = StaticSrcSVG('/icons/hourglass.svg');
 
 export default Object.assign(
-    styled(SVG).attrs<RestartIconProps>(
+    styled(SVG).attrs<HourglassIconProps>(
         (props) => ({
             $color: props.$color ?? null,
             $width: props.$width ?? '24px',
@@ -28,18 +28,12 @@ export default Object.assign(
         height: ${({$height}) => $height};
 
         > path {
-            stroke: ${({$color, theme}) => $color ?? theme.textColor};
-        }
-
-        &.loader {
-            > path {
-                fill: ${({$color, theme}) => $color ?? theme.textColor};
-            }
+            fill: ${({$color, theme}) => $color ?? theme.textColor};
         }
 
         ${({$css}) => $css}
     `,
     {
-        displayName: 'RestartIcon'
+        displayName: 'HourglassIcon'
     }
 );
