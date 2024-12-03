@@ -31,31 +31,31 @@ export const GlobalStyle = createGlobalStyle`
 
         overflow-anchor: none; // Fixes a few React bugs
 
-        color: ${({theme}) => theme.textColor};
+        color: ${({ theme }) => theme.textColor};
         li::marker {
-            color: ${({theme}) => theme.textColor};
+            color: ${({ theme }) => theme.textColor};
         }
 
-        background-color: ${({theme}) => theme.backgroundColor};
+        background-color: ${({ theme }) => theme.backgroundColor};
     }
 `;
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <CacheProvider>
-        <NamedThemeProvider initial="dark">
-          <GlobalStyle />
-          {/*
-            ErrorBoundary will catch any errors that occur in the children of this component and display the fallback
-            if they happen. ErrorBoundaries can be defined below this one, causing them to catch errors in their children
-            instead of this one at the top level.
-          */}
-          <ErrorBoundary fallback={<p>Fatal Error</p>}>
-            <EnvProvider>
-              <App />
-            </EnvProvider>
-          </ErrorBoundary>
-        </NamedThemeProvider>
-      </CacheProvider>
-  </StrictMode>,
+    <StrictMode>
+        <CacheProvider>
+            <NamedThemeProvider initial="dark">
+                <GlobalStyle />
+                {/*
+                    ErrorBoundary will catch any errors that occur in the children of this component and display the fallback
+                    if they happen. ErrorBoundaries can be defined below this one, causing them to catch errors in their children
+                    instead of this one at the top level.
+                */}
+                <ErrorBoundary fallback={<p id="fatal-error">Fatal Error</p>}>
+                    <EnvProvider>
+                        <App />
+                    </EnvProvider>
+                </ErrorBoundary>
+            </NamedThemeProvider>
+        </CacheProvider>
+    </StrictMode>,
 );
