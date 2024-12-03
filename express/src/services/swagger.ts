@@ -22,7 +22,7 @@ const doc = {
 	produces: ["application/json"],
 
 	"@definitions": {
-		Message: {
+		MongoMessage: {
 			type: "object",
 			properties: {
 				id: {
@@ -31,6 +31,15 @@ const doc = {
 				type: {
 					type: "string",
 					enum: ["text", "image", "audio"]
+				},
+
+				origin: {
+					type: "string",
+					enum: ["recepient", "bot"]
+				},
+
+				date: {
+					type: "string"
 				},
 
 				text: {
@@ -76,13 +85,16 @@ const doc = {
 			}
 		},
 
-		Conversation: {
+		MongoConversation: {
 			type: "object",
 			properties: {
+				_id: {
+					type: "string"
+				},
 				messages: {
 					type: "array",
 					items: {
-						$ref: "#/definitions/Message"
+						$ref: "#/definitions/MongoMessage"
 					}
 				}
 			}

@@ -87,7 +87,7 @@
               "type": "object",
               "properties": {
                 "conversation": {
-                  "$ref": "#/definitions/Conversation"
+                  "$ref": "#/definitions/MongoConversation"
                 }
               }
             }
@@ -100,7 +100,7 @@
               "type": "object",
               "properties": {
                 "newMessage": {
-                  "$ref": "#/definitions/Message"
+                  "$ref": "#/definitions/MongoMessage"
                 }
               },
               "xml": {
@@ -122,10 +122,67 @@
           }
         }
       }
+    },
+    "/api/v1/conversation/get/{id}": {
+      "get": {
+        "tags": [
+          "Conversation"
+        ],
+        "description": "Get a conversation by ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID of the conversation to get"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Conversation found",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "conversation": {
+                  "$ref": "#/definitions/MongoConversation"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Conversation not found",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "501": {
+            "description": "Not implemented",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {
-    "Message": {
+    "MongoMessage": {
       "type": "object",
       "properties": {
         "id": {
@@ -138,6 +195,16 @@
             "image",
             "audio"
           ]
+        },
+        "origin": {
+          "type": "string",
+          "enum": [
+            "recepient",
+            "bot"
+          ]
+        },
+        "date": {
+          "type": "string"
         },
         "text": {
           "type": "string",
@@ -178,13 +245,16 @@
         }
       }
     },
-    "Conversation": {
+    "MongoConversation": {
       "type": "object",
       "properties": {
+        "_id": {
+          "type": "string"
+        },
         "messages": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/Message"
+            "$ref": "#/definitions/MongoMessage"
           }
         }
       }

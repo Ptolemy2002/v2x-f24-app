@@ -145,7 +145,7 @@ export const MessageExclusivePropsSchema = <T extends MessageType>(
             alt: z.string().optional()
         });
     }
-}
+};
 
 export type Conversation = {
     id: string;
@@ -191,7 +191,7 @@ export const MongoConversationSchema = z.object({
 export function createMessage<T extends MessageType, Mongo extends boolean = false>(
     type: T,
     origin: MessageOrigin,
-    constructMessage: () => MessageExclusiveProps<T>,
+    constructMessage: () => MessageExclusiveProps<T, Mongo>,
     mongo?: Mongo,
     id?: string
 ): MessageOfType<T, Mongo> {

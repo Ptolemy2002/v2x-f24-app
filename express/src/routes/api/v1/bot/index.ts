@@ -61,16 +61,17 @@ router.post<
                 required: true,
                 schema: {
                     conversation: {
-                        $ref: '#/definitions/Conversation'
+                        $ref: '#/definitions/MongoConversation'
                     }
                 }
             }
             #swagger.responses[200] = {
                 description: "Response from the bot.",
                 schema: {
-                    newMessage: {$ref: '#/definitions/Message'}
+                    newMessage: {$ref: '#/definitions/MongoMessage'}
                 }
             }
+            #swagger.end
         */
 
         const {success, error, data} = MongoConversationSchema.safeParse(req.body.conversation);

@@ -13,7 +13,7 @@
         "directory": "lib"
     },
     "scripts": {
-        "build": "tsc --project ./tsconfig.json",
+        "build": "tsc",
         "postinstall": "npx typesync",
         "uninstall": "bash ./scripts/uninstall.sh",
         "reinstall": "bash ./scripts/reinstall.sh"

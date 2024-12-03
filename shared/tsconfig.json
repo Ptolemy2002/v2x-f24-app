@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
+    "baseUrl": "./",
     "module": "ESNext",
     "target": "ES2020",
     "declaration": true,

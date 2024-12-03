@@ -8,7 +8,7 @@ import {
     BotQueryResponseBody,
     MongoMessage, isMongoMessage,
     toMessage, toMongoMessage,
-    createMessage
+    ConversationGetResponseBody
 } from "shared";
 import { zodValidateWithErrors } from "@ptolemy2002/regex-utils";
 import getApi from "src/Api";
@@ -115,22 +115,12 @@ export default class ConversationData extends MongoData<
 
         // This will be handled client-side for now, but will be moved to the server in the future.
         this.defineRequestType("pull", async function(this: CompletedConversationData, _, convoId) {
-            // Wait between 1 and 5 seconds to simulate a real API call.
-            await new Promise(r => setTimeout(r, Math.random() * 4000 + 1000));
+            const api = getApi();
+            const { data } = await api.get<ConversationGetResponseBody>(`/conversation/get/${convoId}`);
 
-            if (convoId === "demo") {
-                this.fromJSON({
-                    messages: [
-                        createMessage("text", "recepient", () => ({
-                            text: "Hello! How can I assist you today?"
-                        }), true)
-                    ]
-                });
-                return;
+            if (data.ok) {
+                this.fromJSON(data.conversation);
             }
-
-            // Empty if not found.
-            this.messages = [];
         }, {
             undoOnFail: false
         });
@@ -148,5 +138,10 @@ export default class ConversationData extends MongoData<
     getLastMessage(this: CompletedConversationData) {
         if (this.messages.length === 0) return null;
         return this.messages[this.messages.length - 1];
+    }
+
+    fromJSON(data: Partial<MongoConversation>, setReadOnly?: boolean): this {
+        console.log("fromJSON", data);
+        return super.fromJSON(data, setReadOnly);
     }
 }
