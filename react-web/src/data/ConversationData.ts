@@ -139,9 +139,4 @@ export default class ConversationData extends MongoData<
         if (this.messages.length === 0) return null;
         return this.messages[this.messages.length - 1];
     }
-
-    fromJSON(data: Partial<MongoConversation>, setReadOnly?: boolean): this {
-        console.log("fromJSON", data);
-        return super.fromJSON(data, setReadOnly);
-    }
 }
