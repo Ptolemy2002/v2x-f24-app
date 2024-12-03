@@ -11,9 +11,9 @@ export function DefaultLoader({className, ...props}: DefaultLoaderProps) {
 export type StaticSrcSVGProps = Omit<ComponentProps<typeof SVG>, 'src'>;
 export default function StaticSrcSVG(src: string, Loader: FC<DefaultLoaderProps> = DefaultLoader) {
     return Object.assign(
-        ({cacheRequests, className, ...props}: StaticSrcSVGProps) => {
+        (_props: StaticSrcSVGProps) => {
             const env = getEnv();
-            if(cacheRequests === undefined) cacheRequests = env.isProd;
+            const {className, cacheRequests=env.isProd, ...props} = _props;
             
             return <>
                 <HTMLComment text={`[SVG] ${src}`} />
