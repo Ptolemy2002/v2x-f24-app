@@ -12,6 +12,7 @@ import {
 } from "shared";
 import { zodValidateWithErrors } from "@ptolemy2002/regex-utils";
 import getApi from "src/Api";
+import { AdvancedCondition } from "@ptolemy2002/ts-utils";
 
 export type DefaultResponseData = {
     type: string;
@@ -31,6 +32,8 @@ export type CompletedConversationData = ConversationData & CompletedMongoData<
     MongoConversation,
     ConversationRequests
 >;
+
+export class ConversationRequestAdvancedCondition extends AdvancedCondition<keyof ConversationRequests> {}
 
 export default class ConversationData extends MongoData<
     Conversation,
