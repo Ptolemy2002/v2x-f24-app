@@ -11,6 +11,7 @@ import ConversationData from "src/data/ConversationData";
 import { useMountEffect } from "@ptolemy2002/react-mount-effects";
 import useAppSearchParamState from "src/SearchParams";
 import clsx from "clsx";
+import useManualErrorHandling from "@ptolemy2002/react-manual-error-handling";
 
 export default function SpeechContainerBase({
     SpeechBubbleText=DefaultSpeechBubbleText,
@@ -21,6 +22,7 @@ export default function SpeechContainerBase({
     ...props
 }: SpeechContainerProps) {
     const speechContainerRef = useRef<HTMLDivElement>(null);
+    const { _try } = useManualErrorHandling();
 
     const [_conversationData] = ConversationData.useContext(["messages", "requestInProgress", "requestFailed"]);
     const conversationData = _conversationData!;
@@ -30,7 +32,8 @@ export default function SpeechContainerBase({
     // If there is no last request, pull the initial data.
     useMountEffect(() => {
         if (!conversationData.hasLastRequest()) {
-            conversationData.pull(convoId);
+            // _try will allow the error boundary we set up to catch if this fails.
+            _try(() => conversationData.pull(convoId));
         }
     });
 

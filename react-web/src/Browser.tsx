@@ -19,7 +19,7 @@ export function PageLayout() {
     // If sidebar remains null, it will not be rendered
     let sidebar: ReactNode | null = null;
     if (isXXL) {
-        sidebar = <Sidebar colSize={1} />;
+        sidebar = <Sidebar colSize={2} />;
     } else if (showSidebar) {
         sidebar = <Sidebar colSize={isMD ? 3 : 12} />;
     }

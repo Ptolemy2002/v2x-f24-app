@@ -4,6 +4,7 @@ import DefaultSpeechContainer from "src/components/SpeechContainer";
 import DefaultInputContainer from "src/components/InputContainer";
 import { ConversationContainerProps } from "./Types";
 import useAppSearchParamState from "src/SearchParams";
+import { ErrorBoundary } from "react-error-boundary";
 
 export default function ConversationContainerBase({
     className,
@@ -34,8 +35,10 @@ export default function ConversationContainerBase({
             renderDeps={[SpeechContainer, InputContainer, className, ...Object.values(props)]}
         >
             <div id="conversation-container" className={clsx("col", className)} {...props}>
-                <SpeechContainer />
-                <InputContainer />
+                <ErrorBoundary fallback={<div className="error">An error occured loading the conversation.</div>}>
+                    <SpeechContainer />
+                    <InputContainer />
+                </ErrorBoundary>
             </div>
         </ConversationData.Provider>
     );
