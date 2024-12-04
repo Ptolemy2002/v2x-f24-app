@@ -113,10 +113,11 @@ export default class ConversationData extends MongoData<
             undoOnFail: false
         });
 
-        // This will be handled client-side for now, but will be moved to the server in the future.
-        this.defineRequestType("pull", async function(this: CompletedConversationData, _, convoId) {
+        this.defineRequestType("pull", async function(this: CompletedConversationData, ac, convoId) {
             const api = getApi();
-            const { data } = await api.get<ConversationGetResponseBody>(`/conversation/get/${convoId}`);
+            const { data } = await api.get<ConversationGetResponseBody>(`/conversation/get/${convoId}`, {
+                signal: ac.signal
+            });
 
             if (data.ok) {
                 this.fromJSON(data.conversation);

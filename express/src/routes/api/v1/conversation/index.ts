@@ -32,6 +32,14 @@ router.get<
             description: "Conversation not found",
             schema: {
                 $ref: "#/definitions/ErrorResponse"
+            },
+
+            examples: {
+                "application/json": {
+                    ok: false,
+                    code: "NOT_FOUND",
+                    message: "Conversation not found"
+                }
             }
         }
 
@@ -39,6 +47,14 @@ router.get<
             description: "Not implemented",
             schema: {
                 $ref: "#/definitions/ErrorResponse"
+            },
+
+            examples: {
+                "application/json": {
+                    ok: false,
+                    code: "NOT_IMPLEMENTED",
+                    message: "A database is not implemented yet, so getting a non-demo conversation is not possible."
+                }
             }
         }
         #swagger.end

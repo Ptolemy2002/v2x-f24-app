@@ -11,6 +11,14 @@ router.use("/bot", botRouter
             description: "Bad request",
             schema: {
                 $ref: "#/definitions/ErrorResponse"
+            },
+
+            examples: {
+                "application/json": {
+                    ok: false,
+                    code: "BAD_INPUT",
+                    message: "Invalid input"
+                }
             }
         }
 
@@ -31,6 +39,14 @@ router.use("/conversation", conversationRouter
             description: "Bad request",
             schema: {
                 $ref: "#/definitions/ErrorResponse"
+            },
+
+            examples: {
+                "application/json": {
+                    ok: false,
+                    code: "BAD_INPUT",
+                    message: "Invalid input"
+                }
             }
         }
 

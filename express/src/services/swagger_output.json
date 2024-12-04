@@ -112,6 +112,13 @@
             "description": "Bad request",
             "schema": {
               "$ref": "#/definitions/ErrorResponse"
+            },
+            "examples": {
+              "application/json": {
+                "ok": false,
+                "code": "BAD_INPUT",
+                "message": "Invalid input"
+              }
             }
           },
           "500": {
@@ -157,12 +164,26 @@
             "description": "Bad request",
             "schema": {
               "$ref": "#/definitions/ErrorResponse"
+            },
+            "examples": {
+              "application/json": {
+                "ok": false,
+                "code": "BAD_INPUT",
+                "message": "Invalid input"
+              }
             }
           },
           "404": {
             "description": "Conversation not found",
             "schema": {
               "$ref": "#/definitions/ErrorResponse"
+            },
+            "examples": {
+              "application/json": {
+                "ok": false,
+                "code": "NOT_FOUND",
+                "message": "Conversation not found"
+              }
             }
           },
           "500": {
@@ -175,6 +196,13 @@
             "description": "Not implemented",
             "schema": {
               "$ref": "#/definitions/ErrorResponse"
+            },
+            "examples": {
+              "application/json": {
+                "ok": false,
+                "code": "NOT_IMPLEMENTED",
+                "message": "A database is not implemented yet, so getting a non-demo conversation is not possible."
+              }
             }
           }
         }
