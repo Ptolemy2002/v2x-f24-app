@@ -24,7 +24,7 @@ export default Object.assign(
 
         > .input {
             background-color: ${({theme}) => theme.inputColor};
-            color: ${({theme}) => theme.inputTextColor};
+            color: ${({theme}) => theme.inputTextColor ?? theme.textColor};
             border: none;
 
             min-height: ${({$minHeight}) => $minHeight};
@@ -38,7 +38,7 @@ export default Object.assign(
         > .send-button {
             // important is used to override the default Bootstrap styles.
             ${({theme}) => important({backgroundColor: theme.senderColor})}
-            color: ${({theme}) => theme.senderTextColor};
+            color: ${({theme}) => theme.senderTextColor ?? theme.textColor};
             border: none;
             border-radius: ${({$sendButtonRadius}) => $sendButtonRadius};
             padding: ${({$sendButtonPadding}) => $sendButtonPadding};

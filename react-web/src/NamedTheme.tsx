@@ -19,19 +19,22 @@ export const NamedThemes: NamedTheme[] = [
         value: {
             backgroundColor: "#343541",
             headerBackgroundColor: "#202123",
+
             textColor: "white",
             activeTextColor: "#19c37d",
+
             senderColor: "#19c37d",
-            senderTextColor: "white",
             recepientColor: "#40414F",
             timestampColor: "#bbb",
+            
             inputColor: "#555",
-            inputTextColor: "white",
-            recepientTextColor: "white",
+
             audioPlayerProgressColor: "#888",
             audioPlayerBackgroundColor: "#343541",
+            
             dangerIconColor: "white",
             dangerIconBackgroundColor: "red",
+            
             borderThickness: "1px",
             borderColor: "white",
             borderStyle: "solid"

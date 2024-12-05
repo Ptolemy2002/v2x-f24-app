@@ -4,20 +4,21 @@ import { RequiredCSSProperties } from "@ptolemy2002/react-styled-component-utils
 declare module "styled-components" {
     export interface DefaultTheme {
         backgroundColor: RequiredCSSProperties["backgroundColor"],
-        headerBackgroundColor: RequiredCSSProperties["backgroundColor"],
+        headerBackgroundColor?: RequiredCSSProperties["backgroundColor"],
+        
         textColor: RequiredCSSProperties["color"],
-        activeTextColor: RequiredCSSProperties["color"],
+        activeTextColor?: RequiredCSSProperties["color"],
 
         senderColor: RequiredCSSProperties["backgroundColor"],
-        senderTextColor: RequiredCSSProperties["color"],
+        senderTextColor?: RequiredCSSProperties["color"],
 
         recepientColor: RequiredCSSProperties["backgroundColor"],
-        recepientTextColor: RequiredCSSProperties["color"],
+        recepientTextColor?: RequiredCSSProperties["color"],
 
         inputColor: RequiredCSSProperties["backgroundColor"],
-        inputTextColor: RequiredCSSProperties["color"],
+        inputTextColor?: RequiredCSSProperties["color"],
 
-        timestampColor: RequiredCSSProperties["color"],
+        timestampColor?: RequiredCSSProperties["color"],
 
         audioPlayerProgressColor: RequiredCSSProperties["backgroundColor"],
         audioPlayerBackgroundColor: RequiredCSSProperties["backgroundColor"],

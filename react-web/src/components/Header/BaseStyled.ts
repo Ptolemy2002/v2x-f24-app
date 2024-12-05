@@ -11,7 +11,7 @@ export default Object.assign(
     )`
         display: flex;
         flex-direction: row;
-        background-color: ${({theme}) => theme.headerBackgroundColor};
+        background-color: ${({theme}) => theme.headerBackgroundColor ?? theme.backgroundColor};
 
         > * {
             flex-grow: 1;

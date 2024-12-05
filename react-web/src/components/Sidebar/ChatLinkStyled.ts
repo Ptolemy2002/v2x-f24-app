@@ -29,7 +29,7 @@ export default Object.assign(
         }
 
         &.active {
-            color: ${({theme}) => theme.activeTextColor};
+        color: ${({theme}) => theme.activeTextColor ?? theme.textColor};
         }
 
         ${({$css}) => $css}
