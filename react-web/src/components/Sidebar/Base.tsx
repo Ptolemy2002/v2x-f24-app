@@ -3,7 +3,7 @@ import { Col } from "react-bootstrap";
 import DefaultTimeLabel from "./TimeLabelStyled";
 import DefaultChatLink from "./ChatLinkStyled";
 import clsx from "clsx";
-import getEnv from "src/Env";
+import { useEnv } from "src/Env";
 
 export default function SidebarBase({
     className,
@@ -12,7 +12,7 @@ export default function SidebarBase({
     ChatLink = DefaultChatLink,
     ...props
 }: SidebarProps) {
-    const env = getEnv();
+    const env = useEnv();
 
     return (
         // We need to explicitly set the "col" class here so LESS can recognize it as a column.
