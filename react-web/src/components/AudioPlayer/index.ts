@@ -1,8 +1,21 @@
 // Since this is index.tsx, importing the folder itself will import this file.
 // Don't put any other code in this file, just export the necessary resources.
-export {default as UnstyledAudioMedia} from "./Base";
 // The styled component should be the default.
-export {default as default} from "./BaseStyled";
+import UnstyledProgressBar from "./ProgressBar";
+import ProgressBar from "./ProgressBarStyled";
+import AudioMedia from "./AudioMedia";
+import _UnstyledAudioPlayer from "./Base";
+import AudioPlayer from "./BaseStyled";
+
+export default Object.assign(AudioPlayer, {
+    ProgressBar: ProgressBar,
+    AudioMedia: AudioMedia
+});
+
+export const UnstyledAudioPlayer = Object.assign(_UnstyledAudioPlayer, {
+    ProgressBar: UnstyledProgressBar,
+    AudioMedia: AudioMedia
+});
 
 export {default as UnstyledProgressBar} from "./ProgressBar";
 export {default as ProgressBar} from "./ProgressBarStyled";
