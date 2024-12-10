@@ -18,7 +18,12 @@ export default tseslint.config(
       'react-refresh': reactRefresh,
     },
     rules: {
-      ...reactHooks.configs.recommended.rules
+      ...reactHooks.configs.recommended.rules,
+      "@typescript-eslint/no-unused-expressions": "off",
+
+      // Turning this off because it conflicts with the mutable
+      // nature of ProxyContext, which is used by MongoData
+      "react-hooks/exhaustive-deps": "off",
     },
   },
 )
