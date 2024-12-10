@@ -1,10 +1,11 @@
-import { HTMLProps, FC } from 'react';
+import { HTMLProps, FC, MouseEventHandler } from 'react';
 import { RequiredCSSProperties, WithCSSProp } from '@ptolemy2002/react-styled-component-utils';
 
 export type SidebarProps = {
     colSize?: number;
     TimeLabel?: FC<TimeLabelProps & TimeLabelStyleAttributes>;
     ChatLink?: FC<ChatLinkProps & ChatLinkStyleAttributes>;
+    onLinkClick?: MouseEventHandler<HTMLAnchorElement>
 } & HTMLProps<HTMLUListElement>;
 
 export type SidebarStyleAttributes = WithCSSProp<{
@@ -27,7 +28,8 @@ export type TimeLabelStyleAttributes = WithCSSProp<{
 export type ChatLinkProps = {
     id: string;
     text: string;
-} & HTMLProps<HTMLLIElement>;
+    onClick?: MouseEventHandler<HTMLAnchorElement>;
+} & Omit<HTMLProps<HTMLLIElement>, "onClick">;
 
 export type ChatLinkStyleAttributes = WithCSSProp<{
     $margin?: RequiredCSSProperties["marginLeft"];

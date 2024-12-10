@@ -10,6 +10,7 @@ export default function SidebarBase({
     colSize=1,
     TimeLabel = DefaultTimeLabel,
     ChatLink = DefaultChatLink,
+    onLinkClick,
     ...props
 }: SidebarProps) {
     const env = useEnv();
@@ -21,7 +22,7 @@ export default function SidebarBase({
             {
                 env.isDev && <>
                     <TimeLabel text="Development" />
-                    <ChatLink text="Demo" id="demo" />
+                    <ChatLink text="Demo" id="demo" onClick={onLinkClick} />
                 </>
             }
         </Col>

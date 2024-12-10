@@ -21,7 +21,11 @@ export function PageLayout() {
     if (isXXL) {
         sidebar = <Sidebar colSize={2} />;
     } else if (showSidebar) {
-        sidebar = <Sidebar colSize={isMD ? 3 : 12} />;
+        if (!isMD) {
+            sidebar = <Sidebar colSize={12} onLinkClick={() => setShowSidebar(false)} />;
+        } else {
+            sidebar = <Sidebar colSize={3}/>;
+        }
     }
 
     return <>
