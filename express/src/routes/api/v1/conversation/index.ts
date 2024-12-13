@@ -1,6 +1,7 @@
 import { asyncErrorHandler } from '@ptolemy2002/express-utils';
 import express from 'express';
-import { ConversationGetResponseBody, createMessage, MessageExclusiveProps } from 'shared';
+import { ConversationGetResponseBody, createMessage } from 'shared';
+import getEnv from 'env';
 const router = express.Router();
 
 router.get<
@@ -38,7 +39,8 @@ router.get<
                 "application/json": {
                     ok: false,
                     code: "NOT_FOUND",
-                    message: "Conversation not found"
+                    message: "Conversation not found",
+                    help: "https://example.com/docs"
                 }
             }
         }
@@ -53,12 +55,15 @@ router.get<
                 "application/json": {
                     ok: false,
                     code: "NOT_IMPLEMENTED",
-                    message: "A database is not implemented yet, so getting a non-demo conversation is not possible."
+                    message: "A database is not implemented yet, so getting a non-demo conversation is not possible.",
+                    help: "https://example.com/docs"
                 }
             }
         }
         #swagger.end
     */
+    const env = getEnv();
+    const help = (env.apiUrl ?? "https://example.com") + "/api/v1/docs/#/Conversation/get_api_v1_conversation_get__id_";
     const { id } = req.params;
 
     // Simulate a delay
@@ -77,7 +82,8 @@ router.get<
                         }), true
                     )
                 ]
-            }
+            },
+            help
         });
 
         return;
@@ -86,7 +92,8 @@ router.get<
     res.status(501).json({
         ok: false,
         code: "NOT_IMPLEMENTED",
-        message: "A database is not implemented yet, so getting a non-demo conversation is not possible."
+        message: "A database is not implemented yet, so getting a non-demo conversation is not possible.",
+        help
     });
 }));
 

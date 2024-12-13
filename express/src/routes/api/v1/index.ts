@@ -17,7 +17,8 @@ router.use("/bot", botRouter
                 "application/json": {
                     ok: false,
                     code: "BAD_INPUT",
-                    message: "Invalid input"
+                    message: "Invalid input",
+                    help: "https://example.com/docs"
                 }
             }
         }
@@ -45,7 +46,8 @@ router.use("/conversation", conversationRouter
                 "application/json": {
                     ok: false,
                     code: "BAD_INPUT",
-                    message: "Invalid input"
+                    message: "Invalid input",
+                    help: "https://example.com/docs"
                 }
             }
         }

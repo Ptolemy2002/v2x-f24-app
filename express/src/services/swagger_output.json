@@ -19,22 +19,26 @@
   "paths": {
     "/": {
       "get": {
+        "tags": [
+          "General"
+        ],
         "description": "",
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Root route",
+            "schema": {
+              "type": "string",
+              "example": "Root route. For docs, go <a href='/api/v1/docs'>here</a>.",
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "400": {
-            "description": "Bad request",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            }
+            "description": "Bad Request"
           },
           "500": {
-            "description": "Internal server error",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            }
+            "description": "Internal Server Error"
           }
         }
       }
@@ -57,16 +61,10 @@
             }
           },
           "400": {
-            "description": "Bad request",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            }
+            "description": "Bad Request"
           },
           "500": {
-            "description": "Internal server error",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            }
+            "description": "Internal Server Error"
           }
         }
       }
@@ -88,6 +86,10 @@
               "properties": {
                 "conversation": {
                   "$ref": "#/definitions/MongoConversation"
+                },
+                "help": {
+                  "type": "string",
+                  "example": "https://example.com/docs"
                 }
               }
             }
@@ -117,7 +119,8 @@
               "application/json": {
                 "ok": false,
                 "code": "BAD_INPUT",
-                "message": "Invalid input"
+                "message": "Invalid input",
+                "help": "https://example.com/docs"
               }
             }
           },
@@ -169,7 +172,8 @@
               "application/json": {
                 "ok": false,
                 "code": "BAD_INPUT",
-                "message": "Invalid input"
+                "message": "Invalid input",
+                "help": "https://example.com/docs"
               }
             }
           },
@@ -182,7 +186,8 @@
               "application/json": {
                 "ok": false,
                 "code": "NOT_FOUND",
-                "message": "Conversation not found"
+                "message": "Conversation not found",
+                "help": "https://example.com/docs"
               }
             }
           },
@@ -201,7 +206,8 @@
               "application/json": {
                 "ok": false,
                 "code": "NOT_IMPLEMENTED",
-                "message": "A database is not implemented yet, so getting a non-demo conversation is not possible."
+                "message": "A database is not implemented yet, so getting a non-demo conversation is not possible.",
+                "help": "https://example.com/docs"
               }
             }
           }
@@ -253,7 +259,9 @@
       "enum": [
         "UNKNOWN",
         "BAD_INPUT",
-        "INTERNAL"
+        "INTERNAL",
+        "NOT_FOUND",
+        "NOT_IMPLEMENTED"
       ]
     },
     "ErrorResponse": {
@@ -270,6 +278,11 @@
         },
         "message": {
           "type": "string"
+        },
+        "help": {
+          "type": "string",
+          "required": false,
+          "description": "URL to the documentation"
         }
       }
     },

@@ -7,6 +7,7 @@ import {
     BotQueryRequestBody,
     MongoConversationSchema
 } from 'shared';
+import getEnv from 'env';
 const router = express.Router();
 
 type DefaultResponseData = {
@@ -62,7 +63,8 @@ router.post<
                 schema: {
                     conversation: {
                         $ref: '#/definitions/MongoConversation'
-                    }
+                    },
+                    help: "https://example.com/docs"
                 }
             }
             #swagger.responses[200] = {
@@ -73,14 +75,16 @@ router.post<
             }
             #swagger.end
         */
-
+        const env = getEnv();
+        const help = (env.apiUrl ?? "https://example.com") + "/api/v1/docs/#/Bot/post_api_v1_bot_query";
         const {success, error, data} = MongoConversationSchema.safeParse(req.body.conversation);
 
         if (!success) {
             res.status(400).json({
                 ok: false,
                 code: "BAD_INPUT",
-                message: error.message
+                message: error.message,
+                help
             });
             return;
         }
@@ -97,7 +101,8 @@ router.post<
                 ok: true,
                 newMessage: createMessage("text", "recepient", () => ({
                     text: "Greetings! How can I help you today?"
-                }), true)
+                }), true),
+                help
             });
             return;
         }
@@ -119,7 +124,8 @@ router.post<
                 ok: true,
                 newMessage: createMessage("text", "recepient", () => ({
                     text: response.text ?? "[No text provided]"
-                }), true)
+                }), true),
+                help
             });
             return;
         } else if (response.type === "image") {
@@ -137,7 +143,8 @@ router.post<
                     newMessage: createMessage("image", "recepient", () => ({
                         src: response.src!,
                         alt: response.alt ?? "[No alt text provided]"
-                    }), true)
+                    }), true),
+                    help
                 });
                 return;
             }
@@ -147,7 +154,8 @@ router.post<
                     ok: true,
                     newMessage: createMessage("text", "recepient", () => ({
                         text: "I'm sorry, I had trouble sending an audio message."
-                    }), true)
+                    }), true),
+                    help
                 });
                 return;
             } else {
@@ -155,7 +163,8 @@ router.post<
                     ok: true,
                     newMessage: createMessage("audio", "recepient", () => ({
                         src: response.src!
-                    }), true)
+                    }), true),
+                    help
                 });
                 return;
             }
@@ -164,7 +173,8 @@ router.post<
         res.status(500).json({
             ok: false,
             code: "INTERNAL",
-            message: "Unknown response type."
+            message: "Unknown response type.",
+            help
         });
     })
 );

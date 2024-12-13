@@ -64,7 +64,9 @@ const doc = {
 			enum: [
 				"UNKNOWN",
 				"BAD_INPUT",
-				"INTERNAL"
+				"INTERNAL",
+				"NOT_FOUND",
+				"NOT_IMPLEMENTED"
 			]
 		},
 
@@ -81,6 +83,11 @@ const doc = {
 				},
 				message: {
 					type: "string"
+				},
+				help: {
+					type: "string",
+					required: false,
+					description: "URL to the documentation"
 				}
 			}
 		},

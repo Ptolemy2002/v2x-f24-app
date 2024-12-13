@@ -65,6 +65,8 @@ export type EnvType = {
     prodApiUrl: string | null,
     devClientUrl: string,
     prodClientUrl: string | null,
+    apiUrl: string | null,
+    clientUrl: string | null
 
     // Additional environment variables here
 };
@@ -83,7 +85,9 @@ export default function getEnv(createNew=false): EnvType {
             devApiUrl: Env.DEV_API_URL,
             prodApiUrl: Env.PROD_API_URL,
             devClientUrl: Env.DEV_CLIENT_URL,
-            prodClientUrl: Env.PROD_CLIENT_URL
+            prodClientUrl: Env.PROD_CLIENT_URL,
+            apiUrl: Env.NODE_ENV === "production" ? Env.PROD_API_URL : Env.DEV_API_URL,
+            clientUrl: Env.NODE_ENV === "production" ? Env.PROD_CLIENT_URL : Env.DEV_CLIENT_URL,
         });
     }
 

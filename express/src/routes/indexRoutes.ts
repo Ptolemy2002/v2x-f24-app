@@ -4,6 +4,17 @@ const router = express.Router();
 
 // Root route
 router.get('/', function(req, res, next) {
+    /*
+        #swagger.tags = ['General']
+        
+        #swagger.responses[200] = {
+            description: "Root route",
+            schema: "Root route. For docs, go <a href='/api/v1/docs'>here</a>."
+        }
+
+        #swagger.responses[500] = null
+        #swagger.responses[400] = null
+    */
     res.send("Root route. For docs, go <a href='/api/v1/docs'>here</a>.");
 });
 
@@ -20,6 +31,9 @@ router.get("/ping", (req, res) => {
             description: "Server is up and running.",
             schema: "pong"
         }
+
+        #swagger.responses[500] = null
+        #swagger.responses[400] = null
     */
     res.send("pong");
 });
