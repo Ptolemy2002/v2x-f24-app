@@ -6,6 +6,7 @@ import Header from 'src/components/Header';
 import { Outlet } from 'react-router';
 import ConversationContainer from 'src/components/ConversationContainer';
 import { createBrowserRouter } from 'react-router-dom';
+import NotFoundPage from 'src/pages/NotFoundPage';
 
 export function PageLayout() {
     const [showSidebar, setShowSidebar] = useState(false);
@@ -47,6 +48,13 @@ export const router = createBrowserRouter([{
         {
             path: "/",
             element: <ConversationContainer />
+        },
+
+        // The reason we don't use errorElement here is because we want to render the NotFoundPage
+        // within our classical layout instead of as its own separate component
+        {
+            path: "*",
+            element: <NotFoundPage />
         }
     ]
 }]);
