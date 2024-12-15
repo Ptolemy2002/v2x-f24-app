@@ -25,3 +25,4 @@ export {default as AudioMedia} from "./AudioMedia";
 // Export the types and other resources as well.
 export * from "./Types";
 export * from "./Other";
+export * from "./Controllers";

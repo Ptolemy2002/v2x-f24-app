@@ -15,6 +15,7 @@ export type AudioPlayerProps = {
     PlayIcon?: FC<PlayIconProps>;
     PauseIcon?: FC<PauseIconProps>;
 } & HTMLProps<HTMLDivElement>;
+export type AudioPlayerControllerProps = Pick<AudioPlayerProps, 'onCanPlay' | 'onLoadedMetadata' | 'className'>;
 
 export type AudioPlayerStyleAttributes = WithCSSProp<{
     $gap?: RequiredCSSProperties["gap"];
@@ -27,9 +28,11 @@ export type AudioMediaProps = PropsWithRef<{
     onTimeUpdate?: () => void;
     ref?: RefObject<HTMLAudioElement>;
 }> & HTMLProps<HTMLAudioElement>;
+export type AudioMediaControllerProps = Pick<AudioMediaProps, 'onTimeUpdate' | 'mobileTimeUpdateInterval'>;
 
 export type ProgressBarProps = PropsWithChildren<{
     progress: number;
-    duration: number;
+    maxDuration: number;
     onSeek: (progress: number) => void;
 }> & HTMLProps<HTMLProgressElement>;
+export type ProgressBarControllerProps = Pick<ProgressBarProps, 'onSeek'>;
