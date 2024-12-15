@@ -74,6 +74,7 @@ export type SpeechBubbleTypingProps = {
     startDots?: number;
     ScreenReaderText?: FC<ScreenReaderTextProps & WithCSSProp>;
 } & HTMLProps<HTMLDivElement>;
+export type SpeechBubbleTypingControllerProps = Pick<SpeechBubbleTypingProps, "startDots" | "maxDots" | "interval" | "className">;
 
 export type SpeechBubbleTypingStyleAttributes = WithCSSProp<{
     $maxWidth?: RequiredCSSProperties["maxWidth"];

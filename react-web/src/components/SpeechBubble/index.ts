@@ -75,3 +75,4 @@ export {default as DangerScreenReaderText} from "./DangerScreenReaderText";
 // Export the types and other resources.
 export * from "./Types";
 export * from "./Other";
+export * from "./Controllers";
