@@ -24,6 +24,6 @@ export default Object.assign(
         ${({$css}) => $css}
     `,
     {
-        displayName: "styled(ConversationContainer)",
+        displayName: "styled(NotFoundPage)",
     }
 );
