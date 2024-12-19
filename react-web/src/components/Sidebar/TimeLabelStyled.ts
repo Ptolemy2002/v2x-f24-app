@@ -1,9 +1,9 @@
-import { TimeLabelStyleAttributes } from "./Types";
+import { TimeLabelProps } from "./Types";
 import TimeLabel from "./TimeLabel";
 import { baseSidebarItemStyle } from "./Other";
 import styled from "styled-components";
 
-export default Object.assign(styled(TimeLabel).attrs<TimeLabelStyleAttributes>(
+export default Object.assign(styled(TimeLabel).attrs<TimeLabelProps["style"]>(
         (props) => ({
             $margin: props.$margin ?? "0.5em",
             $padding: props.$padding ?? "5px",

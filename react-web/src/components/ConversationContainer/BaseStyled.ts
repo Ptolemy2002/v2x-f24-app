@@ -1,9 +1,9 @@
 import styled from "styled-components";
-import { ConversationContainerStyleAttributes } from "./Types";
+import { ConversationContainerProps } from "./Types";
 import Base from "./Base";
 
 export default Object.assign(
-    styled(Base).attrs<ConversationContainerStyleAttributes>(
+    styled(Base).attrs<ConversationContainerProps["style"]>(
         (props) => ({
             $padding: props.$padding ?? "10px",
             $css: props.$css ?? null,

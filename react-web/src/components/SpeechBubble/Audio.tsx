@@ -14,7 +14,7 @@ export default function SpeechBubbleAudioBase({
     SpeechBubbleTimestamp = DefaultSpeechBubbleTimestamp,
     AudioPlayer = DefaultAudioPlayer,
     ...props
-}: SpeechBubbleAudioProps) {
+}: SpeechBubbleAudioProps["functional"]) {
     return (
         <div className={clsx("speech-bubble-aud", message.origin, className)} {...props}>
             <TimestampWrapper date={message.date} updateInterval={10} render={(text) => <SpeechBubbleTimestamp text={text} />} />

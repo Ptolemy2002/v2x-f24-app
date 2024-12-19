@@ -18,7 +18,7 @@ export default function SpeechBubbleDangerBase({
     RetryLink = DefaultRetryLink,
     Icon = DefaultIcon,
     ...props
-}: SpeechBubbleDangerProps) {
+}: SpeechBubbleDangerProps["functional"]) {
     return (
         <div className={clsx("speech-bubble-danger", origin, className)} {...props}>
             <TimestampWrapper date={date} updateInterval={10} render={(text) => <SpeechBubbleTimestamp text={text} />} />

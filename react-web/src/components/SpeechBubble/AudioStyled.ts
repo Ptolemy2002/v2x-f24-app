@@ -1,10 +1,10 @@
 import { speechBubbleBaseStyle } from "./Other";
-import { SpeechBubbleAudioStyleAttributes } from "./Types";
+import { SpeechBubbleAudioProps } from "./Types";
 import Audio from "./Audio";
 import styled, { css } from "styled-components";
 import { bsBreakpointMax } from "@ptolemy2002/react-styled-component-utils";
 export default Object.assign(
-    styled(Audio).attrs<SpeechBubbleAudioStyleAttributes>(
+    styled(Audio).attrs<SpeechBubbleAudioProps["style"]>(
         (props) => ({
             $maxWidth: props.$maxWidth ?? "75%",
             $maxWidthSm: props.$maxWidthSm ?? "90%",

@@ -1,10 +1,10 @@
 import { speechBubbleBaseStyle } from "./Other";
-import { SpeechBubbleDangerStyleAttributes } from "./Types";
+import { SpeechBubbleDangerProps } from "./Types";
 import Danger from "./Danger";
 import styled from "styled-components";
 
 export default Object.assign(
-    styled(Danger).attrs<SpeechBubbleDangerStyleAttributes>(
+    styled(Danger).attrs<SpeechBubbleDangerProps["style"]>(
         (props) => ({
             $maxWidth: props.$maxWidth ?? "75%",
             $padding: props.$padding ?? "10px",

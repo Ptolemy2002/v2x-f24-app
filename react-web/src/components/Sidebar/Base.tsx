@@ -12,7 +12,7 @@ export default function SidebarBase({
     ChatLink = DefaultChatLink,
     onLinkClick,
     ...props
-}: SidebarProps) {
+}: SidebarProps["functional"]) {
     const env = useEnv();
 
     return (

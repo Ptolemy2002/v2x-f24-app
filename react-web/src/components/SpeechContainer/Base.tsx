@@ -16,7 +16,7 @@ export default function SpeechContainerBase({
     SpeechBubbleTyping=DefaultSpeechBubbleTyping,
     SpeechBubbleDanger=DefaultSpeechBubbleDanger,
     ...props
-}: SpeechContainerProps) {
+}: SpeechContainerProps["functional"]) {
     const {
         speechContainerRef,
         conversationData,

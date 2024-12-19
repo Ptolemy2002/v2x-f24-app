@@ -1,11 +1,11 @@
-import { ChatLinkStyleAttributes } from "./Types";
+import { ChatLinkProps } from "./Types";
 import { baseSidebarItemStyle } from "./Other";
 import ChatLink from "./ChatLink";
 import styled from "styled-components";
 import { lighten } from "polished";
 
 export default Object.assign(
-    styled(ChatLink).attrs<ChatLinkStyleAttributes>(
+    styled(ChatLink).attrs<ChatLinkProps["style"]>(
         (props) => ({
             $margin: props.$margin ?? "0.5em",
             $padding: props.$padding ?? "5px",

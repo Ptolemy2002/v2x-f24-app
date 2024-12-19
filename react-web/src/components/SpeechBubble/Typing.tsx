@@ -10,7 +10,7 @@ export default function SpeechBubbleTypingBase({
     startDots=1,
     ScreenReaderText=DefaultScreenReaderText,
     ...props
-}: SpeechBubbleTypingProps) {
+}: SpeechBubbleTypingProps["functional"]) {
     const {
         dots,
         className

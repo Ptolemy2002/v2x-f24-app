@@ -1,9 +1,9 @@
 import Base from "./Base";
-import { AudioPlayerStyleAttributes } from "./Types";
+import { AudioPlayerProps } from "./Types";
 import styled from "styled-components";
 
 export default Object.assign(
-    styled(Base).attrs<AudioPlayerStyleAttributes>(
+    styled(Base).attrs<AudioPlayerProps["style"]>(
         (props) => ({
             $gap: props.$gap ?? "20px",
             $css: props.$css ?? null,

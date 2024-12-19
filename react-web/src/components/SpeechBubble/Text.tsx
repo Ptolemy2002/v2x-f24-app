@@ -11,7 +11,7 @@ export default function SpeechBubbleTextBase({
     SpeechBubbleTimestamp = DefaultSpeechBubbleTimestamp,
     ScreenReaderText = DefaultScreenReaderText,
     ...props
-}: SpeechBubbleTextProps) {
+}: SpeechBubbleTextProps["functional"]) {
     const lines = message.text.split("\n");
     return (
         <div className={clsx("speech-bubble-txt", message.origin, className)} {...props}>

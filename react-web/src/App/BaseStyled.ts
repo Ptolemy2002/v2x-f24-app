@@ -1,12 +1,12 @@
 import Base from "./Base";
-import { AppStyleAttributes } from "./Types";
+import { AppProps } from "./Types";
 import styled from 'styled-components';
 import { border } from 'polished';
 import { WithCSSProp } from "@ptolemy2002/react-styled-component-utils";
 
 // Object.assign is used to merge the correct displayName with the styled component
 export default Object.assign(
-    styled(Base).attrs<WithCSSProp<AppStyleAttributes>>(
+    styled(Base).attrs<WithCSSProp<AppProps["style"]>>(
         (props) => ({
             $padding: props.$padding ?? "10px",
             $borderThickness: props.$borderThickness ?? "1px",

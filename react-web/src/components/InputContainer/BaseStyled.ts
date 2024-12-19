@@ -1,11 +1,11 @@
-import { InputContainerStyleAttributes } from "./Types";
+import { InputContainerProps } from "./Types";
 import Base from "./Base";
 import styled from "styled-components";
 import { WithCSSProp } from "@ptolemy2002/react-styled-component-utils";
 import { important } from "polished";
 
 export default Object.assign(
-    styled(Base).attrs<WithCSSProp<InputContainerStyleAttributes>>(
+    styled(Base).attrs<WithCSSProp<InputContainerProps["style"]>>(
         (props) => ({
             $gap: props.$gap ?? "10px",
             $maxHeight: props.$maxHeight ?? "50%",

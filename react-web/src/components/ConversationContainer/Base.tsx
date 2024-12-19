@@ -11,7 +11,7 @@ export default function ConversationContainerBase({
     SpeechContainer = DefaultSpeechContainer,
     InputContainer = DefaultInputContainer,
     ...props
-}: ConversationContainerProps) {
+}: ConversationContainerProps["functional"]) {
     const { convo: convoId } = useAppSearchParamState();
 
     if (convoId === null) {

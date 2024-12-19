@@ -1,10 +1,10 @@
-import { SidebarStyleAttributes } from "./Types";
+import { SidebarProps } from "./Types";
 import Base from "./Base";
 import { paddingX, paddingY } from "@ptolemy2002/react-styled-component-utils";
 import styled from "styled-components";
 
 export default Object.assign(
-    styled(Base).attrs<SidebarStyleAttributes>(
+    styled(Base).attrs<SidebarProps["style"]>(
         (props) => ({
             $paddingX: props.$paddingX ?? "10px",
             $paddingY: props.$paddingY ?? "10px",

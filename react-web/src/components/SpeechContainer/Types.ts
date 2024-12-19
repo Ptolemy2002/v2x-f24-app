@@ -1,14 +1,9 @@
 import { FC, HTMLProps } from "react";
 import {
     SpeechBubbleAudioProps, SpeechBubbleImageProps, SpeechBubbleTextProps, SpeechBubbleTypingProps,
-    SpeechBubbleDangerProps,
-    SpeechBubbleTextStyleAttributes,
-    SpeechBubbleImageStyleAttributes,
-    SpeechBubbleAudioStyleAttributes,
-    SpeechBubbleTypingStyleAttributes,
-    SpeechBubbleDangerStyleAttributes
+    SpeechBubbleDangerProps
 } from "src/components/SpeechBubble";
-import { RequiredCSSProperties, WithCSSProp } from "@ptolemy2002/react-styled-component-utils";
+import { RequiredCSSProperties, StyledComponentPropsWithCSS } from "@ptolemy2002/react-styled-component-utils";
 
 export type ResponseData = {
     type: string;
@@ -18,15 +13,13 @@ export type ResponseData = {
     alt?: string;
 };
 
-export type SpeechContainerProps = {
-    SpeechBubbleText?: FC<SpeechBubbleTextProps & SpeechBubbleTextStyleAttributes>;
-    SpeechBubbleImage?: FC<SpeechBubbleImageProps & SpeechBubbleImageStyleAttributes>;
-    SpeechBubbleAudio?: FC<SpeechBubbleAudioProps & SpeechBubbleAudioStyleAttributes>;
-    SpeechBubbleTyping?: FC<SpeechBubbleTypingProps & SpeechBubbleTypingStyleAttributes>;
-    SpeechBubbleDanger?: FC<SpeechBubbleDangerProps & SpeechBubbleDangerStyleAttributes>;
-} & HTMLProps<HTMLDivElement>;
-
-export type SpeechContainerStyleAttributes = WithCSSProp<{
-    $marginBottom?: RequiredCSSProperties["marginBottom"];
-    $gap?: RequiredCSSProperties["gap"];
+export type SpeechContainerProps = StyledComponentPropsWithCSS<{
+    SpeechBubbleText?: FC<SpeechBubbleTextProps["functional"]>;
+    SpeechBubbleImage?: FC<SpeechBubbleImageProps["functional"]>;
+    SpeechBubbleAudio?: FC<SpeechBubbleAudioProps["functional"]>;
+    SpeechBubbleTyping?: FC<SpeechBubbleTypingProps["functional"]>;
+    SpeechBubbleDanger?: FC<SpeechBubbleDangerProps["functional"]>;
+} & HTMLProps<HTMLDivElement>, {
+    marginBottom?: RequiredCSSProperties["marginBottom"];
+    gap?: RequiredCSSProperties["gap"];
 }>;

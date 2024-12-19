@@ -1,9 +1,9 @@
 import styled from "styled-components";
-import { NotFoundPageStyleAttributes } from "./Types";
+import { NotFoundPageProps } from "./Types";
 import Base from "./Base";
 
 export default Object.assign(
-    styled(Base).attrs<NotFoundPageStyleAttributes>(
+    styled(Base).attrs<NotFoundPageProps["style"]>(
         (props) => ({
             $padding: props.$padding ?? "10px",
             $css: props.$css ?? null,

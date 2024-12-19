@@ -6,7 +6,7 @@ import { useInputContainerController } from './Controllers';
 export default function InputContainerBase({
     RightArrowIcon = DefaultRightArrowIcon,
     ...props
-}: InputContainerProps) {
+}: InputContainerProps["functional"]) {
     const {
         messageInputRef,
         keyDownHandler,

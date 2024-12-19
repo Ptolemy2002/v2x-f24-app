@@ -1,9 +1,7 @@
-import { RequiredCSSProperties, WithCSSProp } from "@ptolemy2002/react-styled-component-utils";
+import { RequiredCSSProperties, StyledComponentPropsWithCSS } from "@ptolemy2002/react-styled-component-utils";
 
-export type NotFoundPageProps = {
+export type NotFoundPageProps = StyledComponentPropsWithCSS<{
     className?: string;
-};
-
-export type NotFoundPageStyleAttributes = WithCSSProp<{
-    $padding?: RequiredCSSProperties["padding"];
+}, {
+    padding?: RequiredCSSProperties["padding"];
 }>;

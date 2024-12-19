@@ -1,9 +1,9 @@
 import styled from "styled-components";
 import Base from "./Base";
-import { SpeechContainerStyleAttributes } from "./Types";
+import { SpeechContainerProps } from "./Types";
 
 export default Object.assign(
-    styled(Base).attrs<SpeechContainerStyleAttributes>(
+    styled(Base).attrs<SpeechContainerProps["style"]>(
         (props) => ({
             $marginBottom: props.$marginBottom ?? "20px",
             $gap: props.$gap ?? "10px",

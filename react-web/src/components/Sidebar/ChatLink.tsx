@@ -3,7 +3,7 @@ import {ChatLinkProps} from "./Types";
 import clsx from "clsx";
 import { useNavigate } from "react-router";
 
-export default function ChatLinkBase({text, id, className, onClick, ...props}: ChatLinkProps) {
+export default function ChatLinkBase({text, id, className, onClick, ...props}: ChatLinkProps["functional"]) {
     const {convo, setConvo} = useAppSearchParamState();
     const navigate = useNavigate();
 

@@ -12,7 +12,7 @@ export default function SpeechBubbleImageBase({
     ScreenReaderText = DefaultScreenReaderText,
     SpeechBubbleTimestamp = DefaultSpeechBubbleTimestamp,
     ...props
-}: SpeechBubbleImageProps) {
+}: SpeechBubbleImageProps["functional"]) {
     return (
         <div
             className={clsx("speech-bubble-img", message.origin, className)}

@@ -1,10 +1,9 @@
+import { StyledComponentPropsWithCSS } from "@ptolemy2002/react-styled-component-utils";
 import { CSSProperties } from "react";
 
-export type AppProps = {
+export type AppProps = StyledComponentPropsWithCSS<{
     className?: string;
-}
-
-export type AppStyleAttributes = {
-    $padding?: CSSProperties["padding"];
-    $borderThickness?: CSSProperties["borderWidth"];
-}
+}, {
+    padding?: CSSProperties["padding"];
+    borderThickness?: CSSProperties["borderWidth"];
+}>;

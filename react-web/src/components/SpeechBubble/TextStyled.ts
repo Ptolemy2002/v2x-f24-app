@@ -1,10 +1,10 @@
 import { speechBubbleBaseStyle } from "./Other";
-import { SpeechBubbleTextStyleAttributes } from "./Types";
+import { SpeechBubbleTextProps } from "./Types";
 import Text from "./Text";
 import styled from "styled-components";
 
 export default Object.assign(
-    styled(Text).attrs<SpeechBubbleTextStyleAttributes>(
+    styled(Text).attrs<SpeechBubbleTextProps["style"]>(
         (props) => ({
             $maxWidth: props.$maxWidth ?? "75%",
             $padding: props.$padding ?? "10px",

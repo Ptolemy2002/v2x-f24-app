@@ -18,7 +18,7 @@ export default function AudioPlayerBase({
     PlayIcon = DefaultPlayIcon,
     PauseIcon = DefaultPauseIcon,
     ...props
-}: AudioPlayerProps) {
+}: AudioPlayerProps["functional"]) {
     const {
         canPlayHandler,
         pauseHandler,
