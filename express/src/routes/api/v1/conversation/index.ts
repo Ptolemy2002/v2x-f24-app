@@ -63,7 +63,7 @@ router.get<
         #swagger.end
     */
     const env = getEnv();
-    const help = (env.apiUrl ?? "https://example.com") + "/api/v1/docs/#/Conversation/get_api_v1_conversation_get__id_";
+    const help = env.apiUrl + "/api/v1/docs/#/Conversation/get_api_v1_conversation_get__id_";
     const { id } = req.params;
 
     // Simulate a delay

@@ -76,7 +76,7 @@ router.post<
             #swagger.end
         */
         const env = getEnv();
-        const help = (env.apiUrl ?? "https://example.com") + "/api/v1/docs/#/Bot/post_api_v1_bot_query";
+        const help = env.apiUrl + "/api/v1/docs/#/Bot/post_api_v1_bot_query";
         const {success, error, data} = MongoConversationSchema.safeParse(req.body.conversation);
 
         if (!success) {
