@@ -22,49 +22,17 @@ router.get<
         }
         #swagger.responses[200] = {
             description: "Conversation found",
-            content: {
-                "application/json": {
-                    schema: {
-                        conversation: {
-                            $ref: "#/components/schemas/MongoConversation"
-                        }
-                    },
-
-                    example: {
-                        "application/json": {
-                            ok: true,
-                            conversation: {
-                                _id: "abc123",
-                                messages: [
-                                    {
-                                        type: "text",
-                                        origin: "recepient",
-                                        date: "2021-06-01T00:00:00.000Z",
-                                        text: "Hello, World!"
-                                    }
-                                ]
-                            }
-                        }
-                    }
+            schema: {
+                conversation: {
+                    $ref: "#/components/schemas/MongoConversation"
                 }
             }
         }
 
         #swagger.responses[404] = {
             description: "Conversation not found",
-            content: {
-                "application/json": {
-                    schema: {
-                        $ref: "#/components/schemas/ErrorResponse"
-                    },
-
-                    example: {
-                        ok: false,
-                        code: "NOT_FOUND",
-                        message: "Conversation not found",
-                        help: "https://example.com/docs"
-                    }
-                }
+            schema: {
+                $ref: "#/components/schemas/ErrorResponse"
             }
         }
         #swagger.end

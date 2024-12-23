@@ -58,51 +58,17 @@ router.post<
             #swagger.description = 'Query the bot for a response.'
             #swagger.requestBody = {
                 required: true,
-                content: {
-                    'application/json': {
-                        schema: {
-                            $conversation: {
-                                $ref: '#/components/schemas/MongoConversation'
-                            },
-                            help: 'https://example.com/docs'
-                        },
-
-                        example: {
-                            conversation: {
-                                _id: "abc123",
-                                messages: [
-                                    {
-                                        type: "text",
-                                        origin: "recepient",
-                                        date: "2021-06-01T00:00:00.000Z",
-                                        text: "Hello, World!"
-                                    }
-                                ]
-                            }
-                        }
-                    }
+                schema: {
+                    $ref: "#/components/schemas/BotQueryRequestBody"
                 }
             }
             #swagger.responses[200] = {
                 description: "Response from the bot.",
-                content: {
-                    "application/json": {
-                        schema: {
-                            newMessage: {
-                                $ref: "#/components/schemas/MongoMessage"
-                            },
-                            help: "https://example.com/docs"
-                        },
-
-                        example: {
-                            newMessage: {
-                                type: "text",
-                                origin: "recepient",
-                                date: "2021-06-01T00:00:00.000Z",
-                                text: "Hello, World!"
-                            }
-                        }
-                    }
+                schema: {
+                    newMessage: {
+                        $ref: "#/components/schemas/MongoMessage"
+                    },
+                    help: "https://example.com/docs"
                 }
             }
             #swagger.end

@@ -61,12 +61,16 @@ const doc = {
 
 			MongoConversation: {
 				$_id: "abc123",
-				messages: [
+				$messages: [
 					{ $ref: "#/components/schemas/MongoMessage" }
 				]
+			},
+
+			BotQueryRequestBody: {
+				conversation: { $ref: "#/components/schemas/MongoConversation" }
 			}
-		}
+		},
 	}
 };
 
-export default swaggerAutogen({openapi: "3.0.0"})(outputFile, endpointFiles, doc);
+export default swaggerAutogen({openapi: "3.1.0"})(outputFile, endpointFiles, doc);

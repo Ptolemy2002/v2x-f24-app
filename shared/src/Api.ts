@@ -6,6 +6,6 @@ export type ErrorResponse = {ok: false, code: ErrorCode, message: string, help?:
 export type SuccessResponse<T={}> = T & {ok: true, help?: string};
 
 export type BotQueryResponseBody = SuccessResponse<{newMessage: MongoMessage}> | ErrorResponse;
-export type BotQueryRequestBody = {conversation: Conversation};
+export type BotQueryRequestBody = {conversation: MongoConversation};
 
 export type ConversationGetResponseBody = SuccessResponse<{conversation: MongoConversation}> | ErrorResponse;
