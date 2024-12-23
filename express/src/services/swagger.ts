@@ -1,5 +1,6 @@
 import swaggerAutogen from "swagger-autogen";
 import getEnv from "../env";
+import { text } from "stream/consumers";
 const env = getEnv();
 
 const outputFile = './swagger_output.json';
@@ -21,92 +22,51 @@ const doc = {
 	consumes: ["application/json"],
 	produces: ["application/json"],
 
-	"@definitions": {
-		MongoMessage: {
-			type: "object",
-			properties: {
-				id: {
-					type: "string"
-				},
-				type: {
-					type: "string",
-					enum: ["text", "image", "audio"]
-				},
+	components: {
+		schemas: {
+			MessageType: {
+				"@enum": ["text", "image", "audio"]
+			},
 
-				origin: {
-					type: "string",
-					enum: ["recepient", "bot"]
-				},
+			MessageOrigin: {
+				"@enum": ["recepient", "bot"]
+			},
 
-				date: {
-					type: "string"
-				},
+			MongoMessage: {
+				$id: "abc123",
+				$type: { $ref: "#/components/schemas/MessageType" },
+				$origin: { $ref: "#/components/schemas/MessageOrigin" },
+				$date: "2021-06-01T00:00:00.000Z",
+				text: "Hello, World!",
+				src: "https://example.com/image.jpg",
+				alt: "Image description"
+			},
 
-				text: {
-					type: "string",
-					required: false
-				},
+			ErrorCode: {
+				"@enum": [
+					"UNKNOWN",
+					"BAD_INPUT",
+					"INTERNAL",
+					"NOT_FOUND",
+					"NOT_IMPLEMENTED"
+				]
+			},
 
-				src: {
-					type: "string",
-					required: false
-				},
+			ErrorResponse: {
+				$ok: false,
+				$code: { $ref: "#/components/schemas/ErrorCode" },
+				$message: "Something went wrong",
+				help: "https://example.com/docs"
+			},
 
-				alt: {
-					type: "string",
-					required: false
-				}
-			}
-		},
-
-		ErrorCode: {
-			type: "string",
-			enum: [
-				"UNKNOWN",
-				"BAD_INPUT",
-				"INTERNAL",
-				"NOT_FOUND",
-				"NOT_IMPLEMENTED"
-			]
-		},
-
-		ErrorResponse: {
-			type: "object",
-			properties: {
-				ok: {
-					type: "boolean",
-					enum: [false]
-				},
-				// Code is either an error code or null
-				code: {
-					$ref: "#/definitions/ErrorCode"
-				},
-				message: {
-					type: "string"
-				},
-				help: {
-					type: "string",
-					required: false,
-					description: "URL to the documentation"
-				}
-			}
-		},
-
-		MongoConversation: {
-			type: "object",
-			properties: {
-				_id: {
-					type: "string"
-				},
-				messages: {
-					type: "array",
-					items: {
-						$ref: "#/definitions/MongoMessage"
-					}
-				}
+			MongoConversation: {
+				$_id: "abc123",
+				messages: [
+					{ $ref: "#/components/schemas/MongoMessage" }
+				]
 			}
 		}
 	}
 };
 
-export default swaggerAutogen()(outputFile, endpointFiles, doc);
+export default swaggerAutogen({openapi: "3.0.0"})(outputFile, endpointFiles, doc);

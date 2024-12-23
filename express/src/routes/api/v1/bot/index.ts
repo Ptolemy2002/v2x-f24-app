@@ -56,21 +56,53 @@ router.post<
             #swagger.path = '/api/v1/bot/query'
             #swagger.method = 'post'`
             #swagger.description = 'Query the bot for a response.'
-            #swagger.parameters['conversation'] = {
-                in: 'body',
-                description: 'Conversation object',
+            #swagger.requestBody = {
                 required: true,
-                schema: {
-                    conversation: {
-                        $ref: '#/definitions/MongoConversation'
-                    },
-                    help: "https://example.com/docs"
+                content: {
+                    'application/json': {
+                        schema: {
+                            $conversation: {
+                                $ref: '#/components/schemas/MongoConversation'
+                            },
+                            help: 'https://example.com/docs'
+                        },
+
+                        example: {
+                            conversation: {
+                                _id: "abc123",
+                                messages: [
+                                    {
+                                        type: "text",
+                                        origin: "recepient",
+                                        date: "2021-06-01T00:00:00.000Z",
+                                        text: "Hello, World!"
+                                    }
+                                ]
+                            }
+                        }
+                    }
                 }
             }
             #swagger.responses[200] = {
                 description: "Response from the bot.",
-                schema: {
-                    newMessage: {$ref: '#/definitions/MongoMessage'}
+                content: {
+                    "application/json": {
+                        schema: {
+                            newMessage: {
+                                $ref: "#/components/schemas/MongoMessage"
+                            },
+                            help: "https://example.com/docs"
+                        },
+
+                        example: {
+                            newMessage: {
+                                type: "text",
+                                origin: "recepient",
+                                date: "2021-06-01T00:00:00.000Z",
+                                text: "Hello, World!"
+                            }
+                        }
+                    }
                 }
             }
             #swagger.end

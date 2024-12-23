@@ -1,20 +1,14 @@
 {
-  "swagger": "2.0",
+  "openapi": "3.0.0",
   "info": {
     "version": "1.0.0",
     "title": "V2X F24 API",
     "description": "Documentation of the V2X F24 API"
   },
-  "host": "localhost:8080",
-  "basePath": "/",
-  "schemes": [
-    "http"
-  ],
-  "consumes": [
-    "application/json"
-  ],
-  "produces": [
-    "application/json"
+  "servers": [
+    {
+      "url": "http://localhost:8080/"
+    }
   ],
   "paths": {
     "/": {
@@ -26,11 +20,12 @@
         "responses": {
           "200": {
             "description": "Root route",
-            "schema": {
-              "type": "string",
-              "example": "Root route. For docs, go <a href='/api/v1/docs'>here</a>.",
-              "xml": {
-                "name": "main"
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "Root route. For docs, go <a href='/api/v1/docs'>here</a>."
               }
             }
           },
@@ -52,11 +47,12 @@
         "responses": {
           "200": {
             "description": "Server is up and running.",
-            "schema": {
-              "type": "string",
-              "example": "pong",
-              "xml": {
-                "name": "main"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "pong"
               }
             }
           },
@@ -75,59 +71,94 @@
           "Bot"
         ],
         "description": "Query the bot for a response.",
-        "parameters": [
-          {
-            "name": "conversation",
-            "in": "body",
-            "description": "Conversation object",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "conversation": {
-                  "$ref": "#/definitions/MongoConversation"
-                },
-                "help": {
-                  "type": "string",
-                  "example": "https://example.com/docs"
-                }
-              }
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "Response from the bot.",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "newMessage": {
-                  "$ref": "#/definitions/MongoMessage"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "newMessage": {
+                    "$ref": "#/components/schemas/MongoMessage"
+                  },
+                  "help": "https://example.com/docs"
+                },
+                "example": {
+                  "newMessage": {
+                    "type": "text",
+                    "origin": "recepient",
+                    "date": "2021-06-01T00:00:00.000Z",
+                    "text": "Hello, World!"
+                  }
                 }
-              },
-              "xml": {
-                "name": "main"
               }
             }
           },
           "400": {
             "description": "Bad request",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            },
-            "examples": {
+            "content": {
               "application/json": {
-                "ok": false,
-                "code": "BAD_INPUT",
-                "message": "Invalid input",
-                "help": "https://example.com/docs"
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "ok": false,
+                  "code": "BAD_INPUT",
+                  "message": "Invalid input",
+                  "help": "https://example.com/docs"
+                }
               }
             }
           },
           "500": {
             "description": "Internal server error",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "501": {
+            "description": "Not implemented",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "ok": false,
+                  "code": "NOT_IMPLEMENTED",
+                  "message": "This feature is not implemented",
+                  "help": "https://example.com/docs"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$conversation": {
+                  "$ref": "#/components/schemas/MongoConversation"
+                },
+                "help": "https://example.com/docs"
+              },
+              "example": {
+                "conversation": {
+                  "_id": "abc123",
+                  "messages": [
+                    {
+                      "type": "text",
+                      "origin": "recepient",
+                      "date": "2021-06-01T00:00:00.000Z",
+                      "text": "Hello, World!"
+                    }
+                  ]
+                }
+              }
             }
           }
         }
@@ -144,70 +175,96 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string",
+            "schema": {
+              "type": "string"
+            },
             "description": "ID of the conversation to get"
           }
         ],
         "responses": {
           "200": {
             "description": "Conversation found",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "conversation": {
-                  "$ref": "#/definitions/MongoConversation"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "conversation": {
+                    "$ref": "#/components/schemas/MongoConversation"
+                  }
+                },
+                "example": {
+                  "application/json": {
+                    "ok": true,
+                    "conversation": {
+                      "_id": "abc123",
+                      "messages": [
+                        {
+                          "type": "text",
+                          "origin": "recepient",
+                          "date": "2021-06-01T00:00:00.000Z",
+                          "text": "Hello, World!"
+                        }
+                      ]
+                    }
+                  }
                 }
-              },
-              "xml": {
-                "name": "main"
               }
             }
           },
           "400": {
             "description": "Bad request",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            },
-            "examples": {
+            "content": {
               "application/json": {
-                "ok": false,
-                "code": "BAD_INPUT",
-                "message": "Invalid input",
-                "help": "https://example.com/docs"
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "ok": false,
+                  "code": "BAD_INPUT",
+                  "message": "Invalid input",
+                  "help": "https://example.com/docs"
+                }
               }
             }
           },
           "404": {
             "description": "Conversation not found",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            },
-            "examples": {
+            "content": {
               "application/json": {
-                "ok": false,
-                "code": "NOT_FOUND",
-                "message": "Conversation not found",
-                "help": "https://example.com/docs"
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "ok": false,
+                  "code": "NOT_FOUND",
+                  "message": "Conversation not found",
+                  "help": "https://example.com/docs"
+                }
               }
             }
           },
           "500": {
             "description": "Internal server error",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
             }
           },
           "501": {
             "description": "Not implemented",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            },
-            "examples": {
+            "content": {
               "application/json": {
-                "ok": false,
-                "code": "NOT_IMPLEMENTED",
-                "message": "A database is not implemented yet, so getting a non-demo conversation is not possible.",
-                "help": "https://example.com/docs"
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "ok": false,
+                  "code": "NOT_IMPLEMENTED",
+                  "message": "This feature is not implemented",
+                  "help": "https://example.com/docs"
+                }
               }
             }
           }
@@ -215,89 +272,112 @@
       }
     }
   },
-  "definitions": {
-    "MongoMessage": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "type": {
-          "type": "string",
-          "enum": [
-            "text",
-            "image",
-            "audio"
-          ]
-        },
-        "origin": {
-          "type": "string",
-          "enum": [
-            "recepient",
-            "bot"
-          ]
-        },
-        "date": {
-          "type": "string"
-        },
-        "text": {
-          "type": "string",
-          "required": false
-        },
-        "src": {
-          "type": "string",
-          "required": false
-        },
-        "alt": {
-          "type": "string",
-          "required": false
-        }
-      }
-    },
-    "ErrorCode": {
-      "type": "string",
-      "enum": [
-        "UNKNOWN",
-        "BAD_INPUT",
-        "INTERNAL",
-        "NOT_FOUND",
-        "NOT_IMPLEMENTED"
-      ]
-    },
-    "ErrorResponse": {
-      "type": "object",
-      "properties": {
-        "ok": {
-          "type": "boolean",
-          "enum": [
-            false
-          ]
-        },
-        "code": {
-          "$ref": "#/definitions/ErrorCode"
-        },
-        "message": {
-          "type": "string"
-        },
-        "help": {
-          "type": "string",
-          "required": false,
-          "description": "URL to the documentation"
-        }
-      }
-    },
-    "MongoConversation": {
-      "type": "object",
-      "properties": {
-        "_id": {
-          "type": "string"
-        },
-        "messages": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/MongoMessage"
+  "components": {
+    "schemas": {
+      "MessageType": {
+        "type": "string",
+        "enum": [
+          "text",
+          "image",
+          "audio"
+        ]
+      },
+      "MessageOrigin": {
+        "type": "string",
+        "enum": [
+          "recepient",
+          "bot"
+        ]
+      },
+      "MongoMessage": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "abc123"
+          },
+          "type": {
+            "$ref": "#/components/schemas/MessageType"
+          },
+          "origin": {
+            "$ref": "#/components/schemas/MessageOrigin"
+          },
+          "date": {
+            "type": "string",
+            "example": "2021-06-01T00:00:00.000Z"
+          },
+          "text": {
+            "type": "string",
+            "example": "Hello, World!"
+          },
+          "src": {
+            "type": "string",
+            "example": "https://example.com/image.jpg"
+          },
+          "alt": {
+            "type": "string",
+            "example": "Image description"
           }
-        }
+        },
+        "required": [
+          "id",
+          "type",
+          "origin",
+          "date"
+        ]
+      },
+      "ErrorCode": {
+        "type": "string",
+        "enum": [
+          "UNKNOWN",
+          "BAD_INPUT",
+          "INTERNAL",
+          "NOT_FOUND",
+          "NOT_IMPLEMENTED"
+        ]
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean",
+            "example": false
+          },
+          "code": {
+            "$ref": "#/components/schemas/ErrorCode"
+          },
+          "message": {
+            "type": "string",
+            "example": "Something went wrong"
+          },
+          "help": {
+            "type": "string",
+            "example": "https://example.com/docs"
+          }
+        },
+        "required": [
+          "ok",
+          "code",
+          "message"
+        ]
+      },
+      "MongoConversation": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "abc123"
+          },
+          "messages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MongoMessage"
+            }
+          }
+        },
+        "required": [
+          "_id"
+        ]
       }
     }
   }

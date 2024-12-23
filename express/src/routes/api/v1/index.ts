@@ -9,24 +9,48 @@ router.use("/bot", botRouter
         
         #swagger.responses[400] = {
             description: "Bad request",
-            schema: {
-                $ref: "#/definitions/ErrorResponse"
-            },
-
-            examples: {
+            content: {
                 "application/json": {
-                    ok: false,
-                    code: "BAD_INPUT",
-                    message: "Invalid input",
-                    help: "https://example.com/docs"
+                    schema: {
+                        $ref: "#/components/schemas/ErrorResponse"
+                    },
+
+                    example: {
+                        ok: false,
+                        code: "BAD_INPUT",
+                        message: "Invalid input",
+                        help: "https://example.com/docs"
+                    }
                 }
             }
         }
 
         #swagger.responses[500] = {
             description: "Internal server error",
-            schema: {
-                $ref: "#/definitions/ErrorResponse"
+            content: {
+                "application/json": {
+                    schema: {
+                        $ref: "#/components/schemas/ErrorResponse"
+                    }
+                }
+            }
+        }
+
+         #swagger.responses[501] = {
+            description: "Not implemented",
+            content: {
+                "application/json": {
+                    schema: {
+                        $ref: "#/components/schemas/ErrorResponse"
+                    },
+
+                    example: {
+                        ok: false,
+                        code: "NOT_IMPLEMENTED",
+                        message: "This feature is not implemented",
+                        help: "https://example.com/docs"
+                    }
+                }
             }
         }
     */
@@ -38,24 +62,48 @@ router.use("/conversation", conversationRouter
         
         #swagger.responses[400] = {
             description: "Bad request",
-            schema: {
-                $ref: "#/definitions/ErrorResponse"
-            },
-
-            examples: {
+            content: {
                 "application/json": {
-                    ok: false,
-                    code: "BAD_INPUT",
-                    message: "Invalid input",
-                    help: "https://example.com/docs"
+                    schema: {
+                        $ref: "#/components/schemas/ErrorResponse"
+                    },
+
+                    example: {
+                        ok: false,
+                        code: "BAD_INPUT",
+                        message: "Invalid input",
+                        help: "https://example.com/docs"
+                    }
                 }
             }
         }
 
         #swagger.responses[500] = {
             description: "Internal server error",
-            schema: {
-                $ref: "#/definitions/ErrorResponse"
+            content: {
+                "application/json": {
+                    schema: {
+                        $ref: "#/components/schemas/ErrorResponse"
+                    }
+                }
+            }
+        }
+
+        #swagger.responses[501] = {
+            description: "Not implemented",
+            content: {
+                "application/json": {
+                    schema: {
+                        $ref: "#/components/schemas/ErrorResponse"
+                    },
+
+                    example: {
+                        ok: false,
+                        code: "NOT_IMPLEMENTED",
+                        message: "This feature is not implemented",
+                        help: "https://example.com/docs"
+                    }
+                }
             }
         }
     */
