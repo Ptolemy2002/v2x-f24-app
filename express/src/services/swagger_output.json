@@ -1,5 +1,5 @@
 {
-  "openapi": "3.1.0",
+  "openapi": "3.1.1",
   "info": {
     "version": "1.0.0",
     "title": "V2X F24 API",
@@ -321,57 +321,11 @@
       "MessageOrigin": {
         "type": "string",
         "enum": [
-          "recepient",
-          "bot"
+          "sender",
+          "recepient"
         ],
         "xml": {
           "name": "MessageOrigin"
-        }
-      },
-      "MongoMessage": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "example": "abc123"
-          },
-          "type": {
-            "xml": {
-              "name": "messagetype"
-            },
-            "$ref": "#/components/schemas/MessageType"
-          },
-          "origin": {
-            "xml": {
-              "name": "messageorigin"
-            },
-            "$ref": "#/components/schemas/MessageOrigin"
-          },
-          "date": {
-            "type": "string",
-            "example": "2021-06-01T00:00:00.000Z"
-          },
-          "text": {
-            "type": "string",
-            "example": "Hello, World!"
-          },
-          "src": {
-            "type": "string",
-            "example": "https://example.com/image.jpg"
-          },
-          "alt": {
-            "type": "string",
-            "example": "Image description"
-          }
-        },
-        "required": [
-          "id",
-          "type",
-          "origin",
-          "date"
-        ],
-        "xml": {
-          "name": "MongoMessage"
         }
       },
       "ErrorCode": {
@@ -387,62 +341,6 @@
           "name": "ErrorCode"
         }
       },
-      "ErrorResponse": {
-        "type": "object",
-        "properties": {
-          "ok": {
-            "type": "boolean",
-            "example": false
-          },
-          "code": {
-            "xml": {
-              "name": "errorcode"
-            },
-            "$ref": "#/components/schemas/ErrorCode"
-          },
-          "message": {
-            "type": "string",
-            "example": "Something went wrong"
-          },
-          "help": {
-            "type": "string",
-            "example": "https://example.com/docs"
-          }
-        },
-        "required": [
-          "ok",
-          "code",
-          "message"
-        ],
-        "xml": {
-          "name": "ErrorResponse"
-        }
-      },
-      "MongoConversation": {
-        "type": "object",
-        "properties": {
-          "_id": {
-            "type": "string",
-            "example": "abc123"
-          },
-          "messages": {
-            "type": "array",
-            "items": {
-              "xml": {
-                "name": "mongomessage"
-              },
-              "$ref": "#/components/schemas/MongoMessage"
-            }
-          }
-        },
-        "required": [
-          "_id",
-          "messages"
-        ],
-        "xml": {
-          "name": "MongoConversation"
-        }
-      },
       "BotQueryRequestBody": {
         "type": "object",
         "properties": {
@@ -455,6 +353,304 @@
         },
         "xml": {
           "name": "BotQueryRequestBody"
+        }
+      },
+      "MongoMessage": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "text"
+                ],
+                "required": true
+              },
+              "text": {
+                "type": "string",
+                "required": true,
+                "example": "Hello, world!"
+              },
+              "origin": {
+                "type": "string",
+                "enum": [
+                  "sender",
+                  "recepient"
+                ],
+                "required": true,
+                "example": "sender"
+              },
+              "date": {
+                "type": "string",
+                "required": true,
+                "example": "2021-01-01T00:00:00.000Z"
+              },
+              "id": {
+                "type": "string",
+                "required": true,
+                "example": "abc123"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "image"
+                ],
+                "required": true
+              },
+              "src": {
+                "type": "string",
+                "required": true,
+                "example": "https://example.com/image.jpg"
+              },
+              "alt": {
+                "type": "string",
+                "required": false,
+                "example": "An example image."
+              },
+              "origin": {
+                "type": "string",
+                "enum": [
+                  "sender",
+                  "recepient"
+                ],
+                "required": true,
+                "example": "sender"
+              },
+              "date": {
+                "type": "string",
+                "required": true,
+                "example": "2021-01-01T00:00:00.000Z"
+              },
+              "id": {
+                "type": "string",
+                "required": true,
+                "example": "abc123"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "audio"
+                ],
+                "required": true
+              },
+              "src": {
+                "type": "string",
+                "required": true,
+                "example": "https://example.com/audio.mp3"
+              },
+              "origin": {
+                "type": "string",
+                "enum": [
+                  "sender",
+                  "recepient"
+                ],
+                "required": true,
+                "example": "sender"
+              },
+              "date": {
+                "type": "string",
+                "required": true,
+                "example": "2021-01-01T00:00:00.000Z"
+              },
+              "id": {
+                "type": "string",
+                "required": true,
+                "example": "abc123"
+              }
+            }
+          }
+        ]
+      },
+      "MongoConversation": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "required": true,
+            "example": "abc123"
+          },
+          "messages": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "text"
+                      ],
+                      "required": true
+                    },
+                    "text": {
+                      "type": "string",
+                      "required": true,
+                      "example": "Hello, world!"
+                    },
+                    "origin": {
+                      "type": "string",
+                      "enum": [
+                        "sender",
+                        "recepient"
+                      ],
+                      "required": true,
+                      "example": "sender"
+                    },
+                    "date": {
+                      "type": "string",
+                      "required": true,
+                      "example": "2021-01-01T00:00:00.000Z"
+                    },
+                    "id": {
+                      "type": "string",
+                      "required": true,
+                      "example": "abc123"
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "image"
+                      ],
+                      "required": true
+                    },
+                    "src": {
+                      "type": "string",
+                      "required": true,
+                      "example": "https://example.com/image.jpg"
+                    },
+                    "alt": {
+                      "type": "string",
+                      "required": false,
+                      "example": "An example image."
+                    },
+                    "origin": {
+                      "type": "string",
+                      "enum": [
+                        "sender",
+                        "recepient"
+                      ],
+                      "required": true,
+                      "example": "sender"
+                    },
+                    "date": {
+                      "type": "string",
+                      "required": true,
+                      "example": "2021-01-01T00:00:00.000Z"
+                    },
+                    "id": {
+                      "type": "string",
+                      "required": true,
+                      "example": "abc123"
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "audio"
+                      ],
+                      "required": true
+                    },
+                    "src": {
+                      "type": "string",
+                      "required": true,
+                      "example": "https://example.com/audio.mp3"
+                    },
+                    "origin": {
+                      "type": "string",
+                      "enum": [
+                        "sender",
+                        "recepient"
+                      ],
+                      "required": true,
+                      "example": "sender"
+                    },
+                    "date": {
+                      "type": "string",
+                      "required": true,
+                      "example": "2021-01-01T00:00:00.000Z"
+                    },
+                    "id": {
+                      "type": "string",
+                      "required": true,
+                      "example": "abc123"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean",
+            "required": true,
+            "enum": [
+              false
+            ]
+          },
+          "code": {
+            "type": "string",
+            "required": true,
+            "enum": [
+              "UNKNOWN",
+              "BAD_INPUT",
+              "INTERNAL",
+              "NOT_FOUND",
+              "NOT_IMPLEMENTED"
+            ]
+          },
+          "message": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "required": true
+          },
+          "help": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "required": false
+          }
         }
       }
     }
