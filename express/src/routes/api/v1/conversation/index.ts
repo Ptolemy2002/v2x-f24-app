@@ -1,6 +1,6 @@
 import { asyncErrorHandler } from '@ptolemy2002/express-utils';
 import express from 'express';
-import { ConversationGetResponseBody, createMessage } from 'shared';
+import { ConversationGetResponseBody, createMongoTextMessage } from 'shared';
 import getEnv from 'env';
 const router = express.Router();
 
@@ -50,11 +50,11 @@ router.get<
             conversation: {
                 _id: "demo",
                 messages: [
-                    createMessage(
-                        "text", "recepient",
+                    createMongoTextMessage(
+                        "recepient",
                         () => ({
                             text: "Hello! How can I assist you today?"
-                        }), true
+                        })
                     )
                 ]
             },

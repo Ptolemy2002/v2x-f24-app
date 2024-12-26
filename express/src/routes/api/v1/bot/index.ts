@@ -1,11 +1,14 @@
 import express from 'express';
 import defaultResponses from 'data/default-responses.json';
 import { asyncErrorHandler } from '@ptolemy2002/express-utils';
+import { interpretZodError } from '@ptolemy2002/regex-utils';
 import {
     BotQueryResponseBody,
-    createMessage,
     BotQueryRequestBody,
-    MongoConversationSchema
+    createMongoTextMessage,
+    createMongoImageMessage,
+    createMongoAudioMessage,
+    ZodBotQueryRequestBodySchema
 } from 'shared';
 import getEnv from 'env';
 const router = express.Router();
@@ -75,13 +78,13 @@ router.post<
         */
         const env = getEnv();
         const help = env.apiUrl + "/api/v1/docs/#/Bot/post_api_v1_bot_query";
-        const {success, error, data} = MongoConversationSchema.safeParse(req.body.conversation);
+        const {success, error, data} = ZodBotQueryRequestBodySchema.safeParse(req.body);
 
         if (!success) {
             res.status(400).json({
                 ok: false,
                 code: "BAD_INPUT",
-                message: error.message,
+                message: interpretZodError(error),
                 help
             });
             return;
@@ -90,16 +93,16 @@ router.post<
         // Simulate a delay
         await new Promise((resolve) => setTimeout(resolve, Math.random() * 4000 + 1000));
 
-        const messages = data.messages;
+        const messages = data.conversation.messages;
         const lastMessage = messages[messages.length - 1];
 
         if (!lastMessage) {
             // This is the first message, so we'll just greet the user.
             res.status(200).json({
                 ok: true,
-                newMessage: createMessage("text", "recepient", () => ({
+                newMessage: createMongoTextMessage("recepient", () => ({
                     text: "Greetings! How can I help you today?"
-                }), true),
+                })),
                 help
             });
             return;
@@ -120,9 +123,9 @@ router.post<
         if (response.type === "text") {
             res.status(200).json({
                 ok: true,
-                newMessage: createMessage("text", "recepient", () => ({
+                newMessage: createMongoTextMessage("recepient", () => ({
                     text: response.text ?? "[No text provided]"
-                }), true),
+                })),
                 help
             });
             return;
@@ -130,18 +133,18 @@ router.post<
             if (!response.src) {
                 res.status(200).json({
                     ok: true,
-                    newMessage: createMessage("text", "recepient", () => ({
+                    newMessage: createMongoTextMessage("recepient", () => ({
                         text: "I'm sorry, I had trouble sending an image."
-                    }), true)
+                    }))
                 });
                 return;
             } else {
                 res.status(200).json({
                     ok: true,
-                    newMessage: createMessage("image", "recepient", () => ({
+                    newMessage: createMongoImageMessage("recepient", () => ({
                         src: response.src!,
                         alt: response.alt ?? "[No alt text provided]"
-                    }), true),
+                    })),
                     help
                 });
                 return;
@@ -150,18 +153,18 @@ router.post<
             if (!response.src) {
                 res.status(200).json({
                     ok: true,
-                    newMessage: createMessage("text", "recepient", () => ({
+                    newMessage: createMongoTextMessage("recepient", () => ({
                         text: "I'm sorry, I had trouble sending an audio message."
-                    }), true),
+                    })),
                     help
                 });
                 return;
             } else {
                 res.status(200).json({
                     ok: true,
-                    newMessage: createMessage("audio", "recepient", () => ({
+                    newMessage: createMongoAudioMessage("recepient", () => ({
                         src: response.src!
-                    }), true),
+                    })),
                     help
                 });
                 return;

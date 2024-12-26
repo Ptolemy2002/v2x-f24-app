@@ -4,7 +4,7 @@ import {
 } from "@ptolemy2002/react-proxy-context";
 import {
     Message, Conversation, MongoConversation,
-    UniqueMessageArraySchema,
+    ZodUniqueMessageArraySchema,
     BotQueryResponseBody,
     MongoMessage, isMongoMessage,
     toMessage, toMongoMessage,
@@ -95,7 +95,7 @@ export default class ConversationData extends MongoData<
             initial: [],
             toMongo: (messages) => messages.map((message) => toMongoMessage(message)),
             fromMongo: (messages) => messages.map((message) => toMessage(message)),
-            validate: zodValidateWithErrors(UniqueMessageArraySchema)
+            validate: zodValidateWithErrors(ZodUniqueMessageArraySchema)
         });
 
         this.defineRequestType("queryBot", async function(this: CompletedConversationData, ac) {
