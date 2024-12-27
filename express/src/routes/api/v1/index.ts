@@ -84,6 +84,13 @@ router.use("/conversation", conversationRouter
                 "application/json": {
                     schema: {
                         $ref: "#/components/schemas/ErrorResponse"
+                    },
+
+                    example: {
+                        ok: false,
+                        code: "UNKNOWN",    
+                        message: "An unknown error occurred.",
+                        help: "http://example.com/docs"
                     }
                 }
             }
@@ -99,9 +106,9 @@ router.use("/conversation", conversationRouter
 
                     example: {
                         ok: false,
-                        code: "NOT_IMPLEMENTED",
-                        message: "This feature is not implemented",
-                        help: "https://example.com/docs"
+                        code: "BAD_INPUT",
+                        message: "The request was malformed.",
+                        help: "http://example.com/docs"
                     }
                 }
             }

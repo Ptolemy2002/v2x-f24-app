@@ -21,14 +21,18 @@
         "reinstall": "bash ./scripts/reinstall.sh"
     },
     "peerDependencies": {
+        "@asteasolutions/zod-to-openapi": "^7.3.0",
         "@ptolemy2002/regex-utils": "^2.0.0",
         "@ptolemy2002/ts-utils": "^2.1.0",
+        "mongoose": "^8.9.2",
         "nanoid": "^5.0.8",
         "zod": "^3.23.8"
     },
     "devDependencies": {
+        "@asteasolutions/zod-to-openapi": "^7.3.0",
         "@ptolemy2002/regex-utils": "^2.0.0",
         "@ptolemy2002/ts-utils": "^2.1.0",
+        "mongoose": "^8.9.2",
         "nanoid": "^5.0.8",
         "ts-patch": "^3.3.0",
         "tsconfig-paths": "^4.2.0",

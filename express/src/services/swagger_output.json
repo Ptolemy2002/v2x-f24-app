@@ -42,10 +42,36 @@
             }
           },
           "400": {
-            "description": "Bad Request"
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "ok": false,
+                  "code": "BAD_INPUT",
+                  "message": "The request was malformed.",
+                  "help": "http://example.com/docs"
+                }
+              }
+            }
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "ok": false,
+                  "code": "UNKNOWN",
+                  "message": "An unknown error occurred.",
+                  "help": "http://example.com/docs"
+                }
+              }
+            }
           }
         }
       }
@@ -81,10 +107,36 @@
             }
           },
           "400": {
-            "description": "Bad Request"
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "ok": false,
+                  "code": "BAD_INPUT",
+                  "message": "The request was malformed.",
+                  "help": "http://example.com/docs"
+                }
+              }
+            }
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "ok": false,
+                  "code": "UNKNOWN",
+                  "message": "An unknown error occurred.",
+                  "help": "http://example.com/docs"
+                }
+              }
+            }
           }
         }
       }
@@ -97,40 +149,16 @@
         "description": "Query the bot for a response.",
         "responses": {
           "200": {
-            "description": "Response from the bot.",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "newMessage": {
-                      "$ref": "#/components/schemas/MongoMessage"
-                    },
-                    "help": {
-                      "type": "string",
-                      "example": "https://example.com/docs"
-                    }
-                  },
-                  "xml": {
-                    "name": "main"
-                  }
+                  "$ref": "#/components/schemas/BotQuery200ResponseBody"
                 }
               },
               "application/xml": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "newMessage": {
-                      "$ref": "#/components/schemas/MongoMessage"
-                    },
-                    "help": {
-                      "type": "string",
-                      "example": "https://example.com/docs"
-                    }
-                  },
-                  "xml": {
-                    "name": "main"
-                  }
+                  "$ref": "#/components/schemas/BotQuery200ResponseBody"
                 }
               }
             }
@@ -218,28 +246,12 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "conversation": {
-                      "$ref": "#/components/schemas/MongoConversation"
-                    }
-                  },
-                  "xml": {
-                    "name": "main"
-                  }
+                  "$ref": "#/components/schemas/ConversationGet200ResponseBody"
                 }
               },
               "application/xml": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "conversation": {
-                      "$ref": "#/components/schemas/MongoConversation"
-                    }
-                  },
-                  "xml": {
-                    "name": "main"
-                  }
+                  "$ref": "#/components/schemas/ConversationGet200ResponseBody"
                 }
               }
             }
@@ -266,11 +278,12 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "ok": false,
+                  "code": "NOT_FOUND",
+                  "message": "No conversation found with the specified ID.",
+                  "help": "http://example.com/docs"
                 }
               }
             }
@@ -281,6 +294,12 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "ok": false,
+                  "code": "UNKNOWN",
+                  "message": "An unknown error occurred.",
+                  "help": "http://example.com/docs"
                 }
               }
             }
@@ -294,9 +313,9 @@
                 },
                 "example": {
                   "ok": false,
-                  "code": "NOT_IMPLEMENTED",
-                  "message": "This feature is not implemented",
-                  "help": "https://example.com/docs"
+                  "code": "BAD_INPUT",
+                  "message": "The request was malformed.",
+                  "help": "http://example.com/docs"
                 }
               }
             }
@@ -306,7 +325,16 @@
     }
   },
   "components": {
+    "parameters": {},
     "schemas": {
+      "MessageOrigin": {
+        "type": "string",
+        "enum": [
+          "sender",
+          "recepient"
+        ],
+        "description": "The possible origins of a message."
+      },
       "MessageType": {
         "type": "string",
         "enum": [
@@ -314,19 +342,429 @@
           "image",
           "audio"
         ],
-        "xml": {
-          "name": "MessageType"
-        }
+        "description": "The possible types of a message."
       },
-      "MessageOrigin": {
-        "type": "string",
-        "enum": [
-          "sender",
-          "recepient"
+      "MessageBase": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The ID for the message.",
+            "example": "abc123"
+          },
+          "origin": {
+            "$ref": "#/components/schemas/MessageOrigin"
+          },
+          "type": {
+            "$ref": "#/components/schemas/MessageType"
+          },
+          "date": {
+            "type": "string",
+            "description": "The date the message was initially sent.",
+            "example": "new Date(\"2021-01-01T00:00:00.000Z\")"
+          }
+        },
+        "required": [
+          "id",
+          "origin",
+          "type",
+          "date"
         ],
-        "xml": {
-          "name": "MessageOrigin"
-        }
+        "description": "The base schema for a message."
+      },
+      "MongoMessageBase": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The ID for the message.",
+            "example": "abc123"
+          },
+          "origin": {
+            "$ref": "#/components/schemas/MessageOrigin"
+          },
+          "type": {
+            "$ref": "#/components/schemas/MessageType"
+          },
+          "date": {
+            "type": "string",
+            "description": "The date the message was initially sent.",
+            "example": "2021-01-01T00:00:00.000Z"
+          }
+        },
+        "required": [
+          "id",
+          "origin",
+          "type",
+          "date"
+        ],
+        "description": "The MongoDB representation of the base schema for a message."
+      },
+      "TextMessageBase": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "The text content of the message.",
+            "example": "Hello, world!"
+          }
+        },
+        "required": [
+          "text"
+        ],
+        "description": "The base schema for a text message."
+      },
+      "TextMessage": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The ID for the message.",
+            "example": "abc123"
+          },
+          "origin": {
+            "$ref": "#/components/schemas/MessageOrigin"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "text"
+            ],
+            "description": "The type of message."
+          },
+          "date": {
+            "type": "string",
+            "description": "The date the message was initially sent.",
+            "example": "new Date(\"2021-01-01T00:00:00.000Z\")"
+          },
+          "text": {
+            "type": "string",
+            "description": "The text content of the message.",
+            "example": "Hello, world!"
+          }
+        },
+        "required": [
+          "id",
+          "origin",
+          "type",
+          "date",
+          "text"
+        ],
+        "description": "A text message."
+      },
+      "MongoTextMessage": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The ID for the message.",
+            "example": "abc123"
+          },
+          "origin": {
+            "$ref": "#/components/schemas/MessageOrigin"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "text"
+            ],
+            "description": "The type of message."
+          },
+          "date": {
+            "type": "string",
+            "description": "The date the message was initially sent.",
+            "example": "2021-01-01T00:00:00.000Z"
+          },
+          "text": {
+            "type": "string",
+            "description": "The text content of the message.",
+            "example": "Hello, world!"
+          }
+        },
+        "required": [
+          "id",
+          "origin",
+          "type",
+          "date",
+          "text"
+        ],
+        "description": "The MongoDB representation of a text message."
+      },
+      "ImageMessageBase": {
+        "type": "object",
+        "properties": {
+          "src": {
+            "type": "string",
+            "description": "The source of the image.",
+            "example": "https://example.com/image.jpg"
+          },
+          "alt": {
+            "type": "string",
+            "description": "The alt text for the image.",
+            "example": "An image of a cat."
+          }
+        },
+        "required": [
+          "src",
+          "alt"
+        ],
+        "description": "The base schema for an image message."
+      },
+      "ImageMessage": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The ID for the message.",
+            "example": "abc123"
+          },
+          "origin": {
+            "$ref": "#/components/schemas/MessageOrigin"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "image"
+            ],
+            "description": "The type of message."
+          },
+          "date": {
+            "type": "string",
+            "description": "The date the message was initially sent.",
+            "example": "new Date(\"2021-01-01T00:00:00.000Z\")"
+          },
+          "src": {
+            "type": "string",
+            "description": "The source of the image.",
+            "example": "https://example.com/image.jpg"
+          },
+          "alt": {
+            "type": "string",
+            "description": "The alt text for the image.",
+            "example": "An image of a cat."
+          }
+        },
+        "required": [
+          "id",
+          "origin",
+          "type",
+          "date",
+          "src",
+          "alt"
+        ],
+        "description": "An image message."
+      },
+      "MongoImageMessage": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The ID for the message.",
+            "example": "abc123"
+          },
+          "origin": {
+            "$ref": "#/components/schemas/MessageOrigin"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "image"
+            ],
+            "description": "The type of message."
+          },
+          "date": {
+            "type": "string",
+            "description": "The date the message was initially sent.",
+            "example": "2021-01-01T00:00:00.000Z"
+          },
+          "src": {
+            "type": "string",
+            "description": "The source of the image.",
+            "example": "https://example.com/image.jpg"
+          },
+          "alt": {
+            "type": "string",
+            "description": "The alt text for the image.",
+            "example": "An image of a cat."
+          }
+        },
+        "required": [
+          "id",
+          "origin",
+          "type",
+          "date",
+          "src",
+          "alt"
+        ],
+        "description": "The MongoDB representation of an image message."
+      },
+      "AudioMessageBase": {
+        "type": "object",
+        "properties": {
+          "src": {
+            "type": "string",
+            "description": "The source of the audio.",
+            "example": "https://example.com/audio.mp3"
+          }
+        },
+        "required": [
+          "src"
+        ],
+        "description": "The base schema for an audio message."
+      },
+      "AudioMessage": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The ID for the message.",
+            "example": "abc123"
+          },
+          "origin": {
+            "$ref": "#/components/schemas/MessageOrigin"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "audio"
+            ],
+            "description": "The type of message."
+          },
+          "date": {
+            "type": "string",
+            "description": "The date the message was initially sent.",
+            "example": "new Date(\"2021-01-01T00:00:00.000Z\")"
+          },
+          "src": {
+            "type": "string",
+            "description": "The source of the audio.",
+            "example": "https://example.com/audio.mp3"
+          }
+        },
+        "required": [
+          "id",
+          "origin",
+          "type",
+          "date",
+          "src"
+        ],
+        "description": "An audio message."
+      },
+      "MongoAudioMessage": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The ID for the message.",
+            "example": "abc123"
+          },
+          "origin": {
+            "$ref": "#/components/schemas/MessageOrigin"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "audio"
+            ],
+            "description": "The type of message."
+          },
+          "date": {
+            "type": "string",
+            "description": "The date the message was initially sent.",
+            "example": "2021-01-01T00:00:00.000Z"
+          },
+          "src": {
+            "type": "string",
+            "description": "The source of the audio.",
+            "example": "https://example.com/audio.mp3"
+          }
+        },
+        "required": [
+          "id",
+          "origin",
+          "type",
+          "date",
+          "src"
+        ],
+        "description": "The MongoDB representation of an audio message."
+      },
+      "Message": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/TextMessage"
+          },
+          {
+            "$ref": "#/components/schemas/ImageMessage"
+          },
+          {
+            "$ref": "#/components/schemas/AudioMessage"
+          }
+        ],
+        "description": "A message."
+      },
+      "MongoMessage": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/MongoTextMessage"
+          },
+          {
+            "$ref": "#/components/schemas/MongoImageMessage"
+          },
+          {
+            "$ref": "#/components/schemas/MongoAudioMessage"
+          }
+        ],
+        "description": "The MongoDB representation of a message."
+      },
+      "UniqueMessageArray": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Message"
+        },
+        "description": "An array of messages with unique IDs."
+      },
+      "UniqueMongoMessageArray": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/MongoMessage"
+        },
+        "description": "An array of MongoDB messages with unique IDs."
+      },
+      "Conversation": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The ID of the conversation.",
+            "example": "abc123"
+          },
+          "messages": {
+            "$ref": "#/components/schemas/UniqueMessageArray"
+          }
+        },
+        "required": [
+          "id",
+          "messages"
+        ],
+        "description": "A conversation."
+      },
+      "MongoConversation": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "The ID of the conversation.",
+            "example": "abc123"
+          },
+          "messages": {
+            "$ref": "#/components/schemas/UniqueMongoMessageArray"
+          }
+        },
+        "required": [
+          "_id",
+          "messages"
+        ],
+        "description": "The MongoDB representation of a conversation."
       },
       "ErrorCode": {
         "type": "string",
@@ -340,297 +778,31 @@
           "NOT_FOUND",
           "NOT_IMPLEMENTED"
         ],
-        "xml": {
-          "name": "ErrorCode"
-        }
-      },
-      "BotQueryRequestBody": {
-        "type": "object",
-        "properties": {
-          "conversation": {
-            "xml": {
-              "name": "mongoconversation"
-            },
-            "$ref": "#/components/schemas/MongoConversation"
-          }
-        },
-        "xml": {
-          "name": "BotQueryRequestBody"
-        }
-      },
-      "MongoMessage": {
-        "oneOf": [
-          {
-            "type": "object",
-            "properties": {
-              "type": {
-                "type": "string",
-                "enum": [
-                  "text"
-                ],
-                "required": true
-              },
-              "text": {
-                "type": "string",
-                "required": true,
-                "example": "Hello, world!"
-              },
-              "origin": {
-                "type": "string",
-                "enum": [
-                  "sender",
-                  "recepient"
-                ],
-                "required": true,
-                "example": "sender"
-              },
-              "date": {
-                "type": "string",
-                "required": true,
-                "example": "2021-01-01T00:00:00.000Z"
-              },
-              "id": {
-                "type": "string",
-                "required": true,
-                "example": "abc123"
-              }
-            }
-          },
-          {
-            "type": "object",
-            "properties": {
-              "type": {
-                "type": "string",
-                "enum": [
-                  "image"
-                ],
-                "required": true
-              },
-              "src": {
-                "type": "string",
-                "required": true,
-                "example": "https://example.com/image.jpg"
-              },
-              "alt": {
-                "type": "string",
-                "required": false,
-                "example": "An example image."
-              },
-              "origin": {
-                "type": "string",
-                "enum": [
-                  "sender",
-                  "recepient"
-                ],
-                "required": true,
-                "example": "sender"
-              },
-              "date": {
-                "type": "string",
-                "required": true,
-                "example": "2021-01-01T00:00:00.000Z"
-              },
-              "id": {
-                "type": "string",
-                "required": true,
-                "example": "abc123"
-              }
-            }
-          },
-          {
-            "type": "object",
-            "properties": {
-              "type": {
-                "type": "string",
-                "enum": [
-                  "audio"
-                ],
-                "required": true
-              },
-              "src": {
-                "type": "string",
-                "required": true,
-                "example": "https://example.com/audio.mp3"
-              },
-              "origin": {
-                "type": "string",
-                "enum": [
-                  "sender",
-                  "recepient"
-                ],
-                "required": true,
-                "example": "sender"
-              },
-              "date": {
-                "type": "string",
-                "required": true,
-                "example": "2021-01-01T00:00:00.000Z"
-              },
-              "id": {
-                "type": "string",
-                "required": true,
-                "example": "abc123"
-              }
-            }
-          }
-        ]
-      },
-      "MongoConversation": {
-        "type": "object",
-        "properties": {
-          "_id": {
-            "type": "string",
-            "required": true,
-            "example": "abc123"
-          },
-          "messages": {
-            "type": "array",
-            "items": {
-              "oneOf": [
-                {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string",
-                      "enum": [
-                        "text"
-                      ],
-                      "required": true
-                    },
-                    "text": {
-                      "type": "string",
-                      "required": true,
-                      "example": "Hello, world!"
-                    },
-                    "origin": {
-                      "type": "string",
-                      "enum": [
-                        "sender",
-                        "recepient"
-                      ],
-                      "required": true,
-                      "example": "sender"
-                    },
-                    "date": {
-                      "type": "string",
-                      "required": true,
-                      "example": "2021-01-01T00:00:00.000Z"
-                    },
-                    "id": {
-                      "type": "string",
-                      "required": true,
-                      "example": "abc123"
-                    }
-                  }
-                },
-                {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string",
-                      "enum": [
-                        "image"
-                      ],
-                      "required": true
-                    },
-                    "src": {
-                      "type": "string",
-                      "required": true,
-                      "example": "https://example.com/image.jpg"
-                    },
-                    "alt": {
-                      "type": "string",
-                      "required": false,
-                      "example": "An example image."
-                    },
-                    "origin": {
-                      "type": "string",
-                      "enum": [
-                        "sender",
-                        "recepient"
-                      ],
-                      "required": true,
-                      "example": "sender"
-                    },
-                    "date": {
-                      "type": "string",
-                      "required": true,
-                      "example": "2021-01-01T00:00:00.000Z"
-                    },
-                    "id": {
-                      "type": "string",
-                      "required": true,
-                      "example": "abc123"
-                    }
-                  }
-                },
-                {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string",
-                      "enum": [
-                        "audio"
-                      ],
-                      "required": true
-                    },
-                    "src": {
-                      "type": "string",
-                      "required": true,
-                      "example": "https://example.com/audio.mp3"
-                    },
-                    "origin": {
-                      "type": "string",
-                      "enum": [
-                        "sender",
-                        "recepient"
-                      ],
-                      "required": true,
-                      "example": "sender"
-                    },
-                    "date": {
-                      "type": "string",
-                      "required": true,
-                      "example": "2021-01-01T00:00:00.000Z"
-                    },
-                    "id": {
-                      "type": "string",
-                      "required": true,
-                      "example": "abc123"
-                    }
-                  }
-                }
-              ]
-            }
-          }
-        }
+        "description": "An error code that may be returned by the server."
       },
       "ErrorResponse": {
         "type": "object",
         "properties": {
           "ok": {
             "type": "boolean",
-            "required": true,
             "enum": [
               false
-            ]
+            ],
+            "description": "Whether the operation was successful.",
+            "example": false
           },
           "code": {
-            "type": "string",
-            "required": true,
-            "enum": [
-              "UNKNOWN",
-              "BAD_INPUT",
-              "BAD_URL",
-              "BAD_QUERY",
-              "BAD_BODY",
-              "INTERNAL",
-              "NOT_FOUND",
-              "NOT_IMPLEMENTED"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ErrorCode"
+              },
+              {
+                "description": "The error code."
+              }
             ]
           },
           "message": {
-            "oneOf": [
+            "anyOf": [
               {
                 "type": "string"
               },
@@ -644,20 +816,129 @@
                 "type": "null"
               }
             ],
-            "required": true
+            "description": "A message describing the error.",
+            "example": "The parameters provided were invalid."
           },
           "help": {
-            "oneOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "required": false
+            "type": "string",
+            "description": "A URL to the docs page that may help the user resolve the error.",
+            "example": "https://example.com/docs"
           }
-        }
+        },
+        "required": [
+          "ok",
+          "code",
+          "message"
+        ],
+        "description": "An error response from the server."
+      },
+      "BotQueryRequestBody": {
+        "type": "object",
+        "properties": {
+          "conversation": {
+            "$ref": "#/components/schemas/MongoConversation"
+          }
+        },
+        "required": [
+          "conversation"
+        ],
+        "description": "The request body for the bot query endpoint"
+      },
+      "BotQuery200ResponseBody": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "newMessage": {
+                "$ref": "#/components/schemas/MongoMessage"
+              }
+            },
+            "required": [
+              "newMessage"
+            ],
+            "description": "The 200 response body for the bot query endpoint"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "ok": {
+                "type": "boolean",
+                "enum": [
+                  true
+                ],
+                "description": "Whether the operation was successful.",
+                "example": true
+              },
+              "help": {
+                "type": "string",
+                "description": "A URL to the docs page that may help the user understand the response.",
+                "example": "https://example.com/docs"
+              }
+            },
+            "required": [
+              "ok"
+            ]
+          }
+        ]
+      },
+      "BotQueryResponseBody": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/BotQuery200ResponseBody"
+          },
+          {
+            "$ref": "#/components/schemas/ErrorResponse"
+          }
+        ],
+        "description": "The response body for the bot query endpoint"
+      },
+      "ConversationGet200ResponseBody": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "conversation": {
+                "$ref": "#/components/schemas/MongoConversation"
+              }
+            },
+            "required": [
+              "conversation"
+            ],
+            "description": "The 200 response body for the conversation get endpoint"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "ok": {
+                "type": "boolean",
+                "enum": [
+                  true
+                ],
+                "description": "Whether the operation was successful.",
+                "example": true
+              },
+              "help": {
+                "type": "string",
+                "description": "A URL to the docs page that may help the user understand the response.",
+                "example": "https://example.com/docs"
+              }
+            },
+            "required": [
+              "ok"
+            ]
+          }
+        ]
+      },
+      "ConversationGetResponseBody": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/ConversationGet200ResponseBody"
+          },
+          {
+            "$ref": "#/components/schemas/ErrorResponse"
+          }
+        ],
+        "description": "The response body for the conversation get endpoint"
       }
     }
   }

@@ -11,9 +11,6 @@ router.get('/', function(req, res, next) {
             description: "Root route",
             schema: "Root route. For docs, go <a href='/api/v1/docs'>here</a>."
         }
-
-        #swagger.responses[500] = null
-        #swagger.responses[400] = null
     */
     res.send("Root route. For docs, go <a href='/api/v1/docs'>here</a>.");
 });
@@ -31,9 +28,6 @@ router.get("/ping", (req, res) => {
             description: "Server is up and running.",
             schema: "pong"
         }
-
-        #swagger.responses[500] = null
-        #swagger.responses[400] = null
     */
     res.send("pong");
 });

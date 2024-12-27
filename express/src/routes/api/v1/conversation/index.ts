@@ -1,14 +1,15 @@
 import { asyncErrorHandler } from '@ptolemy2002/express-utils';
 import express from 'express';
-import { ConversationGetResponseBody, createMongoTextMessage } from 'shared';
+import { ConversationGetParams, ConversationGetResponseBody, createMongoTextMessage, ZodConversationGetParamsSchema } from 'shared';
 import getEnv from 'env';
+import { interpretZodError } from '@ptolemy2002/regex-utils';
 const router = express.Router();
 
 router.get<
     // Path
     "/get/:id",
     // Parameters
-    { id: string },
+    ConversationGetParams,
     ConversationGetResponseBody
 >('/get/:id', asyncErrorHandler(async (req, res) => {
     /*
@@ -23,23 +24,46 @@ router.get<
         #swagger.responses[200] = {
             description: "Conversation found",
             schema: {
-                conversation: {
-                    $ref: "#/components/schemas/MongoConversation"
-                }
+                $ref: "#/components/schemas/ConversationGet200ResponseBody"
             }
         }
 
         #swagger.responses[404] = {
             description: "Conversation not found",
-            schema: {
-                $ref: "#/components/schemas/ErrorResponse"
+            content: {
+                "application/json": {
+                    schema: {
+                        $ref: "#/components/schemas/ErrorResponse"
+                    },
+
+                    example: {
+                        ok: false,
+                        code: "NOT_FOUND",
+                        message: "No conversation found with the specified ID.",
+                        help: "http://example.com/docs"
+                    }
+                }
             }
         }
         #swagger.end
     */
     const env = getEnv();
-    const help = env.apiUrl + "/api/v1/docs/#/Conversation/get_api_v1_conversation_get__id_";
-    const { id } = req.params;
+    const help = env.getDocsURL(1) + "/#/Conversation/get_api_v1_conversation_get__id_";
+    
+    const { success, data, error } = ZodConversationGetParamsSchema.safeParse(req.params);
+
+    if (!success) {
+        res.status(400).json({
+            ok: false,
+            code: "BAD_URL",
+            message: interpretZodError(error),
+            help
+        });
+
+        return;
+    }
+
+    const { id } = data;
 
     // Simulate a delay
     await new Promise((resolve) => setTimeout(resolve, Math.random() * 4000 + 1000));

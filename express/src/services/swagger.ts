@@ -1,23 +1,25 @@
 import swaggerAutogen from "swagger-autogen";
 import getEnv from "../env";
+import { stripWords } from '@ptolemy2002/js-utils';
 import {
-  SwaggerErrorCodeSchema,
-  SwaggerErrorResponseSchema,
-  SwaggerMessageOriginSchema,
-  SwaggerMessageTypeSchema,
-  SwaggerMongoConversationSchema,
-  SwaggerMongoMessageSchema,
+  swaggerGenerator
 } from "shared";
 const env = getEnv();
 
 const outputFile = "./swagger_output.json";
 const endpointFiles = ["src/routes/index.ts"];
 
-const url = ((env.isProd && env.prodApiUrl) || env.devApiUrl)
-  .split("://")
-  .slice(1)
-  .join("://");
-const baseUrl = url.endsWith("/api/v1") ? url.slice(0, -7) : url;
+const baseUrl = stripWords(
+  env.apiURL,
+  '/',
+  /^https?:\/\//.test(env.apiURL) ? 2 : 0,
+  /\/api\/v\d+$/.test(env.apiURL) ? 2 : 0,
+);
+console.log('Detected Swagger Base URL:', baseUrl);
+
+const generatedComponents = swaggerGenerator.generateComponents().components ?? {};
+const generatedSchemas = generatedComponents.schemas ?? {};
+const genetatedParameters = generatedComponents.parameters ?? {};
 
 const doc = {
   info: {
@@ -31,22 +33,9 @@ const doc = {
   produces: ["application/json"],
 
   components: {
-    schemas: {
-      MessageType: SwaggerMessageTypeSchema,
-      MessageOrigin: SwaggerMessageOriginSchema,
-      ErrorCode: SwaggerErrorCodeSchema,
-
-      BotQueryRequestBody: {
-        conversation: { $ref: "#/components/schemas/MongoConversation" },
-      },
-    },
-
-    "@schemas": {
-      MongoMessage: SwaggerMongoMessageSchema,
-      MongoConversation: SwaggerMongoConversationSchema,
-      ErrorResponse: SwaggerErrorResponseSchema,
-    },
-  },
+      parameters: genetatedParameters,
+      "@schemas": generatedSchemas
+  }
 };
 
 export default swaggerAutogen({ openapi: "3.1.1" })(

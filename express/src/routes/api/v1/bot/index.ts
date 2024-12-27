@@ -66,18 +66,14 @@ router.post<
                 }
             }
             #swagger.responses[200] = {
-                description: "Response from the bot.",
                 schema: {
-                    newMessage: {
-                        $ref: "#/components/schemas/MongoMessage"
-                    },
-                    help: "https://example.com/docs"
+                    $ref: "#/components/schemas/BotQuery200ResponseBody"
                 }
             }
             #swagger.end
         */
         const env = getEnv();
-        const help = env.apiUrl + "/api/v1/docs/#/Bot/post_api_v1_bot_query";
+        const help = env.getDocsURL(1) + "/#/Bot/post_api_v1_bot_query";
         const {success, error, data} = ZodBotQueryRequestBodySchema.safeParse(req.body);
 
         if (!success) {
