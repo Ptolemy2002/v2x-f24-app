@@ -1,6 +1,6 @@
 import { ValueOf } from "@ptolemy2002/ts-utils";
 import { ErrorCodeEnum } from "./Other";
-import { MongoConversation, MongoMessage } from "../Message";
+import { MongoConversation, MongoMessage } from "src/Message";
 
 export type ErrorCode = Extract<ValueOf<typeof ErrorCodeEnum>, string>;
 export type ErrorResponse = {ok: false, code: ErrorCode, message: string | string[] | null, help?: string};
