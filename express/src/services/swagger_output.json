@@ -46,13 +46,12 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                },
-                "example": {
-                  "ok": false,
-                  "code": "BAD_INPUT",
-                  "message": "The request was malformed.",
-                  "help": "http://example.com/docs"
+                  "$ref": "#/components/schemas/ErrorResponse400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse400"
                 }
               }
             }
@@ -63,12 +62,26 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
-                },
-                "example": {
-                  "ok": false,
-                  "code": "UNKNOWN",
-                  "message": "An unknown error occurred.",
-                  "help": "http://example.com/docs"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "501": {
+            "description": "Not implemented",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse501"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse501"
                 }
               }
             }
@@ -111,13 +124,12 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                },
-                "example": {
-                  "ok": false,
-                  "code": "BAD_INPUT",
-                  "message": "The request was malformed.",
-                  "help": "http://example.com/docs"
+                  "$ref": "#/components/schemas/ErrorResponse400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse400"
                 }
               }
             }
@@ -128,12 +140,26 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
-                },
-                "example": {
-                  "ok": false,
-                  "code": "UNKNOWN",
-                  "message": "An unknown error occurred.",
-                  "help": "http://example.com/docs"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "501": {
+            "description": "Not implemented",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse501"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse501"
                 }
               }
             }
@@ -168,13 +194,12 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                },
-                "example": {
-                  "ok": false,
-                  "code": "BAD_INPUT",
-                  "message": "Invalid input",
-                  "help": "https://example.com/docs"
+                  "$ref": "#/components/schemas/ErrorResponse400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse400"
                 }
               }
             }
@@ -186,6 +211,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
                 }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -194,13 +224,12 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                },
-                "example": {
-                  "ok": false,
-                  "code": "NOT_IMPLEMENTED",
-                  "message": "This feature is not implemented",
-                  "help": "https://example.com/docs"
+                  "$ref": "#/components/schemas/ErrorResponse501"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse501"
                 }
               }
             }
@@ -261,13 +290,12 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                },
-                "example": {
-                  "ok": false,
-                  "code": "BAD_INPUT",
-                  "message": "Invalid input",
-                  "help": "https://example.com/docs"
+                  "$ref": "#/components/schemas/ErrorResponse400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse400"
                 }
               }
             }
@@ -294,12 +322,11 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
-                },
-                "example": {
-                  "ok": false,
-                  "code": "UNKNOWN",
-                  "message": "An unknown error occurred.",
-                  "help": "http://example.com/docs"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -309,13 +336,12 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                },
-                "example": {
-                  "ok": false,
-                  "code": "BAD_INPUT",
-                  "message": "The request was malformed.",
-                  "help": "http://example.com/docs"
+                  "$ref": "#/components/schemas/ErrorResponse501"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse501"
                 }
               }
             }
@@ -780,6 +806,47 @@
         ],
         "description": "An error code that may be returned by the server."
       },
+      "ErrorMessage": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "description": "A message describing an error.",
+        "example": "Internal server error."
+      },
+      "ErrorResponseBase": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean",
+            "enum": [
+              false
+            ],
+            "description": "Whether the operation was successful.",
+            "example": false
+          },
+          "help": {
+            "type": "string",
+            "format": "uri",
+            "description": "A URL to the docs page that may help the user resolve the error.",
+            "example": "https://example.com/docs"
+          }
+        },
+        "required": [
+          "ok"
+        ],
+        "description": "An error response from the server."
+      },
       "ErrorResponse": {
         "type": "object",
         "properties": {
@@ -791,46 +858,167 @@
             "description": "Whether the operation was successful.",
             "example": false
           },
+          "help": {
+            "type": "string",
+            "format": "uri",
+            "description": "A URL to the docs page that may help the user resolve the error.",
+            "example": "https://example.com/docs"
+          },
           "code": {
             "allOf": [
               {
                 "$ref": "#/components/schemas/ErrorCode"
               },
               {
-                "description": "The error code."
+                "description": "The error code.",
+                "example": "UNKNOWN"
               }
             ]
           },
           "message": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "A message describing the error.",
-            "example": "The parameters provided were invalid."
-          },
-          "help": {
-            "type": "string",
-            "description": "A URL to the docs page that may help the user resolve the error.",
-            "example": "https://example.com/docs"
+            "$ref": "#/components/schemas/ErrorMessage"
           }
         },
         "required": [
           "ok",
           "code",
           "message"
-        ],
-        "description": "An error response from the server."
+        ]
+      },
+      "ErrorResponse501": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean",
+            "enum": [
+              false
+            ],
+            "description": "Whether the operation was successful.",
+            "example": false
+          },
+          "help": {
+            "type": "string",
+            "format": "uri",
+            "description": "A URL to the docs page that may help the user resolve the error.",
+            "example": "https://example.com/docs"
+          },
+          "code": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ErrorCode"
+              },
+              {
+                "description": "The error code.",
+                "example": "NOT_IMPLEMENTED"
+              }
+            ]
+          },
+          "message": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ErrorMessage"
+              },
+              {
+                "example": "This feature is not yet implemented."
+              }
+            ]
+          }
+        },
+        "required": [
+          "ok",
+          "code",
+          "message"
+        ]
+      },
+      "ErrorResponse400": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean",
+            "enum": [
+              false
+            ],
+            "description": "Whether the operation was successful.",
+            "example": false
+          },
+          "help": {
+            "type": "string",
+            "format": "uri",
+            "description": "A URL to the docs page that may help the user resolve the error.",
+            "example": "https://example.com/docs"
+          },
+          "code": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ErrorCode"
+              },
+              {
+                "description": "The error code.",
+                "example": "BAD_INPUT"
+              }
+            ]
+          },
+          "message": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ErrorMessage"
+              },
+              {
+                "example": "Invalid input."
+              }
+            ]
+          }
+        },
+        "required": [
+          "ok",
+          "code",
+          "message"
+        ]
+      },
+      "ErrorResponse404": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean",
+            "enum": [
+              false
+            ],
+            "description": "Whether the operation was successful.",
+            "example": false
+          },
+          "help": {
+            "type": "string",
+            "format": "uri",
+            "description": "A URL to the docs page that may help the user resolve the error.",
+            "example": "https://example.com/docs"
+          },
+          "code": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ErrorCode"
+              },
+              {
+                "description": "The error code.",
+                "example": "NOT_FOUND"
+              }
+            ]
+          },
+          "message": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ErrorMessage"
+              },
+              {
+                "example": "No resources found."
+              }
+            ]
+          }
+        },
+        "required": [
+          "ok",
+          "code",
+          "message"
+        ]
       },
       "BotQueryRequestBody": {
         "type": "object",

@@ -9,37 +9,22 @@ router.use("/", indexRoutes
 
         #swagger.responses[500] = {
             description: "Internal server error",
-            content: {
-                "application/json": {
-                    schema: {
-                        $ref: "#/components/schemas/ErrorResponse"
-                    },
-
-                    example: {
-                        ok: false,
-                        code: "UNKNOWN",    
-                        message: "An unknown error occurred.",
-                        help: "http://example.com/docs"
-                    }
-                }
+            schema: {
+                $ref: "#/components/schemas/ErrorResponse"
             }
         }
 
         #swagger.responses[400] = {
             description: "Bad request",
-            content: {
-                "application/json": {
-                    schema: {
-                        $ref: "#/components/schemas/ErrorResponse"
-                    },
+            schema: {
+                $ref: "#/components/schemas/ErrorResponse400"
+            }
+        }
 
-                    example: {
-                        ok: false,
-                        code: "BAD_INPUT",
-                        message: "The request was malformed.",
-                        help: "http://example.com/docs"
-                    }
-                }
+        #swagger.responses[501] = {
+            description: "Not implemented",
+            schema: {
+                $ref: "#/components/schemas/ErrorResponse501"
             }
         }
     */
