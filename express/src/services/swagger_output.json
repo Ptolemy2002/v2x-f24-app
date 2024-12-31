@@ -1011,6 +1011,28 @@
           "message"
         ]
       },
+      "SuccessResponseBase": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean",
+            "enum": [
+              true
+            ],
+            "description": "Whether the operation was successful.",
+            "example": true
+          },
+          "help": {
+            "type": "string",
+            "description": "A URL to the docs page that may help the user understand the response.",
+            "example": "https://example.com/docs"
+          }
+        },
+        "required": [
+          "ok"
+        ],
+        "description": "A successful response from the server."
+      },
       "BotQueryRequestBody": {
         "type": "object",
         "properties": {
@@ -1038,25 +1060,7 @@
             "description": "The 200 response body for the bot query endpoint"
           },
           {
-            "type": "object",
-            "properties": {
-              "ok": {
-                "type": "boolean",
-                "enum": [
-                  true
-                ],
-                "description": "Whether the operation was successful.",
-                "example": true
-              },
-              "help": {
-                "type": "string",
-                "description": "A URL to the docs page that may help the user understand the response.",
-                "example": "https://example.com/docs"
-              }
-            },
-            "required": [
-              "ok"
-            ]
+            "$ref": "#/components/schemas/SuccessResponseBase"
           }
         ]
       },
@@ -1086,25 +1090,7 @@
             "description": "The 200 response body for the conversation get endpoint"
           },
           {
-            "type": "object",
-            "properties": {
-              "ok": {
-                "type": "boolean",
-                "enum": [
-                  true
-                ],
-                "description": "Whether the operation was successful.",
-                "example": true
-              },
-              "help": {
-                "type": "string",
-                "description": "A URL to the docs page that may help the user understand the response.",
-                "example": "https://example.com/docs"
-              }
-            },
-            "required": [
-              "ok"
-            ]
+            "$ref": "#/components/schemas/SuccessResponseBase"
           }
         ]
       },
