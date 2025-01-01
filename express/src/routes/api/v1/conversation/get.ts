@@ -1,10 +1,10 @@
 import { asyncErrorHandler } from '@ptolemy2002/express-utils';
-import express, { Request, Response } from 'express';
+import express from 'express';
 import { ConversationGet200ResponseBody, createMongoTextMessage, ZodConversationGetParamsSchema } from 'shared';
-import RouteHandler from 'lib/RouteHandler';
+import RouteHandler, { RouteHandlerRequest } from 'lib/RouteHandler';
 const router = express.Router();
 
-export class GetConversationHandler extends RouteHandler {
+export class GetConversationHandler extends RouteHandler<ConversationGet200ResponseBody> {
     /*
         #swagger.start
         #swagger.path = '/api/v1/conversation/get/{id}'
@@ -45,12 +45,14 @@ export class GetConversationHandler extends RouteHandler {
         super(1, "/#/Conversation/get_api_v1_conversation_get__id_");
     }
 
-    async handle(req: Request, res: Response) {
+    async generateResponse(req: RouteHandlerRequest) {
         const { success, data, error } = ZodConversationGetParamsSchema.safeParse(req.params);
 
         if (!success) {
-            res.status(400).json(this.buildZodErrorResponse(error, "BAD_URL"));
-            return;
+            return {
+                response: this.buildZodErrorResponse(error, "BAD_URL"),
+                status: 400
+            };
         }
 
         const { id } = data;
@@ -59,28 +61,30 @@ export class GetConversationHandler extends RouteHandler {
         await new Promise((resolve) => setTimeout(resolve, Math.random() * 4000 + 1000));
 
         if (id === "demo") {
-            res.json(this.buildSuccessResponse<ConversationGet200ResponseBody>({
-                conversation: {
-                    _id: "demo",
-                    messages: [
-                        createMongoTextMessage(
-                            "recepient",
-                            () => ({
-                                text: "Hello! How can I assist you today?"
-                            })
-                        )
-                    ]
-                }
-            }));
-
-            return;
+            return {
+                status: 200,
+                response: this.buildSuccessResponse({
+                    conversation: {
+                        _id: "demo",
+                        messages: [
+                            createMongoTextMessage(
+                                "recepient",
+                                () => ({
+                                    text: "Hello! How can I assist you today?"
+                                })
+                            )
+                        ]
+                    }
+                })
+            };
         }
 
-        res.status(501).json(
-            this.buildNotImplementedResponse(
+        return {
+            status: 501,
+            response: this.buildNotImplementedResponse(
                 "A database is not implemented yet, so getting a non-demo conversation is not possible."
             )
-        );
+        };
     }
 }
 

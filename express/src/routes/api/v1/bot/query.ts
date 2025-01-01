@@ -1,7 +1,6 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
 import defaultResponses from 'data/default-responses.json';
 import { asyncErrorHandler } from '@ptolemy2002/express-utils';
-import { interpretZodError } from '@ptolemy2002/regex-utils';
 import {
     BotQueryResponseBody,
     BotQueryRequestBody,
@@ -11,8 +10,7 @@ import {
     ZodBotQueryRequestBodySchema,
     BotQuery200ResponseBody
 } from 'shared';
-import getEnv from 'env';
-import RouteHandler from 'lib/RouteHandler';
+import RouteHandler, { RouteHandlerRequest } from 'lib/RouteHandler';
 const router = express.Router();
 
 type DefaultResponseData = {
@@ -48,7 +46,7 @@ function findMatchingResponse(text: string): DefaultResponseData | null {
     return null;
 }
 
-export class BotQueryHandler extends RouteHandler {
+export class BotQueryHandler extends RouteHandler<BotQuery200ResponseBody> {
     /*
         #swagger.start
         #swagger.path = '/api/v1/bot/query'
@@ -71,12 +69,14 @@ export class BotQueryHandler extends RouteHandler {
         super(1, "/#/Bot/post_api_v1_bot_query");
     }
 
-    async handle(req: Request, res: Response) {
+    async generateResponse(req: RouteHandlerRequest) {
         const {success, error, data} = ZodBotQueryRequestBodySchema.safeParse(req.body);
 
         if (!success) {
-            res.status(400).json(this.buildZodErrorResponse(error, "BAD_BODY"));
-            return;
+            return {
+                status: 400,
+                response: this.buildZodErrorResponse(error, "BAD_BODY")
+            };
         }
 
         // Simulate a delay
@@ -87,12 +87,14 @@ export class BotQueryHandler extends RouteHandler {
 
         if (!lastMessage) {
             // This is the first message, so we'll just greet the user.
-            res.status(200).json(this.buildSuccessResponse<BotQuery200ResponseBody>({
-                newMessage: createMongoTextMessage("recepient", () => ({
-                    text: "Greetings! How can I help you today?"
-                }))
-            }));
-            return;
+            return {
+                status: 200,
+                response: this.buildSuccessResponse({
+                    newMessage: createMongoTextMessage("recepient", () => ({
+                        text: "Greetings! How can I help you today?"
+                    }))
+                })
+            };
         }
 
         let response: DefaultResponseData = defaultResponses["[default]"];
@@ -108,48 +110,61 @@ export class BotQueryHandler extends RouteHandler {
         }
 
         if (response.type === "text") {
-            res.status(200).json(this.buildSuccessResponse<BotQuery200ResponseBody>({
-                newMessage: createMongoTextMessage("recepient", () => ({
-                    text: response.text ?? "[No text provided]"
-                }))
-            }));
-            return;
+            return {
+                status: 200,
+                response: this.buildSuccessResponse({
+                    newMessage: createMongoTextMessage("recepient", () => ({
+                        text: response.text ?? "[No text provided]"
+                    }))
+                })
+            };
         } else if (response.type === "image") {
             if (!response.src) {
-                res.status(200).json(this.buildSuccessResponse<BotQuery200ResponseBody>({
-                    newMessage: createMongoTextMessage("recepient", () => ({
-                        text: "I'm sorry, I had trouble sending an image."
-                    }))
-                }));
-                return;
+                return {
+                    status: 200,
+                    response: this.buildSuccessResponse({
+                        newMessage: createMongoTextMessage("recepient", () => ({
+                            text: "I'm sorry, I had trouble sending an image."
+                        }))
+                    })
+                };
             } else {
-                res.status(200).json(this.buildSuccessResponse<BotQuery200ResponseBody>({
-                    newMessage: createMongoImageMessage("recepient", () => ({
-                        src: response.src!,
-                        alt: response.alt ?? "[No alt text provided]"
-                    }))
-                }));
-                return;
+                return {
+                    status: 200,
+                    response: this.buildSuccessResponse({
+                        newMessage: createMongoImageMessage("recepient", () => ({
+                            src: response.src!,
+                            alt: response.alt ?? "[No alt text provided]"
+                        }))
+                    })
+                };
             }
         } else if (response.type === "audio") {
             if (!response.src) {
-                res.status(200).json(this.buildSuccessResponse<BotQuery200ResponseBody>({
-                    newMessage: createMongoTextMessage("recepient", () => ({
-                        text: "I'm sorry, I had trouble sending an audio message."
-                    }))
-                }));
-                return;
+                return {
+                    status: 200,
+                    response: this.buildSuccessResponse({
+                        newMessage: createMongoTextMessage("recepient", () => ({
+                            text: "I'm sorry, I had trouble sending an audio message."
+                        }))
+                    })
+                };
             } else {
-                res.status(200).json(this.buildSuccessResponse<BotQuery200ResponseBody>({
-                    newMessage: createMongoAudioMessage("recepient", () => ({
-                        src: response.src!
-                    }))
-                }));
-                return;
+                return {
+                    status: 200,
+                    response: this.buildSuccessResponse({
+                        newMessage: createMongoAudioMessage("recepient", () => ({
+                            src: response.src!
+                        }))
+                    })
+                };
             }
+        } else {
+            return {
+                status: 500,
+                response: this.buildErrorResponse("INTERNAL", "Unknown response type.")
+            };
         }
-
-        res.status(500).json(this.buildErrorResponse("INTERNAL", "Unknown response type."));
     }
 }
 
