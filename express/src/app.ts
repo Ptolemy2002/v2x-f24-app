@@ -11,7 +11,7 @@ import cors from 'cors';
 import { HttpError } from 'http-errors';
 import swaggerUi from 'swagger-ui-express';
 import swaggerFile from 'services/swagger_output.json';
-import { ZodErrorCodeSchema } from 'shared';
+import { ZodErrorCodeSchema, ZodHelpLinkSchema } from 'shared';
 
 import getEnv from 'env';
 const env = getEnv();
@@ -57,12 +57,19 @@ app.use(function(err: HttpError, req: Request, res: Response, next: NextFunction
     let code = err.code ?? "UNKNOWN";
     const { success: codeSuccess } = ZodErrorCodeSchema.safeParse(code);
 
+    let help = err.help ?? getEnv().getDocsURL(1);
+    const { success: helpSuccess } = ZodHelpLinkSchema.safeParse(help);
+
     if (!codeSuccess) {
         code = "UNKNOWN";
     }
 
+    if (!helpSuccess) {
+        help = getEnv().getDocsURL(1);
+    }
+
     res.status(err.status ?? 500);
-    res.json({ ok: false, code, message: err.message });
+    res.json({ ok: false, code, message: err.message, help });
 });
 
 export default app;
