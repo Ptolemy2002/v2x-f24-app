@@ -756,13 +756,23 @@
         },
         "description": "An array of MongoDB messages with unique IDs."
       },
+      "ConversationID": {
+        "type": "string",
+        "description": "The ID of a conversation.",
+        "example": "abc123"
+      },
       "Conversation": {
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "description": "The ID of the conversation.",
-            "example": "abc123"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ConversationID"
+              },
+              {
+                "description": "The ID of the conversation."
+              }
+            ]
           },
           "messages": {
             "$ref": "#/components/schemas/UniqueMessageArray"
@@ -778,9 +788,14 @@
         "type": "object",
         "properties": {
           "_id": {
-            "type": "string",
-            "description": "The ID of the conversation.",
-            "example": "abc123"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ConversationID"
+              },
+              {
+                "description": "The ID of the conversation."
+              }
+            ]
           },
           "messages": {
             "$ref": "#/components/schemas/UniqueMongoMessageArray"
@@ -824,6 +839,12 @@
         "description": "A message describing an error.",
         "example": "Internal server error."
       },
+      "HelpLink": {
+        "type": "string",
+        "format": "uri",
+        "description": "A URL to the docs page that may help the user resolve the error or understand the response.",
+        "example": "https://example.com/docs"
+      },
       "ErrorResponseBase": {
         "type": "object",
         "properties": {
@@ -836,10 +857,7 @@
             "example": false
           },
           "help": {
-            "type": "string",
-            "format": "uri",
-            "description": "A URL to the docs page that may help the user resolve the error.",
-            "example": "https://example.com/docs"
+            "$ref": "#/components/schemas/HelpLink"
           }
         },
         "required": [
@@ -859,10 +877,7 @@
             "example": false
           },
           "help": {
-            "type": "string",
-            "format": "uri",
-            "description": "A URL to the docs page that may help the user resolve the error.",
-            "example": "https://example.com/docs"
+            "$ref": "#/components/schemas/HelpLink"
           },
           "code": {
             "allOf": [
@@ -897,10 +912,7 @@
             "example": false
           },
           "help": {
-            "type": "string",
-            "format": "uri",
-            "description": "A URL to the docs page that may help the user resolve the error.",
-            "example": "https://example.com/docs"
+            "$ref": "#/components/schemas/HelpLink"
           },
           "code": {
             "type": "string",
@@ -938,10 +950,7 @@
             "example": false
           },
           "help": {
-            "type": "string",
-            "format": "uri",
-            "description": "A URL to the docs page that may help the user resolve the error.",
-            "example": "https://example.com/docs"
+            "$ref": "#/components/schemas/HelpLink"
           },
           "code": {
             "type": "string",
@@ -982,10 +991,7 @@
             "example": false
           },
           "help": {
-            "type": "string",
-            "format": "uri",
-            "description": "A URL to the docs page that may help the user resolve the error.",
-            "example": "https://example.com/docs"
+            "$ref": "#/components/schemas/HelpLink"
           },
           "code": {
             "type": "string",
@@ -1023,9 +1029,7 @@
             "example": true
           },
           "help": {
-            "type": "string",
-            "description": "A URL to the docs page that may help the user understand the response.",
-            "example": "https://example.com/docs"
+            "$ref": "#/components/schemas/HelpLink"
           }
         },
         "required": [
@@ -1104,6 +1108,29 @@
           }
         ],
         "description": "The response body for the conversation get endpoint"
+      },
+      "ConversationGetURLParams": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "demo"
+                ]
+              },
+              {
+                "$ref": "#/components/schemas/ConversationID"
+              }
+            ],
+            "description": "ID of the conversation to get",
+            "example": "demo"
+          }
+        },
+        "required": [
+          "id"
+        ]
       }
     }
   }

@@ -3,6 +3,7 @@ import { zodSuccessResponseSchema } from "./SuccessResponse";
 import { z } from "zod";
 import { ZodMongoConversationSchema } from "src/Message";
 import { ZodErrorResponseSchema } from "./ErrorResponse";
+import { ZodConversationIDSchema } from "src/Message/Zod/ConversationID";
 
 export const ZodConversationGet200ResponseBodySchema = swaggerRegistry.register(
     "ConversationGet200ResponseBody",
@@ -23,13 +24,20 @@ export const ZodConversationGetResponseBodySchema = swaggerRegistry.register(
     })
 );
 
-export const ZodConversationGetParamsSchema = z.object({
-    id: z.string().openapi({
-        description: "ID of the conversation to get",
-        example: "demo"
+export const ZodConversationGetURLParamsSchema = swaggerRegistry.register(
+    "ConversationGetURLParams",
+    z.object({
+        id: z.union([
+            z.literal("demo"),
+            ZodConversationIDSchema
+        ])
+        .openapi({
+            description: "ID of the conversation to get",
+            example: "demo"
+        })
     })
-});
+)
 
 export type ConversationGet200ResponseBody = z.infer<typeof ZodConversationGet200ResponseBodySchema>;
 export type ConversationGetResponseBody = z.infer<typeof ZodConversationGetResponseBodySchema>;
-export type ConversationGetParams = z.infer<typeof ZodConversationGetParamsSchema>;
+export type ConversationGetURLParams = z.infer<typeof ZodConversationGetURLParamsSchema>;

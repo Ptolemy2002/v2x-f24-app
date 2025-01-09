@@ -11,3 +11,4 @@ export * from "./AudioMessage";
 export * from "./Message";
 export * from "./UniqueMessageArray";
 export * from "./Conversation";
+export * from "./ConversationID";

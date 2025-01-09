@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, CreateAxiosDefaults } from "axios";
 import { TypedAxios, RouteDef } from "typed-axios-instance";
 import getEnv from "src/Env";
-import { BotQueryRequestBody, BotQueryResponseBody, ConversationGetResponseBody } from "shared";
+import { BotQueryRequestBody, BotQueryResponseBody, ConversationGetResponseBody, ConversationGetURLParams } from "shared";
 
 export let Api: AxiosInstance | null = null;
 
@@ -18,7 +18,7 @@ export type ApiRoutes = RouteDefArray<[
     },
 
     {
-        route: `/conversation/get/${string}`,
+        route: `/conversation/get/${ConversationGetURLParams["id"]}`,
         method: "GET",
 
         jsonResponse: ConversationGetResponseBody
