@@ -5,22 +5,11 @@ import {
 import {
     Message, Conversation, MongoConversation,
     ZodUniqueMessageArraySchema,
-    BotQueryResponseBody,
     MongoMessage, isMongoMessage,
-    toMessage, toMongoMessage,
-    ConversationGetResponseBody
+    toMessage, toMongoMessage
 } from "shared";
 import { zodValidateWithErrors } from "@ptolemy2002/regex-utils";
 import getApi from "src/Api";
-import { AdvancedCondition } from "@ptolemy2002/ts-utils";
-
-export type DefaultResponseData = {
-    type: string;
-    triggers?: string[];
-    text?: string;
-    src?: string;
-    alt?: string;
-};
 
 export type ConversationRequests = {
     queryBot: () => Promise<void>;
@@ -32,8 +21,6 @@ export type CompletedConversationData = ConversationData & CompletedMongoData<
     MongoConversation,
     ConversationRequests
 >;
-
-export class ConversationRequestAdvancedCondition extends AdvancedCondition<keyof ConversationRequests> {}
 
 export default class ConversationData extends MongoData<
     Conversation,
@@ -100,7 +87,7 @@ export default class ConversationData extends MongoData<
 
         this.defineRequestType("queryBot", async function(this: CompletedConversationData, ac) {
             const api = getApi();
-            const { data } = await api.post<BotQueryResponseBody>("/bot/query", {
+            const { data } = await api.post("/bot/query", {
                 conversation: this.toJSON()
             }, {
                 signal: ac.signal
@@ -115,7 +102,7 @@ export default class ConversationData extends MongoData<
 
         this.defineRequestType("pull", async function(this: CompletedConversationData, ac, convoId) {
             const api = getApi();
-            const { data } = await api.get<ConversationGetResponseBody>(`/conversation/get/${convoId}`, {
+            const { data } = await api.get(`/conversation/get/${convoId}`, {
                 signal: ac.signal
             });
 
