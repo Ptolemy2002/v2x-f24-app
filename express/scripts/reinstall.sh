@@ -2,4 +2,3 @@
 bash scripts/uninstall.sh
 echo "Reinstalling all dependencies"
 npm install
-npm link ../shared
