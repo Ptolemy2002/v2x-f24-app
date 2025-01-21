@@ -18,6 +18,7 @@
     "directory": "react-web"
   },
   "dependencies": {
+    "@ptolemy2002/js-math-utils": "^2.0.1",
     "@ptolemy2002/react-bs-media-queries": "^1.0.0",
     "@ptolemy2002/react-force-rerender": "^2.0.0",
     "@ptolemy2002/react-manual-error-handling": "^2.0.2",
