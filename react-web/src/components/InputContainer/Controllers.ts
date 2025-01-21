@@ -1,5 +1,5 @@
 import { KeyboardEvent, useCallback, useMemo, useRef } from "react";
-import { createMessage } from "shared";
+import { createAudioMessage, createImageMessage, createTextMessage } from "shared";
 import ConversationData from "src/data/ConversationData";
 
 export function useInputContainerController() {
@@ -11,7 +11,7 @@ export function useInputContainerController() {
 
     // useCallback is used to keep a stable reference to the function.
     const addText = useCallback(() => {
-        conversationData.addMessage(createMessage("text", "sender", () => {
+        conversationData.addMessage(createTextMessage("sender", () => {
             // We do this in a timeout to fix a bug in strict mode where the text comes up empty the second time this
             // code is run. In non-strict mode, the bug doesn't happen.
             setTimeout(() => {
@@ -28,7 +28,7 @@ export function useInputContainerController() {
     }, [conversationData]);
 
     const addImage = useCallback(() => {
-        conversationData.addMessage(createMessage("image", "sender", () => ({
+        conversationData.addMessage(createImageMessage("sender", () => ({
             // Just a placeholder image for now.
             src: "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png",
             alt: "Placeholder image"
@@ -39,7 +39,7 @@ export function useInputContainerController() {
     }, [conversationData, conversationData.requestInProgress, conversationData.requestFailed]);
 
     const addAudio = useCallback(() => {
-        conversationData.addMessage(createMessage("audio", "sender", () => ({
+        conversationData.addMessage(createAudioMessage("sender", () => ({
             // Just a placeholder audio for now.
             src: "/aud-test.wav"
         })));

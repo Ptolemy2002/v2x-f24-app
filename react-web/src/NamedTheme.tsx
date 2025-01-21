@@ -18,26 +18,48 @@ export const NamedThemes: NamedTheme[] = [
         displayName: "Dark",
         value: {
             backgroundColor: "#343541",
-            headerBackgroundColor: "#202123",
+            
 
             textColor: "white",
             activeTextColor: "#19c37d",
 
-            senderColor: "#19c37d",
-            recepientColor: "#40414F",
-            timestampColor: "#bbb",
-            
-            inputColor: "#555",
+            header: {
+                backgroundColor: "#202123"
+            },
 
-            audioPlayerProgressColor: "#888",
-            audioPlayerBackgroundColor: "#343541",
+            sender: {
+                color: "#19c37d"
+            },
+
+            recepient: {
+                color: "#40414F",
+            },
+
+            timestamp: {
+                color: "#bbb"
+            },
             
-            dangerIconColor: "white",
-            dangerIconBackgroundColor: "red",
-            
-            borderThickness: "1px",
-            borderColor: "white",
-            borderStyle: "solid"
+            input: {
+                color: "#555",
+            },
+
+            audioPlayer: {
+                progressColor: "#888",
+                backgroundColor: "#343541",
+            },
+
+            icons: {
+                danger: {
+                    color: "white",
+                    backgroundColor: "red"
+                }
+            },
+
+            border: {
+                color: "white",
+                thickness: "1px",
+                style: "solid"
+            }
         }
     }
 ];

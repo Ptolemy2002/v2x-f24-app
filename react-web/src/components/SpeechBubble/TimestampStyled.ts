@@ -8,7 +8,7 @@ export default Object.assign(
             $css: props.$css ?? null,
         })
     )`
-        color: ${({theme}) => theme.timestampColor ?? theme.textColor};
+        color: ${({theme}) => theme.timestamp?.color ?? theme.textColor};
         min-width: fit-content;
 
         ${({$css}) => $css}

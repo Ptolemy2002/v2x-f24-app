@@ -11,23 +11,23 @@ export default Object.assign(
     )`
         flex-grow: 1;
 
-        background-color: ${({theme}) => theme.audioPlayerBackgroundColor};
-        color: ${({theme}) => theme.audioPlayerProgressColor};
+        background-color: ${({theme}) => theme.audioPlayer.backgroundColor};
+        color: ${({theme}) => theme.audioPlayer.progressColor};
         ${
             (isChrome || isSafari) && css`
                 &::-webkit-progress-value {
-                    background-color: ${({theme}) => theme.audioPlayerProgressColor};
+                    background-color: ${({theme}) => theme.audioPlayer.progressColor};
                 }
                 
                 &::-webkit-progress-bar {
-                    background-color: ${({theme}) => theme.audioPlayerBackgroundColor};
+                    background-color: ${({theme}) => theme.audioPlayer.backgroundColor};
                 }
             `
         }
 
         ${isFirefox && css`
             &::-moz-progress-bar {
-                background-color: ${({theme}) => theme.audioPlayerProgressColor};
+                background-color: ${({theme}) => theme.audioPlayer.progressColor};
             }`
         }
         

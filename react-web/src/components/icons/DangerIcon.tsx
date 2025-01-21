@@ -31,11 +31,11 @@ export default Object.assign(
         height: ${({$height}) => $height};
 
         > #fill {
-            fill: ${({$backgroundColor, theme}) => $backgroundColor ?? theme.dangerIconBackgroundColor};
+            fill: ${({$backgroundColor, theme}) => $backgroundColor ?? theme.icons.danger.backgroundColor};
         }
 
         > #mark-line, > #mark-dot {
-            fill: ${({$color, theme}) => $color ?? theme.dangerIconColor};
+            fill: ${({$color, theme}) => $color ?? theme.icons.danger.color};
         }
 
         &.loader {

@@ -4,30 +4,49 @@ import { RequiredCSSProperties } from "@ptolemy2002/react-styled-component-utils
 declare module "styled-components" {
     export interface DefaultTheme {
         backgroundColor: RequiredCSSProperties["backgroundColor"],
-        headerBackgroundColor?: RequiredCSSProperties["backgroundColor"],
         
         textColor: RequiredCSSProperties["color"],
         activeTextColor?: RequiredCSSProperties["color"],
 
-        senderColor: RequiredCSSProperties["backgroundColor"],
-        senderTextColor?: RequiredCSSProperties["color"],
+        header?: {
+            backgroundColor?: RequiredCSSProperties["backgroundColor"]
+        },
 
-        recepientColor: RequiredCSSProperties["backgroundColor"],
-        recepientTextColor?: RequiredCSSProperties["color"],
+        timestamp?: {
+            color?: RequiredCSSProperties["color"]
+        },
 
-        inputColor: RequiredCSSProperties["backgroundColor"],
-        inputTextColor?: RequiredCSSProperties["color"],
+        sender: {
+            color: RequiredCSSProperties["backgroundColor"],
+            textColor?: RequiredCSSProperties["color"]
+        },
 
-        timestampColor?: RequiredCSSProperties["color"],
+        recepient: {
+            color: RequiredCSSProperties["backgroundColor"],
+            textColor?: RequiredCSSProperties["color"]
+        },
 
-        audioPlayerProgressColor: RequiredCSSProperties["backgroundColor"],
-        audioPlayerBackgroundColor: RequiredCSSProperties["backgroundColor"],
+        input: {
+            color: RequiredCSSProperties["backgroundColor"],
+            textColor?: RequiredCSSProperties["color"]
+        },
 
-        dangerIconColor: RequiredCSSProperties["color"],
-        dangerIconBackgroundColor: RequiredCSSProperties["backgroundColor"],
+        audioPlayer: {
+            progressColor: RequiredCSSProperties["backgroundColor"],
+            backgroundColor: RequiredCSSProperties["backgroundColor"]
+        },
 
-        borderColor: RequiredCSSProperties["borderColor"],
-        borderThickness: RequiredCSSProperties["borderWidth"],
-        borderStyle: RequiredCSSProperties["borderStyle"],
+        icons: {
+            danger: {
+                color: RequiredCSSProperties["color"],
+                backgroundColor: RequiredCSSProperties["backgroundColor"]
+            }
+        },
+
+        border: {
+            color: RequiredCSSProperties["borderColor"],
+            thickness: RequiredCSSProperties["borderWidth"],
+            style: RequiredCSSProperties["borderStyle"]
+        }
     }
 }

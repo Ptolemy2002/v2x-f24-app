@@ -11,7 +11,7 @@ export default Object.assign(
     )`
         display: flex;
         flex-direction: row;
-        background-color: ${({theme}) => theme.headerBackgroundColor ?? theme.backgroundColor};
+        background-color: ${({theme}) => theme.header?.backgroundColor ?? theme.backgroundColor};
 
         > * {
             flex-grow: 1;
@@ -29,7 +29,7 @@ export default Object.assign(
             flex-grow: 0;
             width: 2em;
             // important is used to override the default Bootstrap styles
-            ${({theme}) => important({backgroundColor: theme.senderColor})}
+            ${({theme}) => important({backgroundColor: theme.sender.color})}
             border: none;
         }
 
