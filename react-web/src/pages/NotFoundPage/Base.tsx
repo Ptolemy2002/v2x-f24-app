@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { NotFoundPageProps } from './Types';
 
-export default function NotFoundPageBase({className}: NotFoundPageProps) {
+export default function NotFoundPageBase({className}: NotFoundPageProps["functional"]) {
     return (
         <div id="not-found-page" className={clsx("col", className)}>
             <h1>404 Not Found</h1>
