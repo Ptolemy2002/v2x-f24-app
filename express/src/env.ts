@@ -51,7 +51,8 @@ export const EnvSchema = z.object({
     DEV_API_URL: url("http://localhost:8080", false),
     PROD_API_URL: nullableUrl(null),
     DEV_CLIENT_URL: url("http://localhost:3000", false),
-    PROD_CLIENT_URL: nullableUrl(null)  
+    PROD_CLIENT_URL: nullableUrl(null),
+    MONGO_CONNECTION_STRING: z.string().url(), 
     
     // Additional environment variables here
 });
@@ -68,7 +69,8 @@ export type EnvType = {
     prodClientUrl: string | null,
     apiURL: string,
     clientURL: string,
-    getDocsURL: (version: number) => string
+    getDocsURL: (version: number) => string,
+    mongoConnectionString: string,
 
     // Additional environment variables here
 };
@@ -96,6 +98,7 @@ export default function getEnv(createNew=false): EnvType {
             prodApiUrl: Env.PROD_API_URL,
             devClientUrl: Env.DEV_CLIENT_URL,
             prodClientUrl: Env.PROD_CLIENT_URL,
+            mongoConnectionString: Env.MONGO_CONNECTION_STRING,
             apiURL,
             clientURL,
             getDocsURL: (v) => (/\/api\/v\d+$/.test(apiURL) ? stripWords(apiURL, "/", 0, 2) : apiURL) + `/api/v${v}/docs`
