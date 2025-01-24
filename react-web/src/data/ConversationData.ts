@@ -77,6 +77,13 @@ export default class ConversationData extends MongoData<
             initial: ""
         });
 
+        this.defineProperty("name", {
+            mongoName: "name",
+            initial: "Untitled Conversation",
+            toMongo: (name) => name,
+            fromMongo: (name) => name
+        });
+
         this.defineProperty("messages", {
             mongoName: "messages",
             initial: [],

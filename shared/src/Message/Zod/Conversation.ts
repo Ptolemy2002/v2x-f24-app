@@ -10,6 +10,10 @@ export const ZodConversationSchema = swaggerRegistry.register(
             description: "The ID of the conversation.",
             example: "abc123"
         }),
+        name: z.string().openapi({
+            description: "The name of the conversation.",
+            example: "Untitled Conversation"
+        }),
         messages: ZodUniqueMessageArraySchema
     })
     .openapi({
@@ -23,6 +27,10 @@ export const ZodMongoConversationSchema = swaggerRegistry.register(
         _id: ZodConversationIDSchema.openapi({
             description: "The ID of the conversation.",
             example: "abc123"
+        }),
+        name: z.string().openapi({
+            description: "The name of the conversation.",
+            example: "Untitled Conversation"
         }),
         messages: ZodUniqueMongoMessageArraySchema
     })

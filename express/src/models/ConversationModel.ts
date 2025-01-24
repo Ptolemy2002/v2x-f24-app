@@ -18,7 +18,8 @@ export type MongoDocumentConversation =
 ;
 
 export type ConversationInstanceMethods = {
-    toClientJSON: () => MongoConversation
+    toClientJSON: () => MongoConversation,
+    makeNameUnique: () => Promise<void>
 };
 export type ConversationModel = Model<MongoDocumentConversation, {}, ConversationInstanceMethods>;
 
@@ -27,10 +28,17 @@ export interface ConversationModelWithStatics extends ConversationModel {
 };
 
 const ConversationSchema = new Schema<MongoDocumentConversation, ConversationModel, ConversationInstanceMethods>({
+    name: {
+        type: String,
+        required: true,
+        trim: true
+    },
+
     messages: {
         type: [Object]
     }
 });
+
 ConversationSchema.method("toClientJSON", function() {
     const {_id, ...conversation} = this.toJSON();
     delete conversation.__v;
@@ -40,7 +48,24 @@ ConversationSchema.method("toClientJSON", function() {
     };
 });
 
-ConversationSchema.path("name").validate(zodValidateWithErrors(ZodMongoConversationSchema.shape.messages, true));
+ConversationSchema.method("makeNameUnique", async function() {
+    // See if the name is unique
+    const existingNames = await ConversationModel.distinct("name");
+
+    let name = this.get("name").replace(/\([0-9]+\)$/, "").trim();
+    const originalName = name;
+
+    // Find the first available name
+    let i = 1;
+    while(existingNames.includes(name)) {
+        name = `${originalName} (${i})`;
+        i++;
+    }
+
+    this.set("name", name);
+});
+
+ConversationSchema.path("messages").validate(zodValidateWithErrors(ZodMongoConversationSchema.shape.messages, true));
 
 const ConversationModel = model<MongoDocumentConversation, ConversationModelWithStatics>('conversations', ConversationSchema);
 export default ConversationModel;

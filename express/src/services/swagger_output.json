@@ -348,6 +348,76 @@
           }
         }
       }
+    },
+    "/api/v1/conversation/new": {
+      "post": {
+        "tags": [
+          "Conversation"
+        ],
+        "description": "Create a new conversation with the default demo data.",
+        "responses": {
+          "200": {
+            "description": "Conversation created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConversationNew200ResponseBody"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConversationNew200ResponseBody"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse400"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "501": {
+            "description": "Not implemented",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse501"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse501"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -797,12 +867,18 @@
               }
             ]
           },
+          "name": {
+            "type": "string",
+            "description": "The name of the conversation.",
+            "example": "Demo Conversation"
+          },
           "messages": {
             "$ref": "#/components/schemas/UniqueMongoMessageArray"
           }
         },
         "required": [
           "_id",
+          "name",
           "messages"
         ],
         "description": "The MongoDB representation of a conversation."
@@ -1131,6 +1207,36 @@
         "required": [
           "id"
         ]
+      },
+      "ConversationNew200ResponseBody": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "conversation": {
+                "$ref": "#/components/schemas/MongoConversation"
+              }
+            },
+            "required": [
+              "conversation"
+            ],
+            "description": "The 200 response body for the new conversation endpoint"
+          },
+          {
+            "$ref": "#/components/schemas/SuccessResponseBase"
+          }
+        ]
+      },
+      "ConversationNewResponseBody": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/ConversationNew200ResponseBody"
+          },
+          {
+            "$ref": "#/components/schemas/ErrorResponse"
+          }
+        ],
+        "description": "The response body for the new conversation endpoint"
       }
     }
   }

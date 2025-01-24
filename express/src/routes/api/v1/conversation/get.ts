@@ -66,6 +66,7 @@ export class GetConversationHandler extends RouteHandler<ConversationGet200Respo
                 response: this.buildSuccessResponse({
                     conversation: {
                         _id: "demo",
+                        name: "Demo Conversation",
                         messages: [
                             createMongoTextMessage(
                                 "recepient",

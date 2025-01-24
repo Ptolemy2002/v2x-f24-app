@@ -1,7 +1,9 @@
+import { BotQueryRequestBody, BotQueryResponseBody, ConversationGetResponseBody, ConversationGetURLParams } from "shared";
 import axios, { AxiosInstance, CreateAxiosDefaults } from "axios";
 import { TypedAxios, RouteDef } from "typed-axios-instance";
 import getEnv from "src/Env";
-import { BotQueryRequestBody, BotQueryResponseBody, ConversationGetResponseBody, ConversationGetURLParams } from "shared";
+import { setupCache, CacheOptions } from "axios-cache-interceptor";
+import { minutesToMilliseconds } from "date-fns";
 
 export let Api: AxiosInstance | null = null;
 
@@ -25,17 +27,23 @@ export type ApiRoutes = RouteDefArray<[
     }
 ]>;
 
-export default function getApi(options: CreateAxiosDefaults={}, createNew=false): TypedAxios<ApiRoutes> {
+export default function getApi(
+    options: CreateAxiosDefaults={},
+    cacheOptions: CacheOptions={
+        ttl: minutesToMilliseconds(5)
+    },
+    createNew=false
+): TypedAxios<ApiRoutes> {
     if (!createNew && Api) {
         return Api;
     }
 
     const env = getEnv();
-    Api = axios.create({
+    Api = setupCache(axios.create({
         withCredentials: true,
         ...options,
         baseURL: env.isProd ? env.prodApiUrl! : env.devApiUrl
-    });
+    }), cacheOptions);
 
     return Api;
 }
