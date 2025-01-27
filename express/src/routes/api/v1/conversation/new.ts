@@ -26,8 +26,7 @@ class ConversationNewHandler extends RouteHandler<ConversationNew200ResponseBody
     }
 
     async generateResponse(req: RouteHandlerRequest) {
-        const conversation = await ConversationModel.create({
-            name: "Untitled Conversation",
+        const conversation = await ConversationModel.createWithUniqueName("Untitled Conversation", {
             messages: [
                 createMongoTextMessage(
                     "recepient",
@@ -37,7 +36,6 @@ class ConversationNewHandler extends RouteHandler<ConversationNew200ResponseBody
                 )
             ]
         });
-        await conversation.makeNameUnique();
 
         return {
             status: 200,

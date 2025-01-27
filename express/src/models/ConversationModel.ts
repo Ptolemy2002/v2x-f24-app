@@ -1,5 +1,5 @@
 import { MongoConversation, ZodMongoConversationSchema } from "shared";
-import { Model, Schema, Types, model } from "mongoose";
+import { HydratedDocument, HydratedDocumentFromSchema, Model, Schema, Types, model } from "mongoose";
 import { zodValidateWithErrors } from "@ptolemy2002/regex-utils";
 
 export type MongoDocumentConversation =
@@ -24,7 +24,11 @@ export type ConversationInstanceMethods = {
 export type ConversationModel = Model<MongoDocumentConversation, {}, ConversationInstanceMethods>;
 
 export interface ConversationModelWithStatics extends ConversationModel {
-    // Add static methods here
+    getUniqueName: (name: string) => Promise<string>,
+    createWithUniqueName:
+        (name: string, conversation: Omit<MongoConversation, "name" | "_id">) => Promise<
+            HydratedDocumentFromSchema<typeof ConversationSchema>
+        >
 };
 
 const ConversationSchema = new Schema<MongoDocumentConversation, ConversationModel, ConversationInstanceMethods>({
@@ -48,12 +52,10 @@ ConversationSchema.method("toClientJSON", function() {
     };
 });
 
-ConversationSchema.method("makeNameUnique", async function() {
+ConversationSchema.static("getUniqueName", async function(name: string) {
     // See if the name is unique
     const existingNames = await ConversationModel.distinct("name");
-
-    let name = this.get("name").replace(/\([0-9]+\)$/, "").trim();
-    const originalName = name;
+    const originalName = name.replace(/\([0-9]+\)$/, "").trim()
 
     // Find the first available name
     let i = 1;
@@ -62,6 +64,21 @@ ConversationSchema.method("makeNameUnique", async function() {
         i++;
     }
 
+    return name;
+});
+
+ConversationSchema.static("createWithUniqueName", async function(
+    name: string, conversation: Omit<MongoConversation, "name" | "_id">
+) {
+    const uniqueName = await ConversationModel.getUniqueName(name);
+    return ConversationModel.create({
+        ...conversation,
+        name: uniqueName
+    });
+});
+
+ConversationSchema.method("makeNameUnique", async function() {
+    const name = await ConversationModel.getUniqueName(this.get("name"));
     this.set("name", name);
 });
 

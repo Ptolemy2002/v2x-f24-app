@@ -844,12 +844,18 @@
               }
             ]
           },
+          "name": {
+            "type": "string",
+            "description": "The name of the conversation.",
+            "example": "Untitled Conversation"
+          },
           "messages": {
             "$ref": "#/components/schemas/UniqueMessageArray"
           }
         },
         "required": [
           "id",
+          "name",
           "messages"
         ],
         "description": "A conversation."
@@ -870,7 +876,7 @@
           "name": {
             "type": "string",
             "description": "The name of the conversation.",
-            "example": "Demo Conversation"
+            "example": "Untitled Conversation"
           },
           "messages": {
             "$ref": "#/components/schemas/UniqueMongoMessageArray"
