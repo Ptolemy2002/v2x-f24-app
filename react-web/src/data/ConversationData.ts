@@ -10,7 +10,6 @@ import {
 } from "shared";
 import { zodValidateWithErrors } from "@ptolemy2002/regex-utils";
 import getApi from "src/Api";
-import { Override } from "@ptolemy2002/ts-utils";
 
 export type ConversationRequests = {
     queryBot: () => Promise<void>;
@@ -67,16 +66,17 @@ export default class ConversationData extends MongoData<
         onChangeProp?: OnChangePropCallback<CompletedConversationData | null>,
         onChangeReinit?: OnChangeReinitCallback<CompletedConversationData | null>
     ) {
-        // This is registered as a hook to be used in a class component.
-        // However, that's not what we're doing here, so we disable the rule.
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        const result = ConversationData.useContext(deps, onChangeProp, onChangeReinit);
+        const result = MongoData._useContextNonNullable<
+            Conversation, MongoConversation, ConversationRequests, CompletedConversationData
+        >(
+            ConversationData.Context,
+            ConversationData as unknown as new () => CompletedConversationData,
+            deps,
+            onChangeProp,
+            onChangeReinit
+        );
 
-        if (result === null) throw new Error("Expected ConversationData to be provided, but it was not.");
-        return result as Override<typeof result, {
-            data: Exclude<typeof result["data"], null>;
-            0: Exclude<typeof result[0], null>;
-        }>;
+        return result;
     }
 
     // We use this create method instead of a constructor to allow for
