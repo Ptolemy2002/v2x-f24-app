@@ -10,8 +10,7 @@ export default function SpeechBubbleRetryLinkBase(
     }: SpeechBubbleRetryLinkProps["functional"]
 ) {
     // We're only sending commands, so don't need to have any dependencies.
-    const [_conversationData] = ConversationData.useContext([]);
-    const conversationData = _conversationData!;
+    const [conversationData] = ConversationData.useContextNonNullable([]);
 
     return (
         <a

@@ -8,8 +8,7 @@ export function useSpeechContainerController() {
     const speechContainerRef = useRef<HTMLDivElement>(null);
     const { _try } = useManualErrorHandling();
 
-    const [_conversationData] = ConversationData.useContext(["messages", "requestInProgress", "requestFailed"]);
-    const conversationData = _conversationData!;
+    const [conversationData] = ConversationData.useContextNonNullable(["messages", "requestInProgress", "requestFailed"]);
 
     const { convo: convoId, setConvo: setConvoId } = useAppSearchParamState();
 

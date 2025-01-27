@@ -10,6 +10,7 @@ import {
 } from "shared";
 import { zodValidateWithErrors } from "@ptolemy2002/regex-utils";
 import getApi from "src/Api";
+import { Override } from "@ptolemy2002/ts-utils";
 
 export type ConversationRequests = {
     queryBot: () => Promise<void>;
@@ -26,7 +27,7 @@ export default class ConversationData extends MongoData<
     Conversation,
     MongoConversation,
     ConversationRequests
-> {
+> { 
     static defaultDependencies: Dependency<CompletedConversationData>[] = [
         ...MongoData._defaultDependencies,
         "messages"
@@ -48,7 +49,7 @@ export default class ConversationData extends MongoData<
         onChangeProp?: OnChangePropCallback<CompletedConversationData | null>,
         onChangeReinit?: OnChangeReinitCallback<CompletedConversationData | null>
     ) {
-        return MongoData._useContext<
+        const result = MongoData._useContext<
             Conversation, MongoConversation, ConversationRequests, CompletedConversationData
         >(
             ConversationData.Context,
@@ -57,6 +58,25 @@ export default class ConversationData extends MongoData<
             onChangeProp,
             onChangeReinit
         );
+
+        return result;
+    }
+
+    static useContextNonNullable(
+        deps: Dependency<CompletedConversationData>[] = ConversationData.defaultDependencies,
+        onChangeProp?: OnChangePropCallback<CompletedConversationData | null>,
+        onChangeReinit?: OnChangeReinitCallback<CompletedConversationData | null>
+    ) {
+        // This is registered as a hook to be used in a class component.
+        // However, that's not what we're doing here, so we disable the rule.
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        const result = ConversationData.useContext(deps, onChangeProp, onChangeReinit);
+
+        if (result === null) throw new Error("Expected ConversationData to be provided, but it was not.");
+        return result as Override<typeof result, {
+            data: Exclude<typeof result["data"], null>;
+            0: Exclude<typeof result[0], null>;
+        }>;
     }
 
     // We use this create method instead of a constructor to allow for

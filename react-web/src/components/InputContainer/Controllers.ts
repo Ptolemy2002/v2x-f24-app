@@ -6,8 +6,8 @@ export function useInputContainerController() {
     // This ref is used to allow access to the message content through the textarea element.
     const messageInputRef = useRef<HTMLTextAreaElement>(null);
 
-    const [_conversationData] = ConversationData.useContext(["requestInProgress", "requestFailed"]);
-    const conversationData = _conversationData!;
+    const [conversationData] = ConversationData.useContext(["requestInProgress", "requestFailed"]);
+    if (conversationData === null) throw new Error("No ConversationData provided");
 
     // useCallback is used to keep a stable reference to the function.
     const addText = useCallback(() => {
