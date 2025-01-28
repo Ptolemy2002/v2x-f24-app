@@ -3,8 +3,7 @@ import { Col } from "react-bootstrap";
 import DefaultSidebarLabel from "./SidebarLabelStyled";
 import DefaultChatLink from "./ChatLinkStyled";
 import clsx from "clsx";
-import { SuspenseBoundary, useSuspenseController } from "@ptolemy2002/react-suspense";
-import { useMountEffect } from "@ptolemy2002/react-mount-effects";
+import { SuspenseBoundary } from "@ptolemy2002/react-suspense";
 import { useState } from "react";
 import useManualErrorHandling from "@ptolemy2002/react-manual-error-handling";
 import getApi from "src/Api";
@@ -19,41 +18,31 @@ export default function SidebarBase({
     onLinkClick,
     ...props
 }: SidebarProps["functional"]) {
+    const api = getApi();
+    const [names, setNames] = useState<ConversationListName200ResponseBody["entries"]>([]);
+    const {_try} = useManualErrorHandling();
+
     return (
         // We need to explicitly set the "col" class here so LESS can recognize it as a column.
         // We also need to set the "as" prop after spreading the others to make sure it doesn't get overridden.
         <Col id="sidebar" xs={colSize} className={clsx("col", className)} {...props} as="ul">
             <SidebarLabel text="Conversations" />
             <ErrorBoundary fallback={<SidebarLabel text="Cannot get conversation list" $underline={false} />}>
-                <SuspenseBoundary fallback={<SidebarLabel text="Loading..." $underline={false} />}>
-                    <InternalChatLinks onLinkClick={onLinkClick} ChatLink={ChatLink} />
+                <SuspenseBoundary
+                    fallback={<SidebarLabel text="Loading..." $underline={false} />}
+                    init={() => _try(async () => {
+                        const { data } = await api.get("/conversation/list-name");
+
+                        if (data.ok) {
+                            setNames(data.entries);
+                        }
+                    })}
+                >
+                    {names.map(({_id, name}) => (
+                        <ChatLink key={_id} text={name} id={_id} onClick={onLinkClick} />
+                    ))}
                 </SuspenseBoundary>
             </ErrorBoundary>
         </Col>
-    );
-}
-
-function InternalChatLinks({onLinkClick, ChatLink=DefaultChatLink}: Pick<SidebarProps["functional"], "onLinkClick" | "ChatLink">) {
-    const api = getApi();
-    const [{ suspend }] = useSuspenseController();
-    const { _try } = useManualErrorHandling();
-    const [names, setNames] = useState<ConversationListName200ResponseBody["entries"]>([]);
-
-    useMountEffect(() => {
-        _try(() => suspend(async () => {
-            const { data } = await api.get("/conversation/list-name");
-
-            if (data.ok) {
-                setNames(data.entries);
-            }
-        }));
-    });
-
-    return (
-        <>
-            {names.map(({_id, name}) => (
-                <ChatLink key={_id} text={name} id={_id} onClick={onLinkClick} />
-            ))}
-        </>
     );
 }

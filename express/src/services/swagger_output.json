@@ -1265,19 +1265,14 @@
         "type": "object",
         "properties": {
           "id": {
-            "anyOf": [
-              {
-                "type": "string",
-                "enum": [
-                  "demo"
-                ]
-              },
+            "allOf": [
               {
                 "$ref": "#/components/schemas/ConversationID"
+              },
+              {
+                "description": "ID of the conversation to get"
               }
-            ],
-            "description": "ID of the conversation to get",
-            "example": "demo"
+            ]
           }
         },
         "required": [
@@ -1325,10 +1320,19 @@
                   "type": "object",
                   "properties": {
                     "_id": {
-                      "$ref": "#/components/schemas/ConversationID"
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/ConversationID"
+                        },
+                        {
+                          "description": "ID of the conversation"
+                        }
+                      ]
                     },
                     "name": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "Name of the conversation",
+                      "example": "Unititled Conversation"
                     }
                   },
                   "required": [
