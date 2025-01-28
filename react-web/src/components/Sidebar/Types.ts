@@ -3,7 +3,7 @@ import { RequiredCSSProperties, StyledComponentPropsWithCSS } from '@ptolemy2002
 
 export type SidebarProps = StyledComponentPropsWithCSS<{
     colSize?: number;
-    TimeLabel?: FC<TimeLabelProps["functional"]>;
+    SidebarLabel?: FC<SidebarLabelProps["all"]>;
     ChatLink?: FC<ChatLinkProps["functional"]>;
     onLinkClick?: MouseEventHandler<HTMLAnchorElement>
 } & HTMLProps<HTMLUListElement>, {
@@ -11,11 +11,12 @@ export type SidebarProps = StyledComponentPropsWithCSS<{
     paddingY?: RequiredCSSProperties["paddingTop"];
 }>;
 
-// TimeLabel will take a text string and an optional screenReaderText string as well as the default properties for a paragraph element.
-export type TimeLabelProps = StyledComponentPropsWithCSS<{
+// SidebarLabel will take a text string and an optional screenReaderText string as well as the default properties for a paragraph element.
+export type SidebarLabelProps = StyledComponentPropsWithCSS<{
     text: string;
     screenReaderText?: string;
 } & HTMLProps<HTMLParagraphElement>, {
+    underline?: boolean;
     margin?: RequiredCSSProperties["marginLeft"];
     padding?: RequiredCSSProperties["padding"];
 }>;

@@ -35,7 +35,7 @@ export default Object.assign(
             > .col {
                 max-height: 100%;
                 margin: 0;
-                ${({theme}) => border(theme.borderThickness, theme.borderStyle, theme.borderColor)};
+                ${({theme}) => border(theme.border.thickness, theme.border.style, theme.border.color)};
             }
         }
 

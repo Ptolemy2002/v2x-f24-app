@@ -2,7 +2,8 @@ import { asyncErrorHandler } from '@ptolemy2002/express-utils';
 import express from 'express';
 import { ConversationGet200ResponseBody, createMongoTextMessage, ZodConversationGetURLParamsSchema } from 'shared';
 import RouteHandler, { RouteHandlerRequest } from 'lib/RouteHandler';
-const router = express.Router();
+import ConversationModel from 'models/ConversationModel';
+export const router = express.Router();
 
 export class GetConversationHandler extends RouteHandler<ConversationGet200ResponseBody> {
     /*
@@ -60,31 +61,20 @@ export class GetConversationHandler extends RouteHandler<ConversationGet200Respo
         // Simulate a delay
         await new Promise((resolve) => setTimeout(resolve, Math.random() * 4000 + 1000));
 
-        if (id === "demo") {
+        const conversation = await ConversationModel.findById(id);
+
+        if (conversation === null) {
             return {
-                status: 200,
-                response: this.buildSuccessResponse({
-                    conversation: {
-                        _id: "demo",
-                        name: "Demo Conversation",
-                        messages: [
-                            createMongoTextMessage(
-                                "recepient",
-                                () => ({
-                                    text: "Hello! How can I assist you today?"
-                                })
-                            )
-                        ]
-                    }
-                })
+                status: 404,
+                response: this.buildNotFoundResponse("No conversation found with the specified ID.")
             };
         }
 
         return {
-            status: 501,
-            response: this.buildNotImplementedResponse(
-                "A database is not implemented yet, so getting a non-demo conversation is not possible."
-            )
+            status: 200,
+            response: this.buildSuccessResponse({
+                conversation: conversation.toClientJSON()
+            })
         };
     }
 }

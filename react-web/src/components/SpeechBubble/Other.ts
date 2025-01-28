@@ -34,12 +34,12 @@ export function speechBubbleBaseStyle(
             flex-grow: 1;
 
             &.recepient {
-                background-color: ${({theme}) => theme.recepientColor};
+                background-color: ${({theme}) => theme.recepient.color};
             color: ${({theme}) => theme.recepientTextColor ?? theme.textColor};
             }
 
             &.sender {
-                background-color: ${({theme}) => theme.senderColor};
+                background-color: ${({theme}) => theme.sender.color};
                 color: ${({theme}) => theme.senderTextColor ?? theme.textColor};
             }
         }

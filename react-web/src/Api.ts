@@ -1,4 +1,4 @@
-import { BotQueryRequestBody, BotQueryResponseBody, ConversationGetResponseBody, ConversationGetURLParams } from "shared";
+import { BotQueryRequestBody, BotQueryResponseBody, ConversationGetResponseBody, ConversationGetURLParams, ConversationListNameResponseBody } from "shared";
 import axios, { AxiosInstance, CreateAxiosDefaults } from "axios";
 import { TypedAxios, RouteDef } from "typed-axios-instance";
 import getEnv from "src/Env";
@@ -24,6 +24,13 @@ export type ApiRoutes = RouteDefArray<[
         method: "GET",
 
         jsonResponse: ConversationGetResponseBody
+    },
+
+    {
+        route: "/conversation/list-name",
+        method: "GET",
+
+        jsonResponse: ConversationListNameResponseBody
     }
 ]>;
 

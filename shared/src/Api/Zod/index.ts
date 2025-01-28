@@ -8,3 +8,4 @@ export * from "./HelpLink";
 export * from "./BotQuery";
 export * from "./ConversationGet";
 export * from "./ConversationNew";
+export * from "./ConversationListName";

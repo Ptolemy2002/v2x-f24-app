@@ -418,6 +418,76 @@
           }
         }
       }
+    },
+    "/api/v1/conversation/list-name": {
+      "get": {
+        "tags": [
+          "Conversation"
+        ],
+        "description": "List all conversation names.",
+        "responses": {
+          "200": {
+            "description": "Conversation names found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConversationListName200ResponseBody"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConversationListName200ResponseBody"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse400"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "501": {
+            "description": "Not implemented",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse501"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse501"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1243,6 +1313,51 @@
           }
         ],
         "description": "The response body for the new conversation endpoint"
+      },
+      "ConversationListName200ResponseBody": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "entries": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "$ref": "#/components/schemas/ConversationID"
+                    },
+                    "name": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "_id",
+                    "name"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "entries"
+            ],
+            "description": "The 200 response body for the conversation list name endpoint"
+          },
+          {
+            "$ref": "#/components/schemas/SuccessResponseBase"
+          }
+        ]
+      },
+      "ConversationListNameResponseBody": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/ConversationListName200ResponseBody"
+          },
+          {
+            "$ref": "#/components/schemas/ErrorResponse"
+          }
+        ],
+        "description": "The response body for the conversation list name endpoint"
       }
     }
   }
