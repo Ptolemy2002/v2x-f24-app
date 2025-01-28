@@ -9,6 +9,7 @@ import { useState } from "react";
 import useManualErrorHandling from "@ptolemy2002/react-manual-error-handling";
 import getApi from "src/Api";
 import { ErrorBoundary } from "react-error-boundary";
+import { ConversationListName200ResponseBody } from "shared";
 
 export default function SidebarBase({
     className,
@@ -36,7 +37,7 @@ function InternalChatLinks({onLinkClick, ChatLink=DefaultChatLink}: Pick<Sidebar
     const api = getApi();
     const [{ suspend }] = useSuspenseController();
     const { _try } = useManualErrorHandling();
-    const [names, setNames] = useState<{_id: string, name: string}[]>([]);
+    const [names, setNames] = useState<ConversationListName200ResponseBody["entries"]>([]);
 
     useMountEffect(() => {
         _try(() => suspend(async () => {

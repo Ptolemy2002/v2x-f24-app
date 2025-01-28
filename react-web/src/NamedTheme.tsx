@@ -30,7 +30,6 @@ export const NamedThemes: NamedTheme[] = [
         value: {
             backgroundColor: "#343541",
             
-
             textColor: "white",
             activeTextColor: "#19c37d",
 
