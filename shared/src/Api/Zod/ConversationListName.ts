@@ -8,8 +8,16 @@ export const ZodConversationListName200ResponseBodySchema = swaggerRegistry.regi
     "ConversationListName200ResponseBody",
     zodSuccessResponseSchema(z.object({
         entries: z.array(z.object({
-            _id: ZodConversationIDSchema,
+            _id: ZodConversationIDSchema
+                .openapi({
+                    description: "ID of the conversation",
+                    example: "abc123"
+                }),
             name: z.string()
+                .openapi({
+                    description: "Name of the conversation",
+                    example: "Unititled Conversation"
+                })
         }))
     }).openapi({
         description: "The 200 response body for the conversation list name endpoint"
