@@ -29,7 +29,7 @@ export const ZodConversationGetURLParamsSchema = swaggerRegistry.register(
     z.object({
         id: ZodConversationIDSchema
             .openapi({
-                description: "ID of the conversation to get",
+                description: "ID of the conversation to get.",
                 example: "abc123"
             })
     })

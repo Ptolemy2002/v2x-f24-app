@@ -4,9 +4,9 @@ import {
 } from "@ptolemy2002/react-proxy-context";
 import {
     Message, Conversation, MongoConversation,
-    ZodUniqueMessageArraySchema,
     MongoMessage, isMongoMessage,
-    toMessage, toMongoMessage
+    toMessage, toMongoMessage,
+    ZodConversationSchema
 } from "shared";
 import { zodValidateWithErrors } from "@ptolemy2002/regex-utils";
 import getApi from "src/Api";
@@ -94,14 +94,17 @@ export default class ConversationData extends MongoData<
             toMongo: (id) => id,
             fromMongo: (id) => id,
             
-            initial: ""
+            initial: "",
+            validate: zodValidateWithErrors(ZodConversationSchema.shape.id)
         });
 
         this.defineProperty("name", {
             mongoName: "name",
             initial: "Untitled Conversation",
             toMongo: (name) => name,
-            fromMongo: (name) => name
+            fromMongo: (name) => name,
+
+            validate: zodValidateWithErrors(ZodConversationSchema.shape.name)
         });
 
         this.defineProperty("messages", {
@@ -109,7 +112,7 @@ export default class ConversationData extends MongoData<
             initial: [],
             toMongo: (messages) => messages.map((message) => toMongoMessage(message)),
             fromMongo: (messages) => messages.map((message) => toMessage(message)),
-            validate: zodValidateWithErrors(ZodUniqueMessageArraySchema)
+            validate: zodValidateWithErrors(ZodConversationSchema.shape.messages)
         });
 
         this.defineRequestType("queryBot", async function(this: CompletedConversationData, ac) {
@@ -130,7 +133,8 @@ export default class ConversationData extends MongoData<
         this.defineRequestType("pull", async function(this: CompletedConversationData, ac, convoId) {
             const api = getApi();
             const { data } = await api.get(`/conversation/get/${convoId}`, {
-                signal: ac.signal
+                signal: ac.signal,
+                cache: false
             });
 
             if (data.ok) {

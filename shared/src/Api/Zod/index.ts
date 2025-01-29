@@ -5,6 +5,8 @@ export * from "./SuccessResponse";
 
 export * from "./HelpLink";
 
+export * from "./QueryParams";
+
 export * from "./BotQuery";
 export * from "./ConversationGet";
 export * from "./ConversationNew";

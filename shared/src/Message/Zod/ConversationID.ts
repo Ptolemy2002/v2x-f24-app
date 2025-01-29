@@ -7,7 +7,7 @@ export const ZodConversationIDSchema = swaggerRegistry.register(
     z.string()
         .refine((id) => Types.ObjectId.isValid(id), { message: "Invalid ID" })
         .openapi({
-            description: "The ID of a conversation.",
+            description: "The ID of a conversation in the database",
             example: "abc123"
         })
 );

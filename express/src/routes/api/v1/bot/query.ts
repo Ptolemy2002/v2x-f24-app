@@ -8,9 +8,11 @@ import {
     createMongoImageMessage,
     createMongoAudioMessage,
     ZodBotQueryRequestBodySchema,
-    BotQuery200ResponseBody
+    BotQuery200ResponseBody,
+    MongoMessage
 } from 'shared';
 import RouteHandler, { RouteHandlerRequest } from 'lib/RouteHandler';
+import ConversationModel from 'models/ConversationModel';
 const router = express.Router();
 
 type DefaultResponseData = {
@@ -63,6 +65,23 @@ export class BotQueryHandler extends RouteHandler<BotQuery200ResponseBody> {
                 $ref: "#/components/schemas/BotQuery200ResponseBody"
             }
         }
+
+        #swagger.responses[404] = {
+            content: {
+                "application/json": {
+                    schema: {
+                        $ref: "#/components/schemas/ErrorResponse404"
+                    },
+
+                    example: {
+                        ok: false,
+                        code: "NOT_FOUND",
+                        message: "Could not find the original conversation in the database to update.",
+                        help: "http://example.com/docs"
+                    }
+                }
+            }
+        }
         #swagger.end
     */
     constructor() {
@@ -70,19 +89,19 @@ export class BotQueryHandler extends RouteHandler<BotQuery200ResponseBody> {
     }
 
     async generateResponse(req: RouteHandlerRequest) {
-        const {success, error, data} = ZodBotQueryRequestBodySchema.safeParse(req.body);
+        const {success: bodySuccess, error: bodyError, data: body} = ZodBotQueryRequestBodySchema.safeParse(req.body);
 
-        if (!success) {
+        if (!bodySuccess) {
             return {
                 status: 400,
-                response: this.buildZodErrorResponse(error, "BAD_BODY")
+                response: this.buildZodErrorResponse(bodyError, "BAD_BODY")
             };
         }
 
         // Simulate a delay
         await new Promise((resolve) => setTimeout(resolve, Math.random() * 4000 + 1000));
 
-        const messages = data.conversation.messages;
+        const messages = body.conversation.messages;
         const lastMessage = messages[messages.length - 1];
 
         if (!lastMessage) {
@@ -109,55 +128,31 @@ export class BotQueryHandler extends RouteHandler<BotQuery200ResponseBody> {
             }
         }
 
+        let newMessage: MongoMessage;
         if (response.type === "text") {
-            return {
-                status: 200,
-                response: this.buildSuccessResponse({
-                    newMessage: createMongoTextMessage("recepient", () => ({
-                        text: response.text ?? "[No text provided]"
-                    }))
-                })
-            };
+            newMessage = createMongoTextMessage("recepient", () => ({
+                text: response.text ?? "[No text provided]"
+            }));
         } else if (response.type === "image") {
             if (!response.src) {
-                return {
-                    status: 200,
-                    response: this.buildSuccessResponse({
-                        newMessage: createMongoTextMessage("recepient", () => ({
-                            text: "I'm sorry, I had trouble sending an image."
-                        }))
-                    })
-                };
+                newMessage = createMongoTextMessage("recepient", () => ({
+                    text: "I'm sorry, I had trouble sending an image."
+                }));
             } else {
-                return {
-                    status: 200,
-                    response: this.buildSuccessResponse({
-                        newMessage: createMongoImageMessage("recepient", () => ({
-                            src: response.src!,
-                            alt: response.alt ?? "[No alt text provided]"
-                        }))
-                    })
-                };
+                newMessage = createMongoImageMessage("recepient", () => ({
+                    src: response.src!,
+                    alt: response.alt ?? "[No alt text provided]"
+                }));
             }
         } else if (response.type === "audio") {
             if (!response.src) {
-                return {
-                    status: 200,
-                    response: this.buildSuccessResponse({
-                        newMessage: createMongoTextMessage("recepient", () => ({
-                            text: "I'm sorry, I had trouble sending an audio message."
-                        }))
-                    })
-                };
+                newMessage = createMongoTextMessage("recepient", () => ({
+                    text: "I'm sorry, I had trouble sending an audio message."
+                }));
             } else {
-                return {
-                    status: 200,
-                    response: this.buildSuccessResponse({
-                        newMessage: createMongoAudioMessage("recepient", () => ({
-                            src: response.src!
-                        }))
-                    })
-                };
+                newMessage = createMongoAudioMessage("recepient", () => ({
+                    src: response.src!
+                }));
             }
         } else {
             return {
@@ -165,6 +160,29 @@ export class BotQueryHandler extends RouteHandler<BotQuery200ResponseBody> {
                 response: this.buildErrorResponse("INTERNAL", "Unknown response type.")
             };
         }
+
+        if (body.conversation._id !== "anonymous") {
+            // Update the database with the new message
+            const conversation = await ConversationModel.findById(body.conversation._id);
+            if (conversation) {
+                conversation.messages = [...body.conversation.messages, newMessage];
+                await conversation.save();
+            } else {
+                return {
+                    status: 404,
+                    response: this.buildNotFoundResponse(
+                        "Could not find the original conversation in the database to update."
+                    )
+                };
+            }
+        }
+
+        return {
+            status: 200,
+            response: this.buildSuccessResponse({
+                newMessage
+            })
+        };
     }
 }
 

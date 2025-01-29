@@ -6,8 +6,11 @@ import { ZodConversationIDSchema } from "./ConversationID";
 export const ZodConversationSchema = swaggerRegistry.register(
     "Conversation",
     z.object({
-        id: ZodConversationIDSchema.openapi({
-            description: "The ID of the conversation.",
+        id: z.union([
+            ZodConversationIDSchema,
+            z.literal("anonymous")
+        ]).openapi({
+            description: "The ID of the conversation or 'anonymous' if the conversation should not be saved to the database.",
             example: "abc123"
         }),
         name: z.string().openapi({
@@ -24,8 +27,11 @@ export const ZodConversationSchema = swaggerRegistry.register(
 export const ZodMongoConversationSchema = swaggerRegistry.register(
     "MongoConversation",
     z.object({
-        _id: ZodConversationIDSchema.openapi({
-            description: "The ID of the conversation.",
+        _id: z.union([
+            ZodConversationIDSchema,
+            z.literal("anonymous")
+        ]).openapi({
+            description: "The ID of the conversation or 'anonymous' if the conversation should not be saved to the database.",
             example: "abc123"
         }),
         name: z.string().openapi({

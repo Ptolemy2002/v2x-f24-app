@@ -204,6 +204,22 @@
               }
             }
           },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse404"
+                },
+                "example": {
+                  "ok": false,
+                  "code": "NOT_FOUND",
+                  "message": "Could not find the original conversation in the database to update.",
+                  "help": "http://example.com/docs"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
           "500": {
             "description": "Internal server error",
             "content": {
@@ -355,6 +371,14 @@
           "Conversation"
         ],
         "description": "Create a new conversation with the default demo data.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/anonymous"
+          },
+          {
+            "$ref": "#/components/parameters/a"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Conversation created",
@@ -491,7 +515,24 @@
     }
   },
   "components": {
-    "parameters": {},
+    "parameters": {
+      "anonymous": {
+        "schema": {
+          "$ref": "#/components/schemas/anonymous"
+        },
+        "required": false,
+        "name": "anonymous",
+        "in": "query"
+      },
+      "a": {
+        "schema": {
+          "$ref": "#/components/schemas/a"
+        },
+        "required": false,
+        "name": "a",
+        "in": "query"
+      }
+    },
     "schemas": {
       "MessageOrigin": {
         "type": "string",
@@ -898,21 +939,26 @@
       },
       "ConversationID": {
         "type": "string",
-        "description": "The ID of a conversation.",
+        "description": "The ID of a conversation in the database",
         "example": "abc123"
       },
       "Conversation": {
         "type": "object",
         "properties": {
           "id": {
-            "allOf": [
+            "anyOf": [
               {
                 "$ref": "#/components/schemas/ConversationID"
               },
               {
-                "description": "The ID of the conversation."
+                "type": "string",
+                "enum": [
+                  "anonymous"
+                ]
               }
-            ]
+            ],
+            "description": "The ID of the conversation or 'anonymous' if the conversation should not be saved to the database.",
+            "example": "abc123"
           },
           "name": {
             "type": "string",
@@ -934,14 +980,19 @@
         "type": "object",
         "properties": {
           "_id": {
-            "allOf": [
+            "anyOf": [
               {
                 "$ref": "#/components/schemas/ConversationID"
               },
               {
-                "description": "The ID of the conversation."
+                "type": "string",
+                "enum": [
+                  "anonymous"
+                ]
               }
-            ]
+            ],
+            "description": "The ID of the conversation or 'anonymous' if the conversation should not be saved to the database.",
+            "example": "abc123"
           },
           "name": {
             "type": "string",
@@ -1270,7 +1321,7 @@
                 "$ref": "#/components/schemas/ConversationID"
               },
               {
-                "description": "ID of the conversation to get"
+                "description": "ID of the conversation to get."
               }
             ]
           }
@@ -1297,6 +1348,56 @@
             "$ref": "#/components/schemas/SuccessResponseBase"
           }
         ]
+      },
+      "anonymous": {
+        "type": "string",
+        "enum": [
+          "true",
+          "false",
+          "t",
+          "f",
+          "yes",
+          "no",
+          "y",
+          "n",
+          "1",
+          "0",
+          "on",
+          "off"
+        ],
+        "default": "f",
+        "description": "[Query Parameter] When creating a conversation, this parameter determines whether it should be anonymous, meaning it will not be saved to the database."
+      },
+      "a": {
+        "type": "string",
+        "enum": [
+          "true",
+          "false",
+          "t",
+          "f",
+          "yes",
+          "no",
+          "y",
+          "n",
+          "1",
+          "0",
+          "on",
+          "off"
+        ],
+        "default": "f",
+        "description": "[Query Parameter] Shorthand for the `anonymous` query parameter."
+      },
+      "ConversationNewQueryParams": {
+        "type": "object",
+        "properties": {
+          "anonymous": {
+            "$ref": "#/components/schemas/anonymous"
+          },
+          "a": {
+            "$ref": "#/components/schemas/a"
+          }
+        },
+        "description": "The query parameters for the new conversation endpoint"
       },
       "ConversationNewResponseBody": {
         "anyOf": [
