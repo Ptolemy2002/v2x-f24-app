@@ -2,8 +2,13 @@ import useAppSearchParamState from "src/SearchParams";
 import {ChatLinkProps} from "./Types";
 import clsx from "clsx";
 import { useNavigate } from "react-router";
+import DefaultConversationEditTitleButton from "./ConversationEditTitleButtonStyled";
 
-export default function ChatLinkBase({text, id, className, onClick, ...props}: ChatLinkProps["functional"]) {
+export default function ChatLinkBase({
+    text, id, name, className, onClick,
+    ConversationEditTitleButton=DefaultConversationEditTitleButton,
+    ...props
+}: ChatLinkProps["functional"]) {
     const {convo, setConvo} = useAppSearchParamState();
     const navigate = useNavigate();
 
@@ -16,6 +21,8 @@ export default function ChatLinkBase({text, id, className, onClick, ...props}: C
                 setConvo(id);
                 onClick?.(e);
             }}>{text}</a>
+            
+            <ConversationEditTitleButton name={name} id={id} />
         </li>
     );
 }

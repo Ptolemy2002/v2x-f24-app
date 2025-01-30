@@ -58,9 +58,6 @@ export class GetConversationHandler extends RouteHandler<ConversationGet200Respo
 
         const { id } = data;
 
-        // Simulate a delay
-        await new Promise((resolve) => setTimeout(resolve, Math.random() * 4000 + 1000));
-
         const conversation = await ConversationModel.findById(id);
 
         if (conversation === null) {

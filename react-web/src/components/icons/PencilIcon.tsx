@@ -3,7 +3,7 @@ import { RequiredCSSProperties, WithCSSProp } from '@ptolemy2002/react-styled-co
 import styled from 'styled-components';
 
 // Side effect import so that the compiler knows this is being used
-import "/icons/right-arrow.svg";
+import "/icons/pencil.svg";
 
 export type RightArrowIconStyleAttributes = {
     $color?: RequiredCSSProperties['fill'] | null;
@@ -11,15 +11,15 @@ export type RightArrowIconStyleAttributes = {
     $height?: RequiredCSSProperties['height'];
 };
 
-export type RightArrowIconProps = WithCSSProp<RightArrowIconStyleAttributes> & StaticSrcSVGProps;
+export type PencilIconProps = WithCSSProp<RightArrowIconStyleAttributes> & StaticSrcSVGProps;
 
-const SVG = StaticSrcSVG('/icons/right-arrow.svg');
+const SVG = StaticSrcSVG('/icons/pencil.svg');
 
 export default Object.assign(
-    styled(SVG).attrs<RightArrowIconProps>(
+    styled(SVG).attrs<PencilIconProps>(
         (props) => ({
-            src: '/icons/right-arrow.svg',
-            $color: props.$color ?? null,
+            src: '/icons/pencil.svg',
+            $color: props.$color ?? "currentcolor",
             $width: props.$width ?? '24px',
             $height: props.$height ?? 'auto',
             $css: props.$css ?? null
@@ -42,6 +42,6 @@ export default Object.assign(
         ${({$css}) => $css}
     `,
     {
-        displayName: 'RightArrowIcon'
+        displayName: 'PencilIcon'
     }
 );

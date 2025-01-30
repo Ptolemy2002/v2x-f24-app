@@ -39,7 +39,7 @@ export default function SidebarBase({
                     })}
                 >
                     {names.map(({_id, name}) => (
-                        <ChatLink key={_id} text={name} id={_id} onClick={onLinkClick} />
+                        <ChatLink key={_id} text={name} name={name} id={_id} onClick={onLinkClick} />
                     ))}
                 </SuspenseBoundary>
             </ErrorBoundary>

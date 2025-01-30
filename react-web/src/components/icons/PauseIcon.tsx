@@ -28,12 +28,12 @@ export default Object.assign(
         height: ${({$height}) => $height};
 
         > line {
-            stroke: ${({$color, theme}) => $color ?? theme.textColor};
+            stroke: ${({$color}) => $color ?? "currentColor"};
         }
 
         &.loader {
             > path {
-                fill: ${({$color, theme}) => $color ?? theme.textColor};
+                fill: ${({$color}) => $color ?? "currentColor"};
             }
         }
 

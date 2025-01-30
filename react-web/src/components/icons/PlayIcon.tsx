@@ -18,7 +18,7 @@ const SVG = StaticSrcSVG('/icons/play.svg');
 export default Object.assign(
     styled(SVG).attrs<WithCSSProp<PlayIconStyleAttributes>>(
         (props) => ({
-            $color: props.$color ?? null,
+            $color: props.$color ?? "currentcolor",
             $width: props.$width ?? '24px',
             $height: props.$height ?? 'auto',
             $css: props.$css ?? null

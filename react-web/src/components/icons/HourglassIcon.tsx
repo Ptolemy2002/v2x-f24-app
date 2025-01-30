@@ -28,7 +28,7 @@ export default Object.assign(
         height: ${({$height}) => $height};
 
         > path {
-            fill: ${({$color, theme}) => $color ?? theme.textColor};
+            fill: ${({$color}) => $color ?? "currentcolor"};
         }
 
         ${({$css}) => $css}

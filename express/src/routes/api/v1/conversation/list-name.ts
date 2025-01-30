@@ -29,9 +29,6 @@ export class ConversationListNameHandler extends RouteHandler<ConversationListNa
         const ids = await ConversationModel.distinct("_id");
         const names = await ConversationModel.distinct("name");
 
-        // Simulate a delay
-        await new Promise((resolve) => setTimeout(resolve, Math.random() * 4000 + 1000));
-
         return {
             status: 200,
             response: this.buildSuccessResponse({

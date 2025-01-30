@@ -24,25 +24,35 @@ export function createNamedTheme<T extends string>(
     return {id, ...theme};
 }
 
+const backgroundColor = "#343541";
+const senderColor = "#19c37d";
+const recepientColor = "#40414F";
+
 export const NamedThemes: NamedTheme[] = [
     createNamedTheme("dark", {
         displayName: "Dark",
         value: {
-            backgroundColor: "#343541",
+            backgroundColor: backgroundColor,
             
             textColor: "white",
-            activeTextColor: "#19c37d",
+            activeTextColor: senderColor,
+
+            buttons: {
+                conversationEditTitle: {
+                    hoverTextColor: senderColor,
+                }
+            },
 
             header: {
                 backgroundColor: "#202123"
             },
 
             sender: {
-                color: "#19c37d"
+                color: senderColor,
             },
 
             recepient: {
-                color: "#40414F",
+                color: recepientColor,
             },
 
             timestamp: {
@@ -55,7 +65,7 @@ export const NamedThemes: NamedTheme[] = [
 
             audioPlayer: {
                 progressColor: "#888",
-                backgroundColor: "#343541",
+                backgroundColor: backgroundColor,
             },
 
             icons: {
