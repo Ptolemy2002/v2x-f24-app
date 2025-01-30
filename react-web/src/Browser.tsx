@@ -42,6 +42,7 @@ export function PageLayout() {
 export const router = createBrowserRouter([{
     path: "/",
     element: <PageLayout />,
+    errorElement: <p id="fatal-error">Fatal Error</p>,
     
     // These children will be rendered inside the Outlet in the PageLayout component
     children: [
