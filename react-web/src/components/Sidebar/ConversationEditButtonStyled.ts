@@ -1,12 +1,12 @@
 import styled from "styled-components";
-import { ConversationEditTitleButtonProps } from "./Types";
-import Base from "./ConversationEditTitleButtonBase";
+import { ConversationEditButtonProps } from "./Types";
+import Base from "./ConversationEditButton";
 import { buttonStyles, evaluateButtonStyles } from "src/lib/Styles";
 
 export default Object.assign(
-    styled(Base).attrs<ConversationEditTitleButtonProps["style"]>(
+    styled(Base).attrs<ConversationEditButtonProps["style"]>(
         ({theme, ...props}) => ({
-            ...evaluateButtonStyles(theme, props, "conversationEditTitle"),
+            ...evaluateButtonStyles(theme, props, "conversationEdit"),
             $css: props.$css ?? null
         })
     )`
@@ -17,6 +17,6 @@ export default Object.assign(
         ${({$css}) => $css}
     `,
     {
-        displayName: "styled(ConversationEditTitleButton)",
+        displayName: "styled(ConversationEditButton)",
     }
 );

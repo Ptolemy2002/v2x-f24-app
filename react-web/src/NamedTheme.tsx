@@ -38,7 +38,7 @@ export const NamedThemes: NamedTheme[] = [
             activeTextColor: senderColor,
 
             buttons: {
-                conversationEditTitle: {
+                conversationEdit: {
                     hoverTextColor: senderColor,
                 }
             },

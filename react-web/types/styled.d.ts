@@ -2,7 +2,7 @@ import "styled-components";
 import { RequiredCSSProperties } from "@ptolemy2002/react-styled-component-utils";
 
 declare module "styled-components" {
-    export type ButtonVariant = "conversationEditTitle";
+    export type ButtonVariant = "conversationEdit";
     export type ButtonStyles = Partial<{
         borderStyle: RequiredCSSProperties["borderStyle"],
         borderWidth: RequiredCSSProperties["borderWidth"],

@@ -7,6 +7,7 @@ import { Outlet } from 'react-router';
 import ConversationContainer from 'src/components/ConversationContainer';
 import { createBrowserRouter } from 'react-router-dom';
 import NotFoundPage from 'src/pages/NotFoundPage';
+import ConversationSettingsPage from 'src/pages/ConversationSettingsPage';
 
 export function PageLayout() {
     const [showSidebar, setShowSidebar] = useState(false);
@@ -49,6 +50,11 @@ export const router = createBrowserRouter([{
         {
             path: "/",
             element: <ConversationContainer />
+        },
+
+        {
+            path: "/conversation-settings",
+            element: <ConversationSettingsPage />
         },
 
         // The reason we don't use errorElement here is because we want to render the NotFoundPage

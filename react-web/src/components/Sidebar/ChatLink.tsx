@@ -2,10 +2,10 @@ import useAppSearchParamState from "src/SearchParams";
 import {ChatLinkProps} from "./Types";
 import clsx from "clsx";
 import { useNavigate } from "react-router";
-import DefaultConversationEditTitleButton from "./ConversationEditTitleButtonStyled";
+import DefaultConversationEditTitleButton from "./ConversationEditButtonStyled";
 
 export default function ChatLinkBase({
-    text, id, name, className, onClick,
+    text, id, className, onClick,
     ConversationEditTitleButton=DefaultConversationEditTitleButton,
     ...props
 }: ChatLinkProps["functional"]) {
@@ -22,7 +22,7 @@ export default function ChatLinkBase({
                 onClick?.(e);
             }}>{text}</a>
             
-            <ConversationEditTitleButton name={name} id={id} />
+            <ConversationEditTitleButton id={id} />
         </li>
     );
 }

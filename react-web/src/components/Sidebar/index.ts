@@ -22,6 +22,9 @@ export {default as SidebarLabel} from "./SidebarLabelStyled";
 export {default as UnstyledChatLink} from "./ChatLink";
 export {default as ChatLink} from "./ChatLinkStyled";
 
+export {default as ConversationEditButton} from "./ConversationEditButton";
+export {default as ConversationEditButtonStyled} from "./ConversationEditButtonStyled";
+
 // Export the types and other resources.
 export * from "./Types";
 export * from "./Other";

@@ -42,8 +42,7 @@ export default Object.assign(
         // Show the edit button only on hover.
         > .conversation-title-edit-button {
             display: none;
-            width: 20%;
-            height: 100%;
+            width: 10%;
         }
 
         &:hover {

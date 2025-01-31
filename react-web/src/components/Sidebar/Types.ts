@@ -27,17 +27,15 @@ export type SidebarLabelProps = StyledComponentPropsWithCSS<{
 
 export type ChatLinkProps = StyledComponentPropsWithCSS<{
     id: string;
-    name: string;
     text: string;
     onClick?: MouseEventHandler<HTMLAnchorElement>;
-    ConversationEditTitleButton?: FC<ConversationEditTitleButtonProps["functional"]>;
+    ConversationEditTitleButton?: FC<ConversationEditButtonProps["functional"]>;
 } & Omit<HTMLProps<HTMLLIElement>, "onClick">, {
     margin?: RequiredCSSProperties["marginLeft"];
     padding?: RequiredCSSProperties["padding"];
 }>;
 
-export type ConversationEditTitleButtonProps = StyledComponentPropsWithCSS<Override<ButtonProps, {
+export type ConversationEditButtonProps = StyledComponentPropsWithCSS<Override<ButtonProps, {
     id: string;
-    name: string;
     PencilIcon?: FC<PencilIconProps>;
 }>, ButtonStyles>;
