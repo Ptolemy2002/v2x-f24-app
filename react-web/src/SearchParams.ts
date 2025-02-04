@@ -1,6 +1,5 @@
-import useSearchParamState, { ConvertFunctions, SetSearchParamAction } from "@ptolemy2002/react-search-param-state";
+import useSearchParamState, { ConvertFunctions, SetSearchParamFunction } from "@ptolemy2002/react-search-param-state";
 import { useCallback } from "react";
-import { NavigateOptions } from "react-router";
 
 export type SearchParams = {
     convo: string | null;
@@ -8,10 +7,7 @@ export type SearchParams = {
 
 export type UseAppSearchParamResult = Readonly<SearchParams & {
     // Dynamically generate a setter for each property in SearchParams
-    [K in `set${Capitalize<string & keyof SearchParams>}`]: (value: SetSearchParamAction<
-        SearchParams,
-        K extends `set${infer R}` ? Lowercase<R> : never
-    >, options?: NavigateOptions) => void;
+    [K in `set${Capitalize<string & keyof SearchParams>}`]: SetSearchParamFunction<SearchParams>;
 }>;
 
 export const converts: ConvertFunctions<SearchParams> = {
@@ -26,7 +22,7 @@ export default function useAppSearchParamState(): UseAppSearchParamResult {
     const [{convo}, setSearchParams] = useSearchParamState(defaultValues, converts);
 
     const setConvo = useCallback<UseAppSearchParamResult["setConvo"]>(
-        (value, options={replace: true}) => setSearchParams({convo: value}, options),
+        (value, options) => setSearchParams({convo: value}, options),
         [setSearchParams]
     );
 
