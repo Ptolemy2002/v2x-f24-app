@@ -165,6 +165,8 @@ export class BotQueryHandler extends RouteHandler<BotQuery200ResponseBody> {
             // Update the database with the new message
             const conversation = await ConversationModel.findById(body.conversation._id);
             if (conversation) {
+                // Update the conversation in the database
+                conversation.name = body.conversation.name;
                 conversation.messages = [...body.conversation.messages, newMessage];
                 await conversation.save();
             } else {

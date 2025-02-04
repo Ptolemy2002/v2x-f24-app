@@ -2,7 +2,7 @@ import { SpeechBubbleAudioProps } from "./Types";
 import DefaultAudioPlayer from "src/components/AudioPlayer";
 import DefaultScreenReaderText from "./ScreenReaderText";
 import DefaultTimestampWrapper from "src/components/TimestampWrapper";
-import DefaultSpeechBubbleTimestamp from "./Timestamp";
+import DefaultSpeechBubbleTimestamp from "./TimestampStyled";
 import clsx from "clsx";
 
 export default function SpeechBubbleAudioBase({

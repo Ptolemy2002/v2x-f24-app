@@ -1,5 +1,5 @@
 import { MongoConversation, ZodMongoConversationSchema } from "shared";
-import { HydratedDocument, HydratedDocumentFromSchema, Model, Schema, Types, model } from "mongoose";
+import { HydratedDocumentFromSchema, Model, Schema, Types, model } from "mongoose";
 import { zodValidateWithErrors } from "@ptolemy2002/regex-utils";
 
 export type MongoDocumentConversation =
@@ -19,7 +19,8 @@ export type MongoDocumentConversation =
 
 export type ConversationInstanceMethods = {
     toClientJSON: () => MongoConversation,
-    makeNameUnique: () => Promise<void>
+    makeNameUnique: () => Promise<void>,
+    removeUnsetFields: () => void
 };
 export type ConversationModel = Model<MongoDocumentConversation, {}, ConversationInstanceMethods>;
 
@@ -28,7 +29,8 @@ export interface ConversationModelWithStatics extends ConversationModel {
     createWithUniqueName:
         (name: string, conversation: Omit<MongoConversation, "name" | "_id">) => Promise<
             HydratedDocumentFromSchema<typeof ConversationSchema>
-        >
+        >,
+    getPaths(): string[];
 };
 
 const ConversationSchema = new Schema<MongoDocumentConversation, ConversationModel, ConversationInstanceMethods>({
@@ -55,7 +57,7 @@ ConversationSchema.method("toClientJSON", function() {
 ConversationSchema.static("getUniqueName", async function(name: string) {
     // See if the name is unique
     const existingNames = await ConversationModel.distinct("name");
-    const originalName = name.replace(/\([0-9]+\)$/, "").trim()
+    const originalName = name.replace(/\s*\([0-9]+\)$/, "");
 
     // Find the first available name
     let i = 1;
@@ -77,9 +79,18 @@ ConversationSchema.static("createWithUniqueName", async function(
     });
 });
 
+ConversationSchema.static("getPaths", function() {
+    return Object.keys(this.schema.paths);
+});
+
 ConversationSchema.method("makeNameUnique", async function() {
     const name = await ConversationModel.getUniqueName(this.get("name"));
     this.set("name", name);
+});
+
+ConversationSchema.method("removeUnsetFields", function() {
+    // Remove nulls from lists that should not have nullable items
+    this.set("messages", this.get("messages").filter(x => x !== null));
 });
 
 ConversationSchema.path("messages").validate(zodValidateWithErrors(ZodMongoConversationSchema.shape.messages, true));
