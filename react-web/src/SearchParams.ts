@@ -1,5 +1,6 @@
 import useSearchParamState, { ConvertFunctions, SetSearchParamAction } from "@ptolemy2002/react-search-param-state";
 import { useCallback } from "react";
+import { NavigateOptions } from "react-router";
 
 export type SearchParams = {
     convo: string | null;
@@ -10,7 +11,7 @@ export type UseAppSearchParamResult = Readonly<SearchParams & {
     [K in `set${Capitalize<string & keyof SearchParams>}`]: (value: SetSearchParamAction<
         SearchParams,
         K extends `set${infer R}` ? Lowercase<R> : never
-    >) => void;
+    >, options?: NavigateOptions) => void;
 }>;
 
 export const converts: ConvertFunctions<SearchParams> = {
@@ -25,7 +26,7 @@ export default function useAppSearchParamState(): UseAppSearchParamResult {
     const [{convo}, setSearchParams] = useSearchParamState(defaultValues, converts);
 
     const setConvo = useCallback<UseAppSearchParamResult["setConvo"]>(
-        (value) => setSearchParams({convo: value}),
+        (value, options={replace: true}) => setSearchParams({convo: value}, options),
         [setSearchParams]
     );
 

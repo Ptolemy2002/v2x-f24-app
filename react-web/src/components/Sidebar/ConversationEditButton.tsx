@@ -3,7 +3,6 @@ import { ConversationEditButtonProps } from "./Types";
 import { Button } from "react-bootstrap";
 import DefaultPencilIcon from "src/components/icons/PencilIcon";
 import { useNavigate } from "react-router";
-import useAppSearchParamState from "src/SearchParams";
 
 export default function ConversationEditTitleButtonBase({
     className, onClick,
@@ -12,14 +11,12 @@ export default function ConversationEditTitleButtonBase({
     ...props
 }: ConversationEditButtonProps["functional"]) {
     const navigate = useNavigate();
-    const { setConvo } = useAppSearchParamState();
 
     return (
         <Button
             className={clsx("conversation-title-edit-button", className)}
             onClick={(e) => {
-                navigate("/conversation-settings");
-                setConvo(id);
+                navigate("/conversation-settings?convo=" + id);
                 onClick?.(e);
             }}
             {...props}

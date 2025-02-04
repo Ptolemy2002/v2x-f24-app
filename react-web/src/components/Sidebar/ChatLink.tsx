@@ -9,7 +9,7 @@ export default function ChatLinkBase({
     ConversationEditTitleButton=DefaultConversationEditTitleButton,
     ...props
 }: ChatLinkProps["functional"]) {
-    const {convo, setConvo} = useAppSearchParamState();
+    const {convo} = useAppSearchParamState();
     const navigate = useNavigate();
 
     return (
@@ -17,8 +17,7 @@ export default function ChatLinkBase({
         // which is why "active" is only added when the active prop is true.
         <li className={clsx("chat-link", convo === id && "active", className)} {...props}>
             <a onClick={(e) => {
-                navigate("/");
-                setConvo(id);
+                navigate("/?convo=" + id);
                 onClick?.(e);
             }}>{text}</a>
             
