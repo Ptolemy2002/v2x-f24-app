@@ -1,34 +1,35 @@
 import clsx from 'clsx';
 import { ConversationSettingsPageProps } from './Types';
-import { SuspenseBoundary } from '@ptolemy2002/react-suspense';
 import useAppSearchParamState from 'src/SearchParams';
 import ConversationData from 'src/data/ConversationData';
+import { useNavigate } from 'react-router';
+import { useMountEffect } from '@ptolemy2002/react-mount-effects';
+import ConversationSettingsPageBodyBase from './Body';
 
 export default function ConversationSettingsPageBase({
     className,
     ...props
 }: ConversationSettingsPageProps["functional"]) {
     const { convo: convoId } = useAppSearchParamState();
+    const navigate = useNavigate();
     
-    if (convoId === null) {
-        return (
-            <div id="conversation-settings-page" className={clsx("col", "not-selected", className)}>
-                No conversation selected.
-            </div>
-        );
-    }
+    useMountEffect(() => {
+        // Redirect to the main page if there is no conversation ID
+        if (convoId === null) {
+            navigate("/", {replace: true});
+        }
+    });
     
+    if (convoId === null) return <div id="conversation-settings-page" className={clsx("col", className)} {...props} />;
     return (
         <ConversationData.Provider
             key={convoId}
             value={{_id: convoId}}
             renderDeps={[className, ...Object.values(props)]}
         >
-            <div id="conversation-settings-page" className={clsx("col", className)}>
+            <div id="conversation-settings-page" className={clsx("col", className)} {...props}>
                 <h1>Conversation Settings</h1>
-                <SuspenseBoundary fallback={<p>Loading...</p>}>
-                    <p>Settings will go here.</p>
-                </SuspenseBoundary>
+                <ConversationSettingsPageBodyBase />
             </div>
         </ConversationData.Provider>
     );

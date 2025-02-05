@@ -14,6 +14,7 @@ import getApi from "src/Api";
 export type ConversationRequests = {
     queryBot: () => Promise<void>;
     pull: (convoId: string | null) => Promise<void>;
+    push: () => Promise<void>;
 };
 
 export type CompletedConversationData = ConversationData & CompletedMongoData<
@@ -143,6 +144,22 @@ export default class ConversationData extends MongoData<
         }, {
             undoOnFail: false
         });
+
+        this.defineRequestType("push", async function(this: CompletedConversationData, ac) {
+            const api = getApi();
+            const difference = this.difference({ type: ["push", "pull", "botQuery"] });
+            
+            const { data } = await api.post(`/conversation/update/by-id/${this.id}`, { difference }, {
+                signal: ac.signal
+            });
+
+            // Ensure that the conversation is updated with the latest data.
+            if (data.ok) {
+                this.fromJSON(data.conversation);
+            }
+        }, {
+            undoOnFail: false
+        });
     }
 
     addMessage(this: CompletedConversationData, message: Message | MongoMessage) {
@@ -157,5 +174,10 @@ export default class ConversationData extends MongoData<
     getLastMessage(this: CompletedConversationData) {
         if (this.messages.length === 0) return null;
         return this.messages[this.messages.length - 1];
+    }
+
+    getLastModified(this: CompletedConversationData) {
+        const lastMessage = this.getLastMessage();
+        return lastMessage ? lastMessage.date : null;
     }
 }
