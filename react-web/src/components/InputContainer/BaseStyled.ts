@@ -2,7 +2,6 @@ import { InputContainerProps } from "./Types";
 import Base from "./Base";
 import styled from "styled-components";
 import { WithCSSProp } from "@ptolemy2002/react-styled-component-utils";
-import { important } from "polished";
 
 export default Object.assign(
     styled(Base).attrs<WithCSSProp<InputContainerProps["style"]>>(
@@ -12,8 +11,6 @@ export default Object.assign(
             $minHeight: props.$minHeight ?? "50px",
             $borderRadius: props.$borderRadius ?? "10px",
             $padding: props.$padding ?? "5px",
-            $sendButtonRadius: props.$sendButtonRadius ?? "5px",
-            $sendButtonPadding: props.$sendButtonPadding ?? "5px",
             $css: props.$css ?? null,
         })
     )`
@@ -34,21 +31,6 @@ export default Object.assign(
             border-radius: ${({$borderRadius}) => $borderRadius};
             padding: ${({$padding}) => $padding};
         }
-
-        > .send-button {
-            // important is used to override the default Bootstrap styles.
-            ${({theme}) => important({backgroundColor: theme.sender.color})}
-            color: ${({theme}) => theme.sender.textColor ?? theme.textColor};
-            border: none;
-            border-radius: ${({$sendButtonRadius}) => $sendButtonRadius};
-            padding: ${({$sendButtonPadding}) => $sendButtonPadding};
-
-            height: fit-content;
-            margin-top: auto;
-            margin-bottom: auto;
-
-            ${({$css}) => $css}
-    }
     `,
     {
         displayName: "styled(InputContainer)",

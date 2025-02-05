@@ -4,6 +4,8 @@ import { MaybeForwardRefComponent } from 'src/TypeUtils';
 import { RestartIconProps } from 'src/components/icons/RestartIcon';
 import { PlayIconProps } from 'src/components/icons/PlayIcon';
 import { PauseIconProps } from '../icons/PauseIcon';
+import { ButtonProps } from 'react-bootstrap';
+import { ButtonStyles } from 'styled-components';
 
 export type AudioPlayerProps = StyledComponentPropsWithCSS<{
     src: string;
@@ -11,9 +13,7 @@ export type AudioPlayerProps = StyledComponentPropsWithCSS<{
     onLoadedMetadata?: () => void;
     AudioMedia?: MaybeForwardRefComponent<AudioMediaProps>;
     ProgressBar?: FC<ProgressBarProps & WithCSSProp>;
-    RestartIcon?: FC<RestartIconProps>;
-    PlayIcon?: FC<PlayIconProps>;
-    PauseIcon?: FC<PauseIconProps>;
+    PausePlayButton?: FC<PausePlayButtonProps["functional"]>;
 } & HTMLProps<HTMLDivElement>, {
     gap?: RequiredCSSProperties["gap"];
 }>;
@@ -34,3 +34,11 @@ export type ProgressBarProps = PropsWithChildren<{
     onSeek: (progress: number) => void;
 }> & HTMLProps<HTMLProgressElement>;
 export type ProgressBarControllerProps = Pick<ProgressBarProps, 'onSeek'>;
+
+export type PausePlayButtonProps = StyledComponentPropsWithCSS<{
+    isPaused: boolean;
+    isEnded: boolean;
+    RestartIcon?: FC<RestartIconProps>;
+    PlayIcon?: FC<PlayIconProps>;
+    PauseIcon?: FC<PauseIconProps>;
+} & ButtonProps, ButtonStyles>;

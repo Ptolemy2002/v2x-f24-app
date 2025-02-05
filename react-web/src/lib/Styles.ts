@@ -10,6 +10,13 @@ export function evaluateButtonStyles(
     defaults: Partial<ButtonStyles> = {}
 ): Required<Scoped<ButtonStyles>> {
     return {
+        $radius:
+            props.$radius
+            ?? theme.buttons?.[variant]?.radius
+            ?? theme.buttons?.default?.radius
+            ?? defaults.radius
+            ?? "0",
+        
         $borderStyle: 
             props.$borderStyle
             ?? theme.buttons?.[variant]?.borderStyle
@@ -138,6 +145,7 @@ export function buttonStyles(props: Scoped<ButtonStyles>) {
 
         border-style: ${props.$borderStyle};
         border-width: ${props.$borderWidth};
+        border-radius: ${props.$radius};
 
         --bs-btn-border-color: ${props.$borderColor};
         --bs-btn-active-border-color: ${props.$activeBorderColor};

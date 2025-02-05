@@ -1,4 +1,4 @@
-import { KeyboardEvent, useCallback, useMemo, useRef } from "react";
+import { KeyboardEvent, useCallback, useMemo, useRef, useState } from "react";
 import { createAudioMessage, createImageMessage, createTextMessage } from "shared";
 import ConversationData from "src/data/ConversationData";
 
@@ -6,6 +6,7 @@ export function useInputContainerController() {
     // This ref is used to allow access to the message content through the textarea element.
     const messageInputRef = useRef<HTMLTextAreaElement>(null);
     const [conversationData] = ConversationData.useContextNonNullable(["requestInProgress", "requestFailed"]);
+    const [emptyMessage, setEmptyMessage] = useState(true);
 
     // useCallback is used to keep a stable reference to the function.
     const addText = useCallback(() => {
@@ -50,12 +51,22 @@ export function useInputContainerController() {
         return (
             conversationData.requestInProgress
             || conversationData.hasFailedRequest("queryBot")
+            || emptyMessage
         );
     }, [
         conversationData,
         conversationData.requestInProgress,
-        conversationData.requestFailed
+        conversationData.requestFailed,
+        emptyMessage
     ]);
+
+    const onMessageInputChanged = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        if (e.target.value.trim() === "") {
+            setEmptyMessage(true);
+        } else {
+            setEmptyMessage(false);
+        }
+    }, [conversationData]);
 
     // useCallback is used to keep a stable reference to the function.
     const keyDownHandler = useCallback((event: KeyboardEvent<HTMLTextAreaElement>) => {
@@ -75,6 +86,8 @@ export function useInputContainerController() {
     }, [addText, addImage, addAudio, sendDisabled]);
 
     return {
+        emptyMessage,
+        onMessageInputChanged,
         conversationData,
         messageInputRef,
         keyDownHandler,

@@ -1,12 +1,13 @@
 import { SuspenseBoundary, useSuspenseController } from "@ptolemy2002/react-suspense";
 import { ConversationSettingsFormInputs, ConversationSettingsPageBodyProps } from "./Types";
 import clsx from "clsx";
-import { Button, Form } from "react-bootstrap";
+import { Form } from "react-bootstrap";
 import ConversationData from "src/data/ConversationData";
 import { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import useManualErrorHandling from "@ptolemy2002/react-manual-error-handling";
 import ConversationInfo from "src/context/ConversationInfo";
+import DefaultSaveButton from "./SaveButtonStyled";
 
 export default function ConversationSettingsPageBodyBase(props: ConversationSettingsPageBodyProps["functional"]) {
     const [conversation] = ConversationData.useContextNonNullable([]);
@@ -21,7 +22,12 @@ export default function ConversationSettingsPageBodyBase(props: ConversationSett
 }
 
 function InternalForm(
-    { className, onSubmit: _onSubmit, ...props }: ConversationSettingsPageBodyProps["functional"]
+    {
+        className,
+        onSubmit: _onSubmit,
+        SaveButton = DefaultSaveButton,
+        ...props
+    }: ConversationSettingsPageBodyProps["functional"]
 ) {
     const [conversation] = ConversationData.useContextNonNullable(["name", "createdAt"]);
     const [conversationInfo] = ConversationInfo.useContext();
@@ -41,10 +47,7 @@ function InternalForm(
                 async () => {
                     await conversation.push()
                     // Update the name in the conversation entries list
-                    conversationInfo.setEntries((entries) => entries.map((e) => e._id === conversation.id ? {
-                        ...e,
-                        name: conversation.name
-                    } : e));
+                    conversationInfo.updateEntry(conversation.id, () => ({name: conversation.name}));
                 }
             )
         );
@@ -59,23 +62,25 @@ function InternalForm(
             }}
             {...props}
         >
-            <Form.Label>Name</Form.Label>
-            <Form.Control
-                {...formRegister("name")}
-                type="text"
-                defaultValue={
-                    // Only apply default value after the conversation has been loaded
-                    conversation.hasLastRequest() ? conversation.name : undefined
-                }
-                placeholder="Enter name"
-            />
+            <Form.Group className="form-group">
+                <Form.Label>Name</Form.Label>
+                <Form.Control
+                    {...formRegister("name")}
+                    type="text"
+                    defaultValue={
+                        // Only apply default value after the conversation has been loaded
+                        conversation.hasLastRequest() ? conversation.name : undefined
+                    }
+                    placeholder="Enter name"
+                />
+            </Form.Group>
 
-            <br />
+            <p>
+                Created at: {conversation.createdAt.toLocaleString()} <br />
+                Last Activity: {conversation.getLastModified().toLocaleString()}
+            </p>
 
-            <p>Created at: {conversation.createdAt.toLocaleString()}</p>
-            <p>Last Activity: {conversation.getLastModified().toLocaleString()}</p>
-
-            <Button type="submit">Save</Button>
+            <SaveButton type="submit" />
         </Form>
     );
 }

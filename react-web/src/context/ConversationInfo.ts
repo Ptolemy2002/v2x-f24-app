@@ -38,4 +38,32 @@ export default class ConversationInfo {
         if (isCallable(entries)) entries = entries(this.entries);
         this.entries = [...entries];
     }
+
+    updateEntry(
+        match: string,
+        value: MaybeTransformer<Partial<EntryList[number]>, [EntryList[number]]>,
+        key: "name" | "_id" = "_id"
+    ) {
+        let found = false;
+        this.setEntries((entries) => entries.map((e) => {
+            if (found) return e;
+
+            let newValue;
+            if (e[key] === match) {
+                found = true;
+                if (isCallable(value)) {
+                    newValue = value(e);
+                } else {
+                    newValue = value;
+                }
+
+                return {
+                    ...e,
+                    ...newValue
+                };
+            }
+
+            return e;
+        }));
+    }
 }

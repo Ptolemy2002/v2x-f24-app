@@ -1,17 +1,17 @@
-import { Button } from 'react-bootstrap';
-import DefaultRightArrowIcon from 'src/components/icons/RightArrowIcon';
 import { InputContainerProps } from './Types';
 import { useInputContainerController } from './Controllers';
+import DefaultSendButton from './SendButtonStyled';
 
 export default function InputContainerBase({
-    RightArrowIcon = DefaultRightArrowIcon,
+    SendButton=DefaultSendButton,
     ...props
 }: InputContainerProps["functional"]) {
     const {
         messageInputRef,
         keyDownHandler,
         addText,
-        sendDisabled
+        sendDisabled,
+        onMessageInputChanged
     } = useInputContainerController();
 
     return (
@@ -22,18 +22,10 @@ export default function InputContainerBase({
                 id="message-input"
                 placeholder="Type a message..."
                 onKeyDown={keyDownHandler}
+                onChange={onMessageInputChanged}
             ></textarea>
 
-            <Button
-                id="send-button"
-                className="send-button"
-                as="button"
-                aria-label="Send Message"
-                onClick={addText}
-                disabled={sendDisabled}
-            >
-                <RightArrowIcon />
-            </Button>
+            <SendButton onClick={addText} disabled={sendDisabled} />
         </div>
     );
 }

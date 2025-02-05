@@ -46,14 +46,10 @@ export function useSpeechContainerController() {
 
     // When messages change, update the modifiedAt field in the conversationInfo context.
     useDelayedEffect(() => {
-        conversationInfo.setEntries((entries) => entries.map((e) => {
-            if (e._id !== conversationData.id) return e;
-
-            return {
-                ...e,
-                modifiedAt: conversationData.getLastModified().toISOString()
-            }
-        }));
+        conversationInfo.updateEntry(
+            conversationData.id,
+            () => ({modifiedAt: conversationData.getLastModified().toISOString()})
+        );
 
         conversationInfo.sortEntries();
     }, [conversationData.messages], 1);

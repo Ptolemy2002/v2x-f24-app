@@ -4,10 +4,11 @@ import useAppSearchParamState from 'src/SearchParams';
 import ConversationData from 'src/data/ConversationData';
 import { useNavigate } from 'react-router';
 import { useMountEffect } from '@ptolemy2002/react-mount-effects';
-import ConversationSettingsPageBodyBase from './Body';
+import DefaultBody from './BodyStyled';
 
 export default function ConversationSettingsPageBase({
     className,
+    Body=DefaultBody,
     ...props
 }: ConversationSettingsPageProps["functional"]) {
     const { convo: convoId } = useAppSearchParamState();
@@ -29,7 +30,8 @@ export default function ConversationSettingsPageBase({
         >
             <div id="conversation-settings-page" className={clsx("col", className)} {...props}>
                 <h1>Conversation Settings</h1>
-                <ConversationSettingsPageBodyBase />
+                <p>ID: {convoId}</p>
+                <Body />
             </div>
         </ConversationData.Provider>
     );

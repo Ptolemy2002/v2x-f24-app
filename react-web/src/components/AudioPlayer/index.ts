@@ -6,15 +6,19 @@ import ProgressBar from "./ProgressBarStyled";
 import AudioMedia from "./AudioMedia";
 import _UnstyledAudioPlayer from "./Base";
 import AudioPlayer from "./BaseStyled";
+import PausePlayButtonBase from "./PausePlayButtonBase";
+import PausePlayButton from "./PausePlayButtonStyled";
 
 export default Object.assign(AudioPlayer, {
     ProgressBar: ProgressBar,
-    AudioMedia: AudioMedia
+    AudioMedia: AudioMedia,
+    PausePlayButton: PausePlayButton
 });
 
 export const UnstyledAudioPlayer = Object.assign(_UnstyledAudioPlayer, {
     ProgressBar: UnstyledProgressBar,
-    AudioMedia: AudioMedia
+    AudioMedia: AudioMedia,
+    PausePlayButton: PausePlayButtonBase
 });
 
 export {default as UnstyledProgressBar} from "./ProgressBar";

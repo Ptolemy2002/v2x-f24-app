@@ -1,11 +1,8 @@
 import DefaultAudioMedia from './AudioMedia';
 import DefaultProgressBar from './ProgressBarStyled';
 import { AudioPlayerProps } from './Types';
-import { Button } from 'react-bootstrap';
-import DefaultRestartIcon from 'src/components/icons/RestartIcon';
-import DefaultPlayIcon from 'src/components/icons/PlayIcon';
-import DefaultPauseIcon from 'src/components/icons/PauseIcon';
 import { useAudioPlayerController } from './Controllers';
+import DefaultPausePlayButton from './PausePlayButtonStyled';
 
 export default function AudioPlayerBase({
     src,
@@ -14,9 +11,7 @@ export default function AudioPlayerBase({
     className: _className,
     AudioMedia = DefaultAudioMedia,
     ProgressBar = DefaultProgressBar,
-    RestartIcon = DefaultRestartIcon,
-    PlayIcon = DefaultPlayIcon,
-    PauseIcon = DefaultPauseIcon,
+    PausePlayButton= DefaultPausePlayButton,
     ...props
 }: AudioPlayerProps["functional"]) {
     const {
@@ -50,16 +45,11 @@ export default function AudioPlayerBase({
                 onTimeUpdate={timeUpdateHandler}
             />
 
-            <Button
-                variant="secondary"
+            <PausePlayButton
+                isPaused={isPaused}
+                isEnded={isEnded}
                 onClick={buttonClickHandler}
-            >
-                {
-                    isPaused ? (
-                        isEnded ? <RestartIcon /> : <PlayIcon />
-                    ) : <PauseIcon />
-                }
-            </Button>
+            />
             
             <span className="progress-label">
                 {progressText}
