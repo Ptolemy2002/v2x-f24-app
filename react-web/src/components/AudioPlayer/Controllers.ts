@@ -205,6 +205,8 @@ export function useProgressBarController({
     useUnmountEffect(() => {
         window.removeEventListener("mouseup", mouseUpEventListenerRef.current!);
         window.removeEventListener("mousemove", mouseMoveEventListenerRef.current!);
+        window.removeEventListener("touchend", touchEndEventListenerRef.current!);
+        window.removeEventListener("touchmove", touchMoveEventListenerRef.current!);
     });
 
     const mouseDownHandler = useMemo(() => !isMobile ? mouseDownEventListener : undefined, [isMobile, mouseDownEventListener]);

@@ -1,6 +1,7 @@
 import useManualErrorHandling from "@ptolemy2002/react-manual-error-handling";
-import { useMountEffect } from "@ptolemy2002/react-mount-effects";
+import { useDelayedEffect, useMountEffect } from "@ptolemy2002/react-mount-effects";
 import { useCallback, useEffect, useRef } from "react";
+import ConversationInfo from "src/context/ConversationInfo";
 import ConversationData from "src/data/ConversationData";
 import useAppSearchParamState from "src/SearchParams";
 
@@ -9,6 +10,7 @@ export function useSpeechContainerController() {
     const { _try } = useManualErrorHandling();
 
     const [conversationData] = ConversationData.useContextNonNullable(["messages", "requestInProgress", "requestFailed"]);
+    const [conversationInfo] = ConversationInfo.useContext();
 
     const { convo: convoId, setConvo: setConvoId } = useAppSearchParamState();
 
@@ -42,10 +44,25 @@ export function useSpeechContainerController() {
         }
     }, [conversationData.requestInProgress, scrollToEnd, conversationData]);
 
+    // When messages change, update the modifiedAt field in the conversationInfo context.
+    useDelayedEffect(() => {
+        conversationInfo.setEntries((entries) => entries.map((e) => {
+            if (e._id !== conversationData.id) return e;
+
+            return {
+                ...e,
+                modifiedAt: conversationData.getLastModified().toISOString()
+            }
+        }));
+
+        conversationInfo.sortEntries();
+    }, [conversationData.messages], 1);
+
     return {
         speechContainerRef,
         _try,
         conversationData,
+        conversationInfo,
         scrollToEnd,
         convoId, setConvoId
     };
