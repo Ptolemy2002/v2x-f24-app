@@ -6,6 +6,7 @@ import ConversationData from "src/data/ConversationData";
 import { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import useManualErrorHandling from "@ptolemy2002/react-manual-error-handling";
+import ConversationInfo from "src/context/ConversationInfo";
 
 export default function ConversationSettingsPageBodyBase(props: ConversationSettingsPageBodyProps["functional"]) {
     const [conversation] = ConversationData.useContextNonNullable([]);
@@ -22,7 +23,8 @@ export default function ConversationSettingsPageBodyBase(props: ConversationSett
 function InternalForm(
     { className, onSubmit: _onSubmit, ...props }: ConversationSettingsPageBodyProps["functional"]
 ) {
-    const [conversation] = ConversationData.useContextNonNullable(["name"]);
+    const [conversation] = ConversationData.useContextNonNullable(["name", "createdAt"]);
+    const [conversationInfo] = ConversationInfo.useContext();
     const { _try } = useManualErrorHandling<void | null>();
     const [{ suspend }] = useSuspenseController([]);
 
@@ -36,10 +38,17 @@ function InternalForm(
 
         await _try(
             () => suspend(
-                () => conversation.push(),
+                async () => {
+                    await conversation.push()
+                    // Update the name in the conversation entries list
+                    conversationInfo.setEntries((entries) => entries.map((e) => e._id === conversation.id ? {
+                        ...e,
+                        name: conversation.name
+                    } : e));
+                }
             )
         );
-    }, [conversation]);
+    }, [conversation, conversationInfo, suspend, _try]);
 
     return (
         <Form
@@ -60,6 +69,11 @@ function InternalForm(
                 }
                 placeholder="Enter name"
             />
+
+            <br />
+
+            <p>Created at: {conversation.createdAt.toLocaleString()}</p>
+            <p>Last Activity: {conversation.getLastModified().toLocaleString()}</p>
 
             <Button type="submit">Save</Button>
         </Form>

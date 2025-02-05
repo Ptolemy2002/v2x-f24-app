@@ -17,7 +17,11 @@ export const ZodConversationSchema = swaggerRegistry.register(
             description: "The name of the conversation.",
             example: "Untitled Conversation"
         }),
-        messages: ZodUniqueMessageArraySchema
+        messages: ZodUniqueMessageArraySchema,
+        createdAt: z.date().openapi({
+            description: "The date and time the conversation was created.",
+            example: "2021-07-01T00:00:00.000Z"
+        })
     })
     .openapi({
         description: "A conversation."
@@ -38,7 +42,11 @@ export const ZodMongoConversationSchema = swaggerRegistry.register(
             description: "The name of the conversation.",
             example: "Untitled Conversation"
         }),
-        messages: ZodUniqueMongoMessageArraySchema
+        messages: ZodUniqueMongoMessageArraySchema,
+        createdAt: z.string().openapi({
+            description: "The date and time the conversation was created.",
+            example: "2021-07-01T00:00:00.000Z"
+        })
     })
     .openapi({
         description: "The MongoDB representation of a conversation."

@@ -1159,12 +1159,18 @@
           },
           "messages": {
             "$ref": "#/components/schemas/UniqueMessageArray"
+          },
+          "createdAt": {
+            "type": "string",
+            "description": "The date and time the conversation was created.",
+            "example": "2021-07-01T00:00:00.000Z"
           }
         },
         "required": [
           "id",
           "name",
-          "messages"
+          "messages",
+          "createdAt"
         ],
         "description": "A conversation."
       },
@@ -1193,12 +1199,18 @@
           },
           "messages": {
             "$ref": "#/components/schemas/UniqueMongoMessageArray"
+          },
+          "createdAt": {
+            "type": "string",
+            "description": "The date and time the conversation was created.",
+            "example": "2021-07-01T00:00:00.000Z"
           }
         },
         "required": [
           "_id",
           "name",
-          "messages"
+          "messages",
+          "createdAt"
         ],
         "description": "The MongoDB representation of a conversation."
       },
@@ -1627,11 +1639,23 @@
                       "type": "string",
                       "description": "Name of the conversation",
                       "example": "Unititled Conversation"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "description": "Date and time the conversation was created",
+                      "example": "2021-07-01T00:00:00.000Z"
+                    },
+                    "modifiedAt": {
+                      "type": "string",
+                      "description": "Date and time the conversation last had any activity",
+                      "example": "2021-07-01T00:00:00.000Z"
                     }
                   },
                   "required": [
                     "_id",
-                    "name"
+                    "name",
+                    "createdAt",
+                    "modifiedAt"
                   ]
                 }
               }

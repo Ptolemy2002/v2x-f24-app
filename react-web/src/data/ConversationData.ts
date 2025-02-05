@@ -28,9 +28,10 @@ export default class ConversationData extends MongoData<
     MongoConversation,
     ConversationRequests
 > { 
-    static defaultDependencies: Dependency<CompletedConversationData>[] = [
+    static defaultDependencies: Dependency<CompletedConversationData | null>[] = [
         ...MongoData._defaultDependencies,
-        "messages"
+        "messages",
+        "createdAt"
     ];
 
     static Context = createProxyContext<CompletedConversationData | null>("ConversationContext");
@@ -45,7 +46,7 @@ export default class ConversationData extends MongoData<
     );
 
     static useContext(
-        deps: Dependency<CompletedConversationData>[] = ConversationData.defaultDependencies,
+        deps: Dependency<CompletedConversationData | null>[] = ConversationData.defaultDependencies,
         onChangeProp?: OnChangePropCallback<CompletedConversationData | null>,
         onChangeReinit?: OnChangeReinitCallback<CompletedConversationData | null>
     ) {
@@ -63,7 +64,7 @@ export default class ConversationData extends MongoData<
     }
 
     static useContextNonNullable(
-        deps: Dependency<CompletedConversationData>[] = ConversationData.defaultDependencies,
+        deps: Dependency<CompletedConversationData | null>[] = ConversationData.defaultDependencies,
         onChangeProp?: OnChangePropCallback<CompletedConversationData | null>,
         onChangeReinit?: OnChangeReinitCallback<CompletedConversationData | null>
     ) {
@@ -114,6 +115,16 @@ export default class ConversationData extends MongoData<
             toMongo: (messages) => messages.map((message) => toMongoMessage(message)),
             fromMongo: (messages) => messages.map((message) => toMessage(message)),
             validate: zodValidateWithErrors(ZodConversationSchema.shape.messages)
+        });
+
+        this.defineProperty("createdAt", {
+            mongoName: "createdAt",
+            initial: new Date(),
+            toMongo: (createdAt) => createdAt.toISOString(),
+            fromMongo: (createdAt) => new Date(createdAt),
+
+            validate: zodValidateWithErrors(ZodConversationSchema.shape.createdAt),
+            readOnly: true
         });
 
         this.defineRequestType("queryBot", async function(this: CompletedConversationData, ac) {
@@ -178,6 +189,6 @@ export default class ConversationData extends MongoData<
 
     getLastModified(this: CompletedConversationData) {
         const lastMessage = this.getLastMessage();
-        return lastMessage ? lastMessage.date : null;
+        return lastMessage ? lastMessage.date : this.createdAt;
     }
 }

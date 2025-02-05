@@ -17,6 +17,16 @@ export const ZodConversationListName200ResponseBodySchema = swaggerRegistry.regi
                 .openapi({
                     description: "Name of the conversation",
                     example: "Unititled Conversation"
+                }),
+            createdAt: z.string()
+                .openapi({
+                    description: "Date and time the conversation was created",
+                    example: "2021-07-01T00:00:00.000Z"
+                }),
+            modifiedAt: z.string()
+                .openapi({
+                    description: "Date and time the conversation last had any activity",
+                    example: "2021-07-01T00:00:00.000Z"
                 })
         }))
     }).openapi({

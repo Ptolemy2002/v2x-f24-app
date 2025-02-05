@@ -7,8 +7,9 @@ export type MongoDocumentConversation =
     // instance, as that's what mongoose has in the object
     // itself. However, whenever we respond to the client, we
     // will convert it to match the string format.
-    Omit<MongoConversation, "_id"> & { 
-        _id: Types.ObjectId
+    Omit<MongoConversation, "_id" | "createdAt"> & { 
+        _id: Types.ObjectId,
+        createdAt: Date,
 
         // This is the version key that
         // mongoose uses. It's not relevant
@@ -42,6 +43,11 @@ const ConversationSchema = new Schema<MongoDocumentConversation, ConversationMod
 
     messages: {
         type: [Object]
+    }
+}, {
+    timestamps: {
+        createdAt: "createdAt",
+        updatedAt: false
     }
 });
 

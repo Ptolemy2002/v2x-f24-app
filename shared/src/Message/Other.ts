@@ -12,6 +12,7 @@ export const MessageTypeEnum = [
 export const MongoConversationChildPathLookup: Readonly<Record<keyof MongoConversation, (0 | string)[]>> = {
     _id: [],
     name: [],
+    createdAt: [],
     messages: [0]
 } as const;
 

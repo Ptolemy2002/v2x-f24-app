@@ -8,6 +8,8 @@ import {
 import { SpeechContainerProps } from "./Types";
 import clsx from "clsx";
 import { useSpeechContainerController } from "./Controllers";
+import ConversationInfo from "src/context/ConversationInfo";
+import { useDelayedEffect } from "@ptolemy2002/react-mount-effects";
 
 export default function SpeechContainerBase({
     SpeechBubbleText=DefaultSpeechBubbleText,
@@ -22,6 +24,20 @@ export default function SpeechContainerBase({
         conversationData,
         scrollToEnd
     } = useSpeechContainerController();
+    const [conversationInfo] = ConversationInfo.useContext();
+
+    useDelayedEffect(() => {
+        conversationInfo.setEntries((entries) => entries.map((e) => {
+            if (e._id !== conversationData.id) return e;
+
+            return {
+                ...e,
+                modifiedAt: conversationData.getLastModified().toISOString()
+            }
+        }));
+
+        conversationInfo.sortEntries();
+    }, [conversationData.messages], 1);
 
     if (conversationData.hasInProgressRequest("pull")) {
         return (

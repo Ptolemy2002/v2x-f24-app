@@ -26,15 +26,16 @@ export class ConversationListNameHandler extends RouteHandler<ConversationListNa
     }
 
     async generateResponse() {
-        const ids = await ConversationModel.distinct("_id");
-        const names = await ConversationModel.distinct("name");
+        const docs = await ConversationModel.find({});
 
         return {
             status: 200,
             response: this.buildSuccessResponse({
-                entries: ids.map((id, i) => ({
-                    _id: id.toString(),
-                    name: names[i]
+                entries: docs.map((doc) => ({
+                    _id: doc._id.toString(),
+                    name: doc.name,
+                    createdAt: doc.createdAt?.toISOString() ?? doc.messages.length > 0 ? doc.messages[0].date : new Date().toISOString(),
+                    modifiedAt: doc.messages.length > 0 ? doc.messages[doc.messages.length - 1].date : doc.createdAt.toISOString()
                 }))
             })
         };

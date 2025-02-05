@@ -4,11 +4,10 @@ import DefaultSidebarLabel from "./SidebarLabelStyled";
 import DefaultChatLink from "./ChatLinkStyled";
 import clsx from "clsx";
 import { SuspenseBoundary } from "@ptolemy2002/react-suspense";
-import { useState } from "react";
 import useManualErrorHandling from "@ptolemy2002/react-manual-error-handling";
 import getApi from "src/Api";
 import { ErrorBoundary } from "react-error-boundary";
-import { ConversationListName200ResponseBody } from "shared";
+import ConversationInfo from "src/context/ConversationInfo";
 
 export default function SidebarBase({
     className,
@@ -19,7 +18,7 @@ export default function SidebarBase({
     ...props
 }: SidebarProps["functional"]) {
     const api = getApi();
-    const [names, setNames] = useState<ConversationListName200ResponseBody["entries"]>([]);
+    const [conversationInfo] = ConversationInfo.useContext();
     const {_try} = useManualErrorHandling();
 
     return (
@@ -34,11 +33,13 @@ export default function SidebarBase({
                         const { data } = await api.get("/conversation/list-name");
 
                         if (data.ok) {
-                            setNames(data.entries);
+                            conversationInfo.setEntries(data.entries);
+                            conversationInfo.sortEntries();
                         }
                     })}
+                    renderDeps={[conversationInfo.entries]}
                 >
-                    {names.map(({_id, name}) => (
+                    {conversationInfo.entries.map(({_id, name}) => (
                         <ChatLink key={_id} text={name} name={name} id={_id} onClick={onLinkClick} />
                     ))}
                 </SuspenseBoundary>
