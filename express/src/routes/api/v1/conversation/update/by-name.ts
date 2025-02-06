@@ -1,5 +1,5 @@
 import { Router } from "express";
-import RouteHandler, { RouteHandlerRequest } from "lib/RouteHandler";
+import RouteHandler, { RouteHandlerRequestData } from "lib/RouteHandler";
 import ConversationModel from "models/ConversationModel";
 import { ConversationUpdateByName200ResponseBody, ZodConversationUpdateByNameRequestBodySchema, ZodConversationUpdateByNameURLParamsSchema } from "shared";
 import { Error } from "mongoose";
@@ -52,7 +52,7 @@ export class UpdateConversationByNameHandler extends RouteHandler<ConversationUp
         super(1, "/#/Conversation/post_api_v1_conversation_update_by_name__name_");
     }
 
-    async generateResponse(req: RouteHandlerRequest) {
+    async generateResponse(req: RouteHandlerRequestData) {
         const {
             success: bodySuccess,
             error: bodyError,

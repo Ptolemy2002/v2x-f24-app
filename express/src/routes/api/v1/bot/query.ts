@@ -11,7 +11,7 @@ import {
     BotQuery200ResponseBody,
     MongoMessage
 } from 'shared';
-import RouteHandler, { RouteHandlerRequest } from 'lib/RouteHandler';
+import RouteHandler, { RouteHandlerRequestData } from 'lib/RouteHandler';
 import ConversationModel from 'models/ConversationModel';
 const router = express.Router();
 
@@ -88,7 +88,7 @@ export class BotQueryHandler extends RouteHandler<BotQuery200ResponseBody> {
         super(1, "/#/Bot/post_api_v1_bot_query");
     }
 
-    async generateResponse(req: RouteHandlerRequest) {
+    async generateResponse(req: RouteHandlerRequestData) {
         const {success: bodySuccess, error: bodyError, data: body} = ZodBotQueryRequestBodySchema.safeParse(req.body);
 
         if (!bodySuccess) {

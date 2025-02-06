@@ -1,4 +1,4 @@
-import RouteHandler, { RouteHandlerRequest } from "lib/RouteHandler";
+import RouteHandler, { RouteHandlerRequestData } from "lib/RouteHandler";
 import { Router } from "express";
 import ConversationModel from "models/ConversationModel";
 import { ConversationNew200ResponseBody, createMongoTextMessage, MongoConversation, ZodConversationNewQueryParamsSchema } from "shared";
@@ -30,7 +30,7 @@ class ConversationNewHandler extends RouteHandler<ConversationNew200ResponseBody
         super(1, "/#/Conversation/new_api_v1_conversation_new_");
     }
 
-    async generateResponse(req: RouteHandlerRequest) {
+    async generateResponse(req: RouteHandlerRequestData) {
         const {
             success: paramsSuccess,
             data: paramsData,

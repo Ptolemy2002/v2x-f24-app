@@ -1,7 +1,7 @@
 import { asyncErrorHandler } from '@ptolemy2002/express-utils';
 import express from 'express';
 import { ConversationGet200ResponseBody, createMongoTextMessage, ZodConversationGetURLParamsSchema } from 'shared';
-import RouteHandler, { RouteHandlerRequest } from 'lib/RouteHandler';
+import RouteHandler, { RouteHandlerRequestData } from 'lib/RouteHandler';
 import ConversationModel from 'models/ConversationModel';
 export const router = express.Router();
 
@@ -46,7 +46,7 @@ export class GetConversationHandler extends RouteHandler<ConversationGet200Respo
         super(1, "/#/Conversation/get_api_v1_conversation_get__id_");
     }
 
-    async generateResponse(req: RouteHandlerRequest) {
+    async generateResponse(req: RouteHandlerRequestData) {
         const { success, data, error } = ZodConversationGetURLParamsSchema.safeParse(req.params);
 
         if (!success) {
