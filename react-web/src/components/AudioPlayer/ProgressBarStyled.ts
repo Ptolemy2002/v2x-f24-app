@@ -1,10 +1,10 @@
-import ProgressBar from "./ProgressBar";
+import AudioPlayerProgressBar from "./ProgressBar";
 import styled, { css } from "styled-components";
 import { bsBreakpointMax, WithCSSProp } from "@ptolemy2002/react-styled-component-utils";
 import { isFirefox, isChrome, isSafari } from "react-device-detect";
 
 export default Object.assign(
-    styled(ProgressBar).attrs<WithCSSProp>(
+    styled(AudioPlayerProgressBar).attrs<WithCSSProp>(
         (props) => ({
             $css: props.$css ?? null
         })
@@ -43,6 +43,6 @@ export default Object.assign(
         ${({$css}) => $css}
     `,
     {
-        displayName: "styled(ProgressBar)"
+        displayName: "styled(AudioPlayerProgressBar)"
     }
 );

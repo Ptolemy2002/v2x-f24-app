@@ -12,7 +12,7 @@ export type AudioPlayerProps = StyledComponentPropsWithCSS<{
     onCanPlay?: () => void;
     onLoadedMetadata?: () => void;
     AudioMedia?: MaybeForwardRefComponent<AudioMediaProps>;
-    ProgressBar?: FC<ProgressBarProps & WithCSSProp>;
+    AudioPlayerProgressBar?: FC<AudioPlayerProgressBarProps & WithCSSProp>;
     PausePlayButton?: FC<PausePlayButtonProps["functional"]>;
 } & HTMLProps<HTMLDivElement>, {
     gap?: RequiredCSSProperties["gap"];
@@ -28,12 +28,12 @@ export type AudioMediaProps = PropsWithRef<{
 }> & HTMLProps<HTMLAudioElement>;
 export type AudioMediaControllerProps = Pick<AudioMediaProps, 'onTimeUpdate' | 'mobileTimeUpdateInterval'>;
 
-export type ProgressBarProps = PropsWithChildren<{
+export type AudioPlayerProgressBarProps = PropsWithChildren<{
     progress: number;
     maxDuration: number;
     onSeek: (progress: number) => void;
 }> & HTMLProps<HTMLProgressElement>;
-export type ProgressBarControllerProps = Pick<ProgressBarProps, 'onSeek'>;
+export type AudioPlayerProgressBarControllerProps = Pick<AudioPlayerProgressBarProps, 'onSeek'>;
 
 export type PausePlayButtonProps = StyledComponentPropsWithCSS<{
     isPaused: boolean;

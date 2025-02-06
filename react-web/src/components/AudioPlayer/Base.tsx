@@ -1,5 +1,5 @@
 import DefaultAudioMedia from './AudioMedia';
-import DefaultProgressBar from './ProgressBarStyled';
+import DefaultAudioPlayerProgressBar from './ProgressBarStyled';
 import { AudioPlayerProps } from './Types';
 import { useAudioPlayerController } from './Controllers';
 import DefaultPausePlayButton from './PausePlayButtonStyled';
@@ -10,7 +10,7 @@ export default function AudioPlayerBase({
     onLoadedMetadata,
     className: _className,
     AudioMedia = DefaultAudioMedia,
-    ProgressBar = DefaultProgressBar,
+    AudioPlayerProgressBar = DefaultAudioPlayerProgressBar,
     PausePlayButton= DefaultPausePlayButton,
     ...props
 }: AudioPlayerProps["functional"]) {
@@ -55,13 +55,13 @@ export default function AudioPlayerBase({
                 {progressText}
             </span>
             
-            <ProgressBar
+            <AudioPlayerProgressBar
                 progress={progress}
                 maxDuration={maxDuration}
                 onSeek={setProgress}
             >
                 {progressText}
-            </ProgressBar>
+            </AudioPlayerProgressBar>
         </div>
     );
 }

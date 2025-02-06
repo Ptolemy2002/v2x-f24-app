@@ -1,5 +1,5 @@
 import { useCallback, useRef, useState, useMemo } from 'react';
-import { AudioMediaControllerProps, AudioPlayerControllerProps, ProgressBarControllerProps } from './Types';
+import { AudioMediaControllerProps, AudioPlayerControllerProps, AudioPlayerProgressBarControllerProps } from './Types';
 import { intervalToDuration } from 'date-fns';
 import { formatDuration } from './Other';
 import clsx from 'clsx';
@@ -98,7 +98,11 @@ export function useAudioPlayerController({
     }, []);
 
     const className = useMemo(() => clsx("audio-player", _className), [_className]);
-    const maxDuration = useMemo(() => audioRef.current?.duration ?? 0, [audioRef.current?.duration]);
+    const maxDuration = useMemo(() => {
+        const result = audioRef.current?.duration ?? 0;
+        if (isNaN(result)) return 0;
+        return result;
+    }, [audioRef.current?.duration]);
 
     return {
         audioRef,
@@ -155,9 +159,9 @@ export function useAudioMediaController({
     };
 }
 
-export function useProgressBarController({
+export function useAudioPlayerProgressBarController({
     onSeek
-}: ProgressBarControllerProps) {
+}: AudioPlayerProgressBarControllerProps) {
     const touchedRef = useRef(false);
     const mouseUpEventListenerRef = useRef<() => void>();
     const touchEndEventListenerRef = useRef<() => void>();

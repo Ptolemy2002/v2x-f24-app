@@ -1,18 +1,18 @@
-import { ProgressBarProps } from './Types';
-import { useProgressBarController } from './Controllers';
+import { AudioPlayerProgressBarProps } from './Types';
+import { useAudioPlayerProgressBarController } from './Controllers';
 
-export default function ProgressBarBase({
+export default function AudioPlayerProgressBarBase({
     progress,
     maxDuration: duration,
     onSeek,
     children,
     ...props
-}: ProgressBarProps) {
+}: AudioPlayerProgressBarProps) {
     const {
         progressRef,
         mouseDownHandler,
         touchStartHandler
-    } = useProgressBarController({ onSeek });
+    } = useAudioPlayerProgressBarController({ onSeek });
 
     return (
         <progress

@@ -14,6 +14,11 @@ export default Object.assign(
 
         padding: 0;
 
+        > svg {
+            width: 100%;
+            height: 100%;
+        }
+
         ${({$css}) => $css}
     `,
     {
