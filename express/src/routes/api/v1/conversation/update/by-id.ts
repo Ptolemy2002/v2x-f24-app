@@ -2,10 +2,9 @@ import { Router } from "express";
 import RouteHandler, { RouteHandlerRequest } from "lib/RouteHandler";
 import ConversationModel from "models/ConversationModel";
 import { ConversationUpdateByID200ResponseBody, ZodConversationUpdateByIDRequestBodySchema, ZodConversationUpdateByIDURLParamsSchema } from "shared";
-import { Error, MongooseError } from "mongoose";
+import { Error } from "mongoose";
 import { MongoServerError } from "mongodb";
 import { asyncErrorHandler } from "@ptolemy2002/express-utils";
-import RouteError from "lib/RouteError";
 
 const router = Router();
 
@@ -32,7 +31,19 @@ export class UpdateConversationByIDHandler extends RouteHandler<ConversationUpda
 
         #swagger.responses[200] = {
             schema: {
-                $ref: "#/components/schemas/ConversationUpdateByIDResponseBody"
+                $ref: "#/components/schemas/ConversationUpdateByID200ResponseBody"
+            }
+        }
+
+        #swagger.responses[409] = {
+            schema: {
+                $ref: "#/components/schemas/ErrorResponse",
+                example: {
+                    ok: false,
+                    code: "VALIDATION",
+                    message: "Conversation with the name you're setting already exists",
+                    help: "https://example.com/docs"
+                }
             }
         }
         #swagger.end
@@ -85,12 +96,13 @@ export class UpdateConversationByIDHandler extends RouteHandler<ConversationUpda
         } catch (e) {
             if (e instanceof MongoServerError) {
                 if (e.codeName === "DuplicateKey") {
-                    throw new RouteError(
-                        "Name conflict",
-                        409,
-                        "VALIDATION",
-                        this.help
-                    );
+                    return {
+                        status: 409,
+                        response: this.buildErrorResponse(
+                            "VALIDATION",
+                            "Conversation with the name you're setting already exists"   
+                        )
+                    };
                 }
             }
 

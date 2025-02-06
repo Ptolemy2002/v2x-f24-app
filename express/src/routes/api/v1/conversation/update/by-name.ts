@@ -4,7 +4,6 @@ import ConversationModel from "models/ConversationModel";
 import { ConversationUpdateByName200ResponseBody, ZodConversationUpdateByNameRequestBodySchema, ZodConversationUpdateByNameURLParamsSchema } from "shared";
 import { Error } from "mongoose";
 import { asyncErrorHandler } from "@ptolemy2002/express-utils";
-import RouteError from "lib/RouteError";
 import { MongoServerError } from "mongodb";
 
 const router = Router();
@@ -33,6 +32,18 @@ export class UpdateConversationByNameHandler extends RouteHandler<ConversationUp
         #swagger.responses[200] = {
             schema: {
                 $ref: "#/components/schemas/ConversationUpdateByNameResponseBody"
+            }
+        }
+
+        #swagger.responses[409] = {
+            schema: {
+                $ref: "#/components/schemas/ErrorResponse",
+                example: {
+                    ok: false,
+                    code: "VALIDATION",
+                    message: "Conversation with the name you're setting already exists",
+                    help: "https://example.com/docs"
+                }
             }
         }
         #swagger.end
@@ -85,13 +96,16 @@ export class UpdateConversationByNameHandler extends RouteHandler<ConversationUp
             newConversation = (await ConversationModel.findOneAndUpdate({ name }, body.difference, { new: true }))!;
         } catch (e) {
             if (e instanceof MongoServerError) {
-                if (e.codeName === "DuplicateKey") {
-                    throw new RouteError(
-                        "Name conflict",
-                        409,
-                        "VALIDATION",
-                        this.help
-                    );
+                if (e instanceof MongoServerError) {
+                    if (e.codeName === "DuplicateKey") {
+                        return {
+                            status: 409,
+                            response: this.buildErrorResponse(
+                                "VALIDATION",
+                                "Conversation with the name you're setting already exists"
+                            )
+                        };
+                    }
                 }
             }
 

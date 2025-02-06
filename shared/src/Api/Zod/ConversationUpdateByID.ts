@@ -126,7 +126,7 @@ export const ZodConversationUpdateByIDRequestBodySchema = swaggerRegistry.regist
 );
 
 export const ZodConversationUpdateByID200ResponseBodySchema = swaggerRegistry.register(
-    "UpdateConversationByID200ResponseBody",
+    "ConversationUpdateByID200ResponseBody",
     zodSuccessResponseSchema(
         z.object({
             conversation: ZodMongoConversationSchema
@@ -141,7 +141,7 @@ export const ZodConversationUpdateByID200ResponseBodySchema = swaggerRegistry.re
 );
 
 export const ZodConversationUpdateByIDResponseBodySchema = swaggerRegistry.register(
-    "UpdateConversationByIDResponseBody",
+    "ConversationUpdateByIDResponseBody",
     z.union([
         ZodConversationUpdateByID200ResponseBodySchema,
         ZodErrorResponseSchema

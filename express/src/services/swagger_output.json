@@ -536,12 +536,12 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ConversationUpdateByIDResponseBody"
+                  "$ref": "#/components/schemas/ConversationUpdateByID200ResponseBody"
                 }
               },
               "application/xml": {
                 "schema": {
-                  "$ref": "#/components/schemas/ConversationUpdateByIDResponseBody"
+                  "$ref": "#/components/schemas/ConversationUpdateByID200ResponseBody"
                 }
               }
             }
@@ -557,6 +557,33 @@
               "application/xml": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse400"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse",
+                  "example": {
+                    "ok": false,
+                    "code": "VALIDATION",
+                    "message": "Conversation with the name you're setting already exists",
+                    "help": "https://example.com/docs"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse",
+                  "example": {
+                    "ok": false,
+                    "code": "VALIDATION",
+                    "message": "Conversation with the name you're setting already exists",
+                    "help": "https://example.com/docs"
+                  }
                 }
               }
             }
@@ -653,6 +680,33 @@
               "application/xml": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse400"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse",
+                  "example": {
+                    "ok": false,
+                    "code": "VALIDATION",
+                    "message": "Conversation with the name you're setting already exists",
+                    "help": "https://example.com/docs"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse",
+                  "example": {
+                    "ok": false,
+                    "code": "VALIDATION",
+                    "message": "Conversation with the name you're setting already exists",
+                    "help": "https://example.com/docs"
+                  }
                 }
               }
             }
@@ -1782,7 +1836,7 @@
         ],
         "description": "The request body for updating a conversation"
       },
-      "UpdateConversationByID200ResponseBody": {
+      "ConversationUpdateByID200ResponseBody": {
         "allOf": [
           {
             "type": "object",
@@ -1808,10 +1862,10 @@
         ],
         "description": "The 200 response body from updating a conversation"
       },
-      "UpdateConversationByIDResponseBody": {
+      "ConversationUpdateByIDResponseBody": {
         "anyOf": [
           {
-            "$ref": "#/components/schemas/UpdateConversationByID200ResponseBody"
+            "$ref": "#/components/schemas/ConversationUpdateByID200ResponseBody"
           },
           {
             "$ref": "#/components/schemas/ErrorResponse"
@@ -1920,7 +1974,7 @@
         ],
         "description": "The request body for updating a conversation"
       },
-      "ConversationUpdateByNameResponseBody": {
+      "ConversationUpdateByName200ResponseBody": {
         "allOf": [
           {
             "type": "object",
@@ -1945,6 +1999,17 @@
           }
         ],
         "description": "The 200 response body from updating a conversation"
+      },
+      "ConversationUpdateByNameResponseBody": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/ConversationUpdateByName200ResponseBody"
+          },
+          {
+            "$ref": "#/components/schemas/ErrorResponse"
+          }
+        ],
+        "description": "The response for updating a conversation by name."
       }
     }
   }

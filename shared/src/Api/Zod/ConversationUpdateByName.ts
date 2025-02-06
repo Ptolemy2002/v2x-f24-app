@@ -19,7 +19,7 @@ export const ZodConversationUpdateByNameRequestBodySchema = swaggerRegistry.regi
 );
 
 export const ZodConversationUpdateByName200ResponseBodySchema = swaggerRegistry.register(
-    "ConversationUpdateByNameResponseBody",
+    "ConversationUpdateByName200ResponseBody",
     ZodConversationUpdateByID200ResponseBodySchema
 );
 
