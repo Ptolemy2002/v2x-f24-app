@@ -2,6 +2,14 @@ import "styled-components";
 import { RequiredCSSProperties } from "@ptolemy2002/react-styled-component-utils";
 
 declare module "styled-components" {
+    export type AlertVariant = "primary" | "secondary" | "success" | "danger" | "warning" | "info" | "light" | "dark";
+    export type AlertStyles = Partial<{
+        backgroundColor: RequiredCSSProperties["backgroundColor"],
+        textColor: RequiredCSSProperties["color"],
+        borderColor: RequiredCSSProperties["borderColor"],
+        linkColor: RequiredCSSProperties["color"]
+    }>;
+
     export type ButtonVariant = "conversationEdit" | "send" | "pausePlay" | "conversationSettingsSave";
     export type ButtonStyles = Partial<{
         radius: RequiredCSSProperties["borderRadius"],
@@ -33,6 +41,10 @@ declare module "styled-components" {
 
         buttons?: Partial<Record<ButtonVariant, ButtonStyles>> & {
             default?: ButtonStyles
+        },
+
+        alerts?: Partial<Record<AlertVariant, AlertStyles>> & {
+            default?: AlertStyles
         },
 
         header?: {

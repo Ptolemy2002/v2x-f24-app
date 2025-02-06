@@ -2,8 +2,10 @@ import { Router } from "express";
 import RouteHandler, { RouteHandlerRequest } from "lib/RouteHandler";
 import ConversationModel from "models/ConversationModel";
 import { ConversationUpdateByID200ResponseBody, ZodConversationUpdateByIDRequestBodySchema, ZodConversationUpdateByIDURLParamsSchema } from "shared";
-import { Error } from "mongoose";
+import { Error, MongooseError } from "mongoose";
+import { MongoServerError } from "mongodb";
 import { asyncErrorHandler } from "@ptolemy2002/express-utils";
+import RouteError from "lib/RouteError";
 
 const router = Router();
 
@@ -77,7 +79,24 @@ export class UpdateConversationByIDHandler extends RouteHandler<ConversationUpda
         }
         const oldConversationJSON = oldConversation.toClientJSON();
 
-        const newConversation = (await ConversationModel.findOneAndUpdate({ _id: id }, body.difference, { new: true }))!;
+        let newConversation;
+        try {
+            newConversation = (await ConversationModel.findOneAndUpdate({ _id: id }, body.difference, { new: true }))!;
+        } catch (e) {
+            if (e instanceof MongoServerError) {
+                if (e.codeName === "DuplicateKey") {
+                    throw new RouteError(
+                        "Name conflict",
+                        409,
+                        "VALIDATION",
+                        this.help
+                    );
+                }
+            }
+
+            throw e;
+        }
+
         newConversation.removeUnsetFields();
 
         // Re-validate the conversation

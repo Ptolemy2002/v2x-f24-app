@@ -1,7 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from 'src/App';
-import { createGlobalStyle } from 'styled-components';
+import { createGlobalStyle, AlertVariant, css } from 'styled-components';
 import CacheProvider from "react-inlinesvg/provider";
 import { NamedThemeProvider } from 'src/NamedTheme';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -38,6 +38,28 @@ export const GlobalStyle = createGlobalStyle`
 
         background-color: ${({ theme }) => theme.backgroundColor};
     }
+
+    // Override Bootstrap Alert styles where applicable
+    ${({ theme }) => {
+        if (!theme.alerts) return null;
+
+        return Object.entries(theme.alerts).map(([variant, styles]) => {
+            variant = variant as AlertVariant | 'default';
+            if (variant === 'default') return null;
+
+            return css`
+                .alert-${variant} {
+                    ${styles.backgroundColor && `--bs-alert-bg: ${styles.backgroundColor ?? theme.alerts?.default?.backgroundColor};`}
+                    ${styles.textColor && `--bs-alert-color: ${styles.textColor ?? theme.alerts?.default?.textColor};`}
+                    ${(styles.borderColor) && `--bs-alert-border-color: ${styles.borderColor ?? theme.alerts?.default?.borderColor};`}
+                    ${(styles.linkColor ?? styles.textColor) && `--bs-alert-link-color: ${
+                        styles.linkColor ?? styles.textColor ??
+                        theme.alerts?.default?.linkColor ?? theme.alerts?.default?.textColor
+                    };`}
+                }  
+            `;
+        });
+    }}
 `;
 
 createRoot(document.getElementById('root')!).render(

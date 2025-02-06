@@ -74,7 +74,8 @@ class ConversationNewHandler extends RouteHandler<ConversationNew200ResponseBody
             const conversation: MongoConversation = {
                 _id: "anonymous",
                 name: "Anonymous Conversation",
-                messages: defaultMessages
+                messages: defaultMessages,
+                createdAt: new Date().toISOString()
             };
 
             return {

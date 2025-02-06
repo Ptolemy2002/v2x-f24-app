@@ -28,7 +28,7 @@ export type ConversationModel = Model<MongoDocumentConversation, {}, Conversatio
 export interface ConversationModelWithStatics extends ConversationModel {
     getUniqueName: (name: string) => Promise<string>,
     createWithUniqueName:
-        (name: string, conversation: Omit<MongoConversation, "name" | "_id">) => Promise<
+        (name: string, conversation: Omit<MongoConversation, "name" | "_id" | "createdAt">) => Promise<
             HydratedDocumentFromSchema<typeof ConversationSchema>
         >,
     getPaths(): string[];
