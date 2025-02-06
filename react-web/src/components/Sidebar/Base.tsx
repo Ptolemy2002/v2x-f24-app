@@ -34,7 +34,6 @@ export default function SidebarBase({
 
                         if (data.ok) {
                             conversationInfo.setEntries(data.entries);
-                            conversationInfo.sortEntries();
                         }
                     })}
                     renderDeps={[conversationInfo.entries]}

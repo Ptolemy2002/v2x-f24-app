@@ -32,17 +32,21 @@ export default class ConversationInfo {
             const bModified = new Date(b.modifiedAt).getTime();
             return bModified - aModified;
         });
+        return this;
     }
 
-    setEntries(entries: MaybeTransformer<EntryList, [EntryList]>) {
+    setEntries(entries: MaybeTransformer<EntryList, [EntryList]>, sort = true) {
         if (isCallable(entries)) entries = entries(this.entries);
         this.entries = [...entries];
+        if (sort) this.sortEntries();
+        return this;
     }
 
     updateEntry(
         match: string,
         value: MaybeTransformer<Partial<EntryList[number]>, [EntryList[number]]>,
-        key: "name" | "_id" = "_id"
+        key: "name" | "_id" = "_id",
+        sort = true
     ) {
         let found = false;
         this.setEntries((entries) => entries.map((e) => {
@@ -64,6 +68,11 @@ export default class ConversationInfo {
             }
 
             return e;
-        }));
+        }), sort);
+
+        return {
+            found,
+            entries: this.entries
+        }
     }
 }

@@ -50,8 +50,6 @@ export function useSpeechContainerController() {
             conversationData.id,
             () => ({modifiedAt: conversationData.getLastModified().toISOString()})
         );
-
-        conversationInfo.sortEntries();
     }, [conversationData.messages], 1);
 
     return {
