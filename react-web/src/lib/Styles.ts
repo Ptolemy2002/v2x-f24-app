@@ -1,4 +1,4 @@
-import { ButtonVariant, css, ButtonStyles, DefaultTheme } from "styled-components";
+import { ButtonVariant, css, ButtonStyles, DefaultTheme, ModalStyles, ModalVariant } from "styled-components";
 
 export type Scoped<T extends Record<string, unknown>> = {
     [K in keyof T as `$${Extract<K, string>}`]: T[K]
@@ -28,14 +28,14 @@ export function evaluateButtonStyles(
             ?? theme.buttons?.[variant]?.borderWidth
             ?? theme.buttons?.default?.borderWidth
             ?? defaults.borderWidth
-            ?? theme.borderWidth,
+            ?? "1px",
 
         $borderColor:
             props.$borderColor
             ?? theme.buttons?.[variant]?.borderColor
             ?? theme.buttons?.default?.borderColor
             ?? defaults.borderColor
-            ?? theme.borderColor,
+            ?? "black",
         $activeBorderColor:
             props.$activeBorderColor
             ?? theme.buttons?.[variant]?.activeBorderColor
@@ -44,7 +44,7 @@ export function evaluateButtonStyles(
             ?? theme.buttons?.[variant]?.borderColor
             ?? theme.buttons?.default?.borderColor
             ?? defaults.borderColor
-            ?? theme.borderColor,
+            ?? "black",
         $hoverBorderColor:
             props.$hoverBorderColor
             ?? theme.buttons?.[variant]?.hoverBorderColor
@@ -53,7 +53,7 @@ export function evaluateButtonStyles(
             ?? theme.buttons?.[variant]?.borderColor
             ?? theme.buttons?.default?.borderColor
             ?? defaults.borderColor
-            ?? theme.borderColor,
+            ?? "black",
         $disabledBorderColor:
             props.$disabledBorderColor
             ?? theme.buttons?.[variant]?.disabledBorderColor
@@ -62,7 +62,7 @@ export function evaluateButtonStyles(
             ?? theme.buttons?.[variant]?.borderColor
             ?? theme.buttons?.default?.borderColor
             ?? defaults.borderColor
-            ?? theme.borderColor,
+            ?? "black",
 
         
         $backgroundColor:
@@ -156,5 +156,98 @@ export function buttonStyles(props: Scoped<ButtonStyles>) {
         --bs-btn-active-color: ${props.$activeTextColor};
         --bs-btn-hover-color: ${props.$hoverTextColor};
         --bs-btn-disabled-color: ${props.$disabledTextColor};
+    `;
+}
+
+export function evaluateModalStyles(
+    theme: DefaultTheme, props: Scoped<ModalStyles>,
+    variant: ModalVariant
+): Required<Scoped<ModalStyles>> {
+    return {
+        $zIndex:
+            props.$zIndex
+            ?? theme.modals?.[variant]?.zIndex
+            ?? theme.modals?.default?.zIndex
+            ?? theme.zIndex,
+
+        $textColor:
+            props.$textColor
+            ?? theme.modals?.[variant]?.textColor
+            ?? theme.modals?.default?.textColor
+            ?? theme.textColor,
+        $backgroundColor:
+            props.$backgroundColor
+            ?? theme.modals?.[variant]?.backgroundColor
+            ?? theme.modals?.default?.backgroundColor
+            ?? theme.backgroundColor,
+
+        $borderStyle:
+            props.$borderStyle
+            ?? theme.modals?.[variant]?.borderStyle
+            ?? theme.modals?.default?.borderStyle
+            ?? "solid",
+        $borderColor:
+            props.$borderColor
+            ?? theme.modals?.[variant]?.borderColor
+            ?? theme.modals?.default?.borderColor
+            ?? "black",
+        $borderWidth:
+            props.$borderWidth
+            ?? theme.modals?.[variant]?.borderWidth
+            ?? theme.modals?.default?.borderWidth
+            ?? "1px",
+        $radius:
+            props.$radius
+            ?? theme.modals?.[variant]?.radius
+            ?? theme.modals?.default?.radius
+            ?? "0",
+
+        $whiteCloseButton:
+            props.$whiteCloseButton
+            ?? theme.modals?.[variant]?.whiteCloseButton
+            ?? theme.modals?.default?.whiteCloseButton
+            ?? false,
+
+        $header: {
+            borderColor:
+                props.$header?.borderColor
+                ?? theme.modals?.[variant]?.header?.borderColor
+                ?? theme.modals?.default?.header?.borderColor
+                ?? theme.modals?.[variant]?.borderColor
+                ?? theme.modals?.default?.borderColor
+                ?? "black",
+            borderWidth:
+                props.$header?.borderWidth
+                ?? theme.modals?.[variant]?.header?.borderWidth
+                ?? theme.modals?.default?.header?.borderWidth
+                ?? theme.modals?.[variant]?.borderWidth
+                ?? theme.modals?.default?.borderWidth
+                ?? "1px",
+        }
+    }
+}
+
+export function modalStyles(props: Scoped<ModalStyles>) {
+    return css`
+        --bs-modal-z-index: ${props.$zIndex};
+        --bs-modal-color: ${props.$textColor};
+        --bs-modal-bg: ${props.$backgroundColor};
+
+        --bs-modal-border-color: ${props.$borderColor};
+        --bs-modal-border-width: ${props.$borderWidth};
+        --bs-modal-border-radius: ${props.$radius};
+
+        --bs-modal-header-border-width: ${props.$header?.borderWidth};
+        --bs-modal-header-border-color: ${props.$header?.borderColor};
+
+        .btn-close {
+            ${
+                props.$whiteCloseButton && css`
+                    filter: var(--bs-btn-close-white-filter);
+                `
+            }
+        }
+
+        border-style: ${props.$borderStyle};
     `;
 }

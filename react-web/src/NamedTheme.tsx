@@ -48,6 +48,12 @@ export const NamedThemes: NamedTheme[] = [
                     radius: "5px"
                 },
 
+                upload: {
+                    borderStyle: "none",
+                    backgroundColor: senderColor,
+                    radius: "5px"
+                },
+
                 pausePlay: {
                     borderStyle: "none",
                     backgroundColor: "#666",
@@ -59,6 +65,12 @@ export const NamedThemes: NamedTheme[] = [
                     borderStyle: "none",
                     backgroundColor: senderColor,
                     radius: "5px"
+                }
+            },
+
+            modals: {
+                default: {
+                    whiteCloseButton: true,
                 }
             },
 

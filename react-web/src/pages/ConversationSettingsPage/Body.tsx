@@ -10,8 +10,8 @@ import ConversationInfo from "src/context/ConversationInfo";
 import DefaultSaveButton from "./SaveButtonStyled";
 import { AxiosError } from "axios";
 import { ConversationUpdateByIDResponseBody } from "shared";
-import ErrorAlert from "src/components/Alerts/ErrorAlert";
-import SuccessAlert from "src/components/Alerts/SuccessAlert";
+import ErrorAlert from "src/components/alerts/ErrorAlert";
+import SuccessAlert from "src/components/alerts/SuccessAlert";
 
 export default function ConversationSettingsPageBodyBase(props: ConversationSettingsPageBodyProps["functional"]) {
     const [conversation] = ConversationData.useContextNonNullable([]);

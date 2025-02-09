@@ -31,6 +31,8 @@ export default Object.assign(
             border-radius: ${({$borderRadius}) => $borderRadius};
             padding: ${({$padding}) => $padding};
         }
+
+        ${({ $css }) => $css}
     `,
     {
         displayName: "styled(InputContainer)",

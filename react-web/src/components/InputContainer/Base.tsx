@@ -1,9 +1,11 @@
 import { InputContainerProps } from './Types';
 import { useInputContainerController } from './Controllers';
 import DefaultSendButton from './SendButtonStyled';
+import DefaultUploadButton from './UploadButtonStyled';
 
 export default function InputContainerBase({
     SendButton=DefaultSendButton,
+    UploadButton=DefaultUploadButton,
     ...props
 }: InputContainerProps["functional"]) {
     const {
@@ -25,6 +27,7 @@ export default function InputContainerBase({
                 onChange={onMessageInputChanged}
             ></textarea>
 
+            <UploadButton />
             <SendButton onClick={addText} disabled={sendDisabled} />
         </div>
     );

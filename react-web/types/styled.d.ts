@@ -10,7 +10,7 @@ declare module "styled-components" {
         linkColor: RequiredCSSProperties["color"]
     }>;
 
-    export type ButtonVariant = "conversationEdit" | "send" | "pausePlay" | "conversationSettingsSave";
+    export type ButtonVariant = "conversationEdit" | "send" | "pausePlay" | "conversationSettingsSave" | "upload";
     export type ButtonStyles = Partial<{
         radius: RequiredCSSProperties["borderRadius"],
 
@@ -33,6 +33,26 @@ declare module "styled-components" {
         disabledTextColor: RequiredCSSProperties["color"],
     }>;
 
+    export type ModalVariant = "upload";
+    export type ModalStyles = Partial<{
+        zIndex: RequiredCSSProperties["zIndex"],
+
+        textColor: RequiredCSSProperties["color"],
+        backgroundColor: RequiredCSSProperties["backgroundColor"],
+
+        borderStyle: RequiredCSSProperties["borderStyle"],
+        borderColor: RequiredCSSProperties["borderColor"],
+        borderWidth: RequiredCSSProperties["borderWidth"],
+        radius: RequiredCSSProperties["borderRadius"],
+
+        whiteCloseButton: boolean,
+
+        header?: {
+            borderColor: RequiredCSSProperties["borderColor"],
+            borderWidth: RequiredCSSProperties["borderWidth"],
+        }
+    }>;
+
     export interface DefaultTheme {
         backgroundColor: RequiredCSSProperties["backgroundColor"],
         
@@ -45,6 +65,10 @@ declare module "styled-components" {
 
         alerts?: Partial<Record<AlertVariant, AlertStyles>> & {
             default?: AlertStyles
+        },
+
+        modals?: Partial<Record<ModalVariant, ModalStyles>> & {
+            default?: ModalStyles
         },
 
         header?: {
