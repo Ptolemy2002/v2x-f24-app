@@ -16,6 +16,7 @@ export default defineConfig({
   },
 
   define: {
+    // One package depends on process.platform being defined
     "process.platform": JSON.stringify(process.platform)
   }
 })
