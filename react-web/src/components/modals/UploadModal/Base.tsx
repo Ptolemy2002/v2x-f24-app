@@ -2,7 +2,7 @@ import { UploadModalProps } from "./Types";
 import { Button, Modal } from "react-bootstrap";
 import FilePicker, { FilePickerRenderFunctionProps } from "@ptolemy2002/react-file-picker";
 import { valueConditionMatches } from "@ptolemy2002/ts-utils";
-import { acceptedMimeTypes, fileMimeTypeCondition } from "./Other";
+import { acceptedFileTypeCondition } from "./Other";
 import { useCallback, useState } from "react";
 import AudioPlayer from "src/components/AudioPlayer";
 
@@ -27,8 +27,8 @@ export default function UploadModalBase({
         if (files.length === 0) {
             setError("No files selected");
             return false;
-        } else if (!valueConditionMatches(files[0].type, fileMimeTypeCondition)) {
-            setError("Unsupported file type");
+        } else if (files.some((file) => !valueConditionMatches(file.type, acceptedFileTypeCondition))) {
+            setError("Invalid file type for one or more files");
             return false;
         }
 
@@ -39,7 +39,6 @@ export default function UploadModalBase({
     const fileRenderHandler = useCallback(({ input, files, urls }: FilePickerRenderFunctionProps) => {
         let fileElements;
         if (!error && files.length > 0) {
-            console.log(files, urls);
             fileElements = files.map((file, i) => {
                 const url = urls[i];
                 const [type] = file.type.split("/");
@@ -86,7 +85,7 @@ export default function UploadModalBase({
                         render={fileRenderHandler}
 
                         multiple
-                        accept={acceptedMimeTypes.join(",")}
+                        accept={acceptedFileTypeCondition}
                     />
 
                     {error && <div className="error-text">{error}</div>}

@@ -1,10 +1,7 @@
-import { ValueCondition, createAdvancedCondition, valueConditionMatches } from '@ptolemy2002/ts-utils';
-import { extensions } from "mime-types";
-
-const allMimeTypes = Object.keys(extensions);
+import { ValueCondition, createAdvancedCondition } from '@ptolemy2002/ts-utils';
 
 // Match the mime types of supported files
-export const fileMimeTypeCondition: ValueCondition<string> = [
+export const acceptedFileTypeCondition: ValueCondition<string> = [
     // Images except for GIF, BMP, and TIFF
     createAdvancedCondition({
         include: (v) => v.startsWith("image/"),
@@ -25,5 +22,3 @@ export const fileMimeTypeCondition: ValueCondition<string> = [
         }
     }),
 ];
-
-export const acceptedMimeTypes = allMimeTypes.filter((v) => valueConditionMatches(v, fileMimeTypeCondition));
