@@ -8,7 +8,7 @@ export default Object.assign(
     styled(Base).attrs<WithCSSProp<UploadModalProps["style"]>>(
         ({ theme, ...props }) => ({
             ...evaluateModalStyles(theme, props, "upload"),
-            $errorTextColor: props.errorTextColor ?? "red",
+            $errorTextColor: props.errorTextColor ?? theme.errorTextColor,
             $css: props.$css ?? null
         })
     )`

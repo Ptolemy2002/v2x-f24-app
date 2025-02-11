@@ -35,6 +35,7 @@ export const NamedThemes: NamedTheme[] = [
             backgroundColor: backgroundColor,
             
             textColor: "white",
+            errorTextColor: "red",
             activeTextColor: senderColor,
 
             buttons: {

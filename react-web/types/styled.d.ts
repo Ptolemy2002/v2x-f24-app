@@ -57,6 +57,7 @@ declare module "styled-components" {
         backgroundColor: RequiredCSSProperties["backgroundColor"],
         
         textColor: RequiredCSSProperties["color"],
+        errorTextColor: RequiredCSSProperties["color"],
         activeTextColor?: RequiredCSSProperties["color"],
 
         buttons?: Partial<Record<ButtonVariant, ButtonStyles>> & {
