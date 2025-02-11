@@ -1,4 +1,4 @@
-import { StyledComponentPropsWithCSS } from "@ptolemy2002/react-styled-component-utils";
+import { RequiredCSSProperties, StyledComponentPropsWithCSS } from "@ptolemy2002/react-styled-component-utils";
 import { ModalHeaderProps, ModalProps, ModalTitleProps } from "react-bootstrap";
 import { ModalStyles } from "styled-components";
 import { PropsWithCustomChildren } from "@ptolemy2002/react-utils";
@@ -8,9 +8,9 @@ import { ModalBodyProps } from "react-bootstrap/esm/ModalBody";
 export type UploadModalProps = StyledComponentPropsWithCSS<
     PropsWithCustomChildren<
         Omit<ModalProps, "id"> & {
-            titleProps?: ModalTitleProps;
-            headerProps?: ModalHeaderProps;
-            bodyProps?: ModalBodyProps;
+            titleProps?: Omit<ModalTitleProps, "children">;
+            headerProps?: Omit<ModalHeaderProps, "children">;
+            bodyProps?: Omit<ModalBodyProps, "children">;
         },
         {
             title: string | null;
@@ -18,5 +18,7 @@ export type UploadModalProps = StyledComponentPropsWithCSS<
             body: ReactNode;
         }
     >,
-    ModalStyles
+    ModalStyles & {
+        errorTextColor: RequiredCSSProperties["color"];
+    }
 >;

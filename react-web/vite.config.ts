@@ -13,5 +13,9 @@ export default defineConfig({
     alias: {
       "src": resolve(__dirname, 'src')
     }
+  },
+
+  define: {
+    "process.platform": JSON.stringify(process.platform)
   }
 })

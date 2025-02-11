@@ -6,7 +6,7 @@ import { ButtonStyles } from "styled-components";
 
 export type ConversationSettingsPageProps = StyledComponentPropsWithCSS<
         Override<HTMLProps<HTMLDivElement>, {
-            Body: ComponentType<ConversationSettingsPageBodyProps["functional"]>;
+            Body?: ComponentType<ConversationSettingsPageBodyProps["functional"]>;
         }
     >, {
         padding?: RequiredCSSProperties["padding"];
