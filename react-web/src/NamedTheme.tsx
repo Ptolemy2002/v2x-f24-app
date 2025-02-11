@@ -71,6 +71,9 @@ export const NamedThemes: NamedTheme[] = [
             modals: {
                 default: {
                     whiteCloseButton: true,
+                    header: {
+                        borderColor: "white"
+                    }
                 }
             },
 

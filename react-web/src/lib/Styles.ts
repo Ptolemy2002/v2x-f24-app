@@ -161,51 +161,60 @@ export function buttonStyles(props: Scoped<ButtonStyles>) {
 
 export function evaluateModalStyles(
     theme: DefaultTheme, props: Scoped<ModalStyles>,
-    variant: ModalVariant
+    variant: ModalVariant,
+    defaults: Partial<ModalStyles> = {}
 ): Required<Scoped<ModalStyles>> {
     return {
         $zIndex:
             props.$zIndex
             ?? theme.modals?.[variant]?.zIndex
             ?? theme.modals?.default?.zIndex
-            ?? theme.zIndex,
+            ?? defaults.zIndex
+            ?? 1050,
 
         $textColor:
             props.$textColor
             ?? theme.modals?.[variant]?.textColor
             ?? theme.modals?.default?.textColor
+            ?? defaults.textColor
             ?? theme.textColor,
         $backgroundColor:
             props.$backgroundColor
             ?? theme.modals?.[variant]?.backgroundColor
             ?? theme.modals?.default?.backgroundColor
+            ?? defaults.backgroundColor
             ?? theme.backgroundColor,
 
         $borderStyle:
             props.$borderStyle
             ?? theme.modals?.[variant]?.borderStyle
             ?? theme.modals?.default?.borderStyle
+            ?? defaults.borderStyle
             ?? "solid",
         $borderColor:
             props.$borderColor
             ?? theme.modals?.[variant]?.borderColor
             ?? theme.modals?.default?.borderColor
+            ?? defaults.borderColor
             ?? "black",
         $borderWidth:
             props.$borderWidth
             ?? theme.modals?.[variant]?.borderWidth
             ?? theme.modals?.default?.borderWidth
+            ?? defaults.borderWidth
             ?? "1px",
         $radius:
             props.$radius
             ?? theme.modals?.[variant]?.radius
             ?? theme.modals?.default?.radius
+            ?? defaults.radius
             ?? "0",
 
         $whiteCloseButton:
             props.$whiteCloseButton
             ?? theme.modals?.[variant]?.whiteCloseButton
             ?? theme.modals?.default?.whiteCloseButton
+            ?? defaults.whiteCloseButton
             ?? false,
 
         $header: {
@@ -215,6 +224,7 @@ export function evaluateModalStyles(
                 ?? theme.modals?.default?.header?.borderColor
                 ?? theme.modals?.[variant]?.borderColor
                 ?? theme.modals?.default?.borderColor
+                ?? defaults.header?.borderColor
                 ?? "black",
             borderWidth:
                 props.$header?.borderWidth
@@ -222,6 +232,7 @@ export function evaluateModalStyles(
                 ?? theme.modals?.default?.header?.borderWidth
                 ?? theme.modals?.[variant]?.borderWidth
                 ?? theme.modals?.default?.borderWidth
+                ?? defaults.header?.borderWidth
                 ?? "1px",
         }
     }

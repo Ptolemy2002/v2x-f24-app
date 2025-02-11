@@ -54,7 +54,7 @@ export default function UploadModalBase({
         return (
             <>
                 <Button onClick={() => input.click()}>
-                    Select File
+                    Select Files
                 </Button>
 
                 {

@@ -48,8 +48,8 @@ declare module "styled-components" {
         whiteCloseButton: boolean,
 
         header?: {
-            borderColor: RequiredCSSProperties["borderColor"],
-            borderWidth: RequiredCSSProperties["borderWidth"],
+            borderColor?: RequiredCSSProperties["borderColor"],
+            borderWidth?: RequiredCSSProperties["borderWidth"],
         }
     }>;
 
