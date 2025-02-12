@@ -208,7 +208,7 @@ export function evaluateModalStyles(
             ?? theme.modals?.[variant]?.radius
             ?? theme.modals?.default?.radius
             ?? defaults.radius
-            ?? "0",
+            ?? 0,
 
         $whiteCloseButton:
             props.$whiteCloseButton

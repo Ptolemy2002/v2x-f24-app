@@ -41,4 +41,4 @@ export type PausePlayButtonProps = StyledComponentPropsWithCSS<{
     RestartIcon?: FC<RestartIconProps>;
     PlayIcon?: FC<PlayIconProps>;
     PauseIcon?: FC<PauseIconProps>;
-} & ButtonProps, ButtonStyles>;
+} & Omit<ButtonProps, "children">, ButtonStyles>;

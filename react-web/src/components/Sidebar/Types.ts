@@ -35,7 +35,12 @@ export type ChatLinkProps = StyledComponentPropsWithCSS<{
     padding?: RequiredCSSProperties["padding"];
 }>;
 
-export type ConversationEditButtonProps = StyledComponentPropsWithCSS<Override<ButtonProps, {
-    id: string;
-    PencilIcon?: FC<PencilIconProps>;
-}>, ButtonStyles>;
+export type ConversationEditButtonProps = StyledComponentPropsWithCSS<
+    Override<
+        Omit<ButtonProps, "children">, 
+        {
+            id: string;
+            PencilIcon?: FC<PencilIconProps>;
+        }
+    >, ButtonStyles
+>;

@@ -20,7 +20,10 @@ export type ConversationSettingsPageBodyProps = StyledComponentPropsWithCSS<Form
     marginBottom?: RequiredCSSProperties["marginBottom"];
 }>;
 
-export type ConversationSettingsSaveButtonProps = StyledComponentPropsWithCSS<ButtonProps, ButtonStyles>;
+export type ConversationSettingsSaveButtonProps = StyledComponentPropsWithCSS<
+    Omit<ButtonProps, "children">,
+    ButtonStyles
+>;
 
 export type ConversationSettingsFormInputs = {
     name: string;

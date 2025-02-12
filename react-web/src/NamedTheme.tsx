@@ -39,33 +39,21 @@ export const NamedThemes: NamedTheme[] = [
             activeTextColor: senderColor,
 
             buttons: {
+                default: {
+                    backgroundColor: senderColor,
+                    borderStyle: "none",
+                    radius: "5px",
+                },
+
                 conversationEdit: {
+                    backgroundColor: "transparent",
                     hoverTextColor: senderColor,
-                },
-
-                send: {
-                    borderStyle: "none",
-                    backgroundColor: senderColor,
-                    radius: "5px"
-                },
-
-                upload: {
-                    borderStyle: "none",
-                    backgroundColor: senderColor,
-                    radius: "5px"
+                    radius: 0
                 },
 
                 pausePlay: {
-                    borderStyle: "none",
                     backgroundColor: "#666",
                     hoverBackgroundColor: "#555",
-                    radius: "5px"
-                },
-
-                conversationSettingsSave: {
-                    borderStyle: "none",
-                    backgroundColor: senderColor,
-                    radius: "5px"
                 }
             },
 

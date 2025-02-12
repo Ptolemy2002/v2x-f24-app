@@ -18,15 +18,25 @@ export type InputContainerProps = StyledComponentPropsWithCSS<HTMLProps<HTMLDivE
     padding: RequiredCSSProperties["padding"];
 }>;
 
-export type SendButtonProps = StyledComponentPropsWithCSS<Override<ButtonProps, {
-    RightArrowIcon?: FC<RightArrowIconProps>;
-}>, ButtonStyles & {
-    padding: RequiredCSSProperties["padding"];
-}>;
+export type SendButtonProps = StyledComponentPropsWithCSS<
+    Override<
+        Omit<ButtonProps, "children">,
+        {
+            RightArrowIcon?: FC<RightArrowIconProps>;
+        }
+    >, ButtonStyles & {
+        padding: RequiredCSSProperties["padding"];
+    }
+>;
 
-export type UploadButtonProps = StyledComponentPropsWithCSS<Override<ButtonProps, {
-    UploadIcon?: FC<UploadIconProps>;
-    UploadModal?: FC<UploadModalProps["functional"]>;
-}>, ButtonStyles & {
-    padding: RequiredCSSProperties["padding"];
-}>;
+export type UploadButtonProps = StyledComponentPropsWithCSS<
+    Override<
+        Omit<ButtonProps, "children">,
+        {
+            UploadIcon?: FC<UploadIconProps>;
+            UploadModal?: FC<UploadModalProps["functional"]>;
+        }
+    >, ButtonStyles & {
+        padding: RequiredCSSProperties["padding"];
+    }
+>;

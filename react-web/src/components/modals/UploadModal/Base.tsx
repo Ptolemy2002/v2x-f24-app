@@ -1,10 +1,11 @@
 import { UploadModalProps } from "./Types";
-import { Button, Modal } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import FilePicker, { FilePickerRenderFunctionProps } from "@ptolemy2002/react-file-picker";
 import { valueConditionMatches } from "@ptolemy2002/ts-utils";
 import { acceptedFileTypeCondition } from "./Other";
 import { useCallback, useState } from "react";
-import AudioPlayer from "src/components/AudioPlayer";
+import DefaultAudioPlayer from "src/components/AudioPlayer";
+import DefaultSelectFilesButton from "./SelectFilesButtonStyled";
 
 export default function UploadModalBase({
     className,
@@ -19,6 +20,8 @@ export default function UploadModalBase({
     }={},
     titleProps={},
     bodyProps={},
+    AudioPlayer=DefaultAudioPlayer,
+    SelectFilesButton=DefaultSelectFilesButton,
     ...props
 }: UploadModalProps["functional"]) {
     const [error, setError] = useState<string | null>(null);
@@ -53,9 +56,7 @@ export default function UploadModalBase({
 
         return (
             <>
-                <Button onClick={() => input.click()}>
-                    Select Files
-                </Button>
+                <SelectFilesButton onClick={() => input.click()} />
 
                 {
                     fileElements
