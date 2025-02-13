@@ -4,8 +4,9 @@ import FilePicker, { FilePickerRenderFunctionProps } from "@ptolemy2002/react-fi
 import { valueConditionMatches } from "@ptolemy2002/ts-utils";
 import { acceptedFileTypeCondition } from "./Other";
 import { useCallback, useState } from "react";
-import DefaultAudioPlayer from "src/components/AudioPlayer";
+import DefaultAudioPlayer, { AudioPlayerProgressBar } from "src/components/AudioPlayer";
 import DefaultSelectFilesButton from "./SelectFilesButtonStyled";
+import { css } from "styled-components";
 
 export default function UploadModalBase({
     className,
@@ -47,9 +48,22 @@ export default function UploadModalBase({
                 const [type] = file.type.split("/");
 
                 return type === "image" ? (
-                    <img key={url} className={"img-fluid"} src={url} alt={file.name} />
+                    <img className={"img-fluid"} src={url} alt={file.name} />
                 ) : (
-                    <AudioPlayer key={url} src={url} />
+                    <AudioPlayer src={url}
+                        AudioPlayerProgressBar={
+                            (props) => {
+                                return <AudioPlayerProgressBar
+                                    {...props}
+                                    $css={css`
+                                        // Manually adjusting height until I can figure out why
+                                        // any percentage-based height is resulting in 0.
+                                        height: 16px;
+                                    `}
+                                />
+                            }
+                        } 
+                    />
                 );
             });
         }
@@ -57,10 +71,17 @@ export default function UploadModalBase({
         return (
             <>
                 <SelectFilesButton onClick={() => input.click()} />
-
-                {
-                    fileElements
-                }
+                <ul className="file-preview-list">
+                    {
+                        fileElements?.map((e, i) => (
+                            <li key={urls[i]}>
+                                {files[i].name}
+                                {e}
+                            </li>
+                        ))
+                    }
+                </ul>
+                
             </>
         )
     }, [error]);

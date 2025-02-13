@@ -3,9 +3,10 @@ import { RequiredCSSProperties, StyledComponentPropsWithCSS, WithCSSProp } from 
 import { MaybeForwardRefComponent } from 'src/TypeUtils';
 import { RestartIconProps } from 'src/components/icons/RestartIcon';
 import { PlayIconProps } from 'src/components/icons/PlayIcon';
-import { PauseIconProps } from '../icons/PauseIcon';
+import { PauseIconProps } from 'src/components/icons/PauseIcon';
 import { ButtonProps } from 'react-bootstrap';
 import { ButtonStyles } from 'styled-components';
+import { Override } from '@ptolemy2002/ts-utils';
 
 export type AudioPlayerProps = StyledComponentPropsWithCSS<{
     src: string;
@@ -28,11 +29,15 @@ export type AudioMediaProps = PropsWithRef<{
 }> & HTMLProps<HTMLAudioElement>;
 export type AudioMediaControllerProps = Pick<AudioMediaProps, 'onTimeUpdate' | 'mobileTimeUpdateInterval'>;
 
-export type AudioPlayerProgressBarProps = PropsWithChildren<{
-    progress: number;
-    maxDuration: number;
-    onSeek: (progress: number) => void;
-}> & HTMLProps<HTMLProgressElement>;
+export type AudioPlayerProgressBarProps = Override<
+    HTMLProps<HTMLProgressElement>, 
+    PropsWithChildren<{
+        progress: number;
+        maxDuration: number;
+        onSeek: (progress: number) => void;
+        ref?: RefObject<HTMLProgressElement>;
+    }>
+>;
 export type AudioPlayerProgressBarControllerProps = Pick<AudioPlayerProgressBarProps, 'onSeek'>;
 
 export type PausePlayButtonProps = StyledComponentPropsWithCSS<{
