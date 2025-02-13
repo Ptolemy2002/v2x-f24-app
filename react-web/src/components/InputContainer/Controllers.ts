@@ -29,7 +29,7 @@ export function useInputContainerController() {
     const addImage = useCallback(() => {
         conversationData.addMessage(createImageMessage("sender", () => ({
             // Just a placeholder image for now.
-            src: "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png",
+            src: "/placeholder-image.png",
             alt: "Placeholder image"
         })));
 
