@@ -1,5 +1,5 @@
 import { UploadModalProps } from "./Types";
-import { Modal } from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap";
 import FilePicker, { FilePickerRenderFunctionProps } from "@ptolemy2002/react-file-picker";
 import { valueConditionMatches } from "@ptolemy2002/ts-utils";
 import { acceptedFileTypeCondition } from "./Other";
@@ -40,7 +40,7 @@ export default function UploadModalBase({
         return true;
     }, []);
 
-    const fileRenderHandler = useCallback(({ input, files, urls }: FilePickerRenderFunctionProps) => {
+    const fileRenderHandler = useCallback(({ input, files, urls, modifyInputFiles }: FilePickerRenderFunctionProps) => {
         let fileElements;
         if (!error && files.length > 0) {
             fileElements = files.map((file, i) => {
@@ -77,6 +77,14 @@ export default function UploadModalBase({
                             <li key={urls[i]}>
                                 {files[i].name}
                                 {e}
+                                
+                                <Button onClick={() => {
+                                    modifyInputFiles((files) => {
+                                        files.splice(i, 1);
+                                    }, "replace");
+                                }}>
+                                    Remove
+                                </Button>
                             </li>
                         ))
                     }
@@ -106,6 +114,7 @@ export default function UploadModalBase({
                         validateFiles={fileValidateHandler}
                         render={fileRenderHandler}
 
+                        defaultChangeBehavior="append"
                         multiple
                         accept={acceptedFileTypeCondition}
                     />

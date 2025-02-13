@@ -18,6 +18,13 @@ export default Object.assign(
             > .error-text {
                 color: ${({ $errorTextColor }) => $errorTextColor};
             }
+
+            > .file-preview-list {
+                > li {
+                    display: flex;
+                    flex-direction: column;
+                }
+            }
         }
         
         ${({ $css }) => $css}
