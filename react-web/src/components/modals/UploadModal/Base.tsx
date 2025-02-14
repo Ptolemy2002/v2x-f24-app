@@ -81,7 +81,7 @@ export default function UploadModalBase({
                                 <Button onClick={() => {
                                     modifyInputFiles((files) => {
                                         files.splice(i, 1);
-                                    }, "replace");
+                                    });
                                 }}>
                                     Remove
                                 </Button>
