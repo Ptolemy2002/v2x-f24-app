@@ -29,14 +29,16 @@ export const GlobalStyle = createGlobalStyle`
         display: flex;
         flex-direction: column;
 
-        overflow-anchor: none; // Fixes a few React bugs
-
         color: ${({ theme }) => theme.textColor};
         li::marker {
             color: ${({ theme }) => theme.textColor};
         }
 
         background-color: ${({ theme }) => theme.backgroundColor};
+    }
+
+    #root, .modal {
+        overflow-anchor: none; // Fixes a few React bugs
     }
 
     // Override Bootstrap Alert styles where applicable
