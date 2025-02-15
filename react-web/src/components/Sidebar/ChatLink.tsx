@@ -2,11 +2,13 @@ import useAppSearchParamState from "src/SearchParams";
 import {ChatLinkProps} from "./Types";
 import clsx from "clsx";
 import { useNavigate } from "react-router";
-import DefaultConversationEditTitleButton from "./ConversationEditButtonStyled";
+import DefaultPencilIcon from "src/components/icons/PencilIcon";
+import StyledButton from "src/components/StyledButton";
+import { css } from "styled-components";
 
 export default function ChatLinkBase({
     text, id, className, onClick,
-    ConversationEditTitleButton=DefaultConversationEditTitleButton,
+    PencilIcon=DefaultPencilIcon,
     ...props
 }: ChatLinkProps["functional"]) {
     const {convo} = useAppSearchParamState();
@@ -21,7 +23,24 @@ export default function ChatLinkBase({
                 onClick?.(e);
             }}>{text}</a>
             
-            <ConversationEditTitleButton id={id} />
+            <StyledButton
+                $variant="conversationTitleEdit"
+                className="conversation-title-edit-button"
+                onClick={() => {
+                    navigate("/conversation-settings?convo=" + id);
+                }}
+
+                $css={css`
+                    padding: 0;
+
+                    > svg {
+                        width: 100%;
+                        height: 100%;
+                    }
+                `}
+            >
+                <PencilIcon />
+            </StyledButton>
         </li>
     );
 }

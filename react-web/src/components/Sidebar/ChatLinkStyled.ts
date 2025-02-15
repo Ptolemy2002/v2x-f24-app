@@ -52,7 +52,7 @@ export default Object.assign(
         }
 
         &.active {
-        color: ${({theme}) => theme.activeTextColor ?? theme.textColor};
+            color: ${({theme}) => theme.activeTextColor ?? theme.textColor};
         }
 
         ${({$css}) => $css}

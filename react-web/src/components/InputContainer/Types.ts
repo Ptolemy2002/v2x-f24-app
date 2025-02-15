@@ -1,15 +1,15 @@
 import { FC, HTMLProps } from 'react';
 import { RequiredCSSProperties, StyledComponentPropsWithCSS } from '@ptolemy2002/react-styled-component-utils';
 import { RightArrowIconProps } from '../icons/RightArrowIcon';
-import { ButtonStyles } from 'styled-components';
-import { ButtonProps } from 'react-bootstrap';
-import { Override } from '@ptolemy2002/ts-utils';
 import { UploadIconProps } from 'src/components/icons/UploadIcon';
-import { UploadModalProps } from 'src/components/modals/UploadModal';
+import { SendButtonProps } from './SendButton';
+import { UploadButtonProps } from './UploadButton';
 
 export type InputContainerProps = StyledComponentPropsWithCSS<HTMLProps<HTMLDivElement> & {
-    SendButton?: FC<SendButtonProps["functional"]>;
-    UploadButton?: FC<UploadButtonProps["functional"]>;
+    SendButton?: FC<SendButtonProps>;
+    UploadButton?: FC<UploadButtonProps>;
+    RightArrowIcon?: FC<RightArrowIconProps>;
+    UploadIcon?: FC<UploadIconProps>;
 }, {
     gap: RequiredCSSProperties["gap"];
     maxHeight: RequiredCSSProperties["maxHeight"];
@@ -17,26 +17,3 @@ export type InputContainerProps = StyledComponentPropsWithCSS<HTMLProps<HTMLDivE
     borderRadius: RequiredCSSProperties["borderRadius"];
     padding: RequiredCSSProperties["padding"];
 }>;
-
-export type SendButtonProps = StyledComponentPropsWithCSS<
-    Override<
-        Omit<ButtonProps, "children">,
-        {
-            RightArrowIcon?: FC<RightArrowIconProps>;
-        }
-    >, ButtonStyles & {
-        padding: RequiredCSSProperties["padding"];
-    }
->;
-
-export type UploadButtonProps = StyledComponentPropsWithCSS<
-    Override<
-        Omit<ButtonProps, "children">,
-        {
-            UploadIcon?: FC<UploadIconProps>;
-            UploadModal?: FC<UploadModalProps["functional"]>;
-        }
-    >, ButtonStyles & {
-        padding: RequiredCSSProperties["padding"];
-    }
->;

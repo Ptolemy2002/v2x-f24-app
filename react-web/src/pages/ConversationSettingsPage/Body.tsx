@@ -7,11 +7,12 @@ import { useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import useManualErrorHandling from "@ptolemy2002/react-manual-error-handling";
 import ConversationInfo from "src/context/ConversationInfo";
-import DefaultSaveButton from "./SaveButtonStyled";
 import { AxiosError } from "axios";
 import { ConversationUpdateByIDResponseBody } from "shared";
 import ErrorAlert from "src/components/alerts/ErrorAlert";
 import SuccessAlert from "src/components/alerts/SuccessAlert";
+import StyledButton from "src/components/StyledButton";
+import { css } from "styled-components";
 
 export default function ConversationSettingsPageBodyBase(props: ConversationSettingsPageBodyProps["functional"]) {
     const [conversation] = ConversationData.useContextNonNullable([]);
@@ -29,7 +30,6 @@ function InternalForm(
     {
         className,
         onSubmit: _onSubmit,
-        SaveButton = DefaultSaveButton,
         ...props
     }: ConversationSettingsPageBodyProps["functional"]
 ) {
@@ -136,7 +136,17 @@ function InternalForm(
                 Last Activity: {conversation.getLastModified().toLocaleString()}
             </p>
 
-            <SaveButton type="submit" />
+            <StyledButton
+                $variant="conversationSettingsSave"
+                type="submit"
+                $css={css`
+                    height: fit-content;
+                    margin-top: auto;
+                    margin-bottom: auto;
+                `}
+            >
+                Save
+            </StyledButton>
         </Form>
     );
 }

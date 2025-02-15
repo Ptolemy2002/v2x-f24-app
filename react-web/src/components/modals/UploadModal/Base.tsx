@@ -5,8 +5,8 @@ import { valueConditionMatches } from "@ptolemy2002/ts-utils";
 import { acceptedFileTypeCondition } from "./Other";
 import { useCallback, useState } from "react";
 import DefaultAudioPlayer, { AudioPlayerProgressBar } from "src/components/AudioPlayer";
-import DefaultSelectFilesButton from "./SelectFilesButtonStyled";
 import { css } from "styled-components";
+import StyledButton from "src/components/StyledButton";
 
 export default function UploadModalBase({
     className,
@@ -22,7 +22,6 @@ export default function UploadModalBase({
     titleProps={},
     bodyProps={},
     AudioPlayer=DefaultAudioPlayer,
-    SelectFilesButton=DefaultSelectFilesButton,
     ...props
 }: UploadModalProps["functional"]) {
     const [error, setError] = useState<string | null>(null);
@@ -51,7 +50,7 @@ export default function UploadModalBase({
                     <img className={"img-fluid"} src={url} alt={file.name} />
                 ) : (
                     <AudioPlayer src={url}
-                        AudioPlayerProgressBar={
+                        ProgressBar={
                             (props) => {
                                 return <AudioPlayerProgressBar
                                     {...props}
@@ -70,7 +69,13 @@ export default function UploadModalBase({
 
         return (
             <>
-                <SelectFilesButton onClick={() => input.click()} />
+                <StyledButton
+                    $variant="selectFiles"
+                    onClick={() => input.click()}
+                >
+                    Select Files
+                </StyledButton>
+
                 <ul className="file-preview-list">
                     {
                         fileElements?.map((e, i) => (

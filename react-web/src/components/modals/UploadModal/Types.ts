@@ -1,6 +1,6 @@
 import { RequiredCSSProperties, StyledComponentPropsWithCSS } from "@ptolemy2002/react-styled-component-utils";
-import { ButtonProps, ModalHeaderProps, ModalProps, ModalTitleProps } from "react-bootstrap";
-import { ButtonStyles, ModalStyles } from "styled-components";
+import { ModalHeaderProps, ModalProps, ModalTitleProps } from "react-bootstrap";
+import { ModalStyles } from "styled-components";
 import { PropsWithCustomChildren } from "@ptolemy2002/react-utils";
 import { ComponentType, ReactNode } from "react";
 import { ModalBodyProps } from "react-bootstrap/esm/ModalBody";
@@ -12,7 +12,6 @@ export type UploadModalProps = StyledComponentPropsWithCSS<
             titleProps?: Omit<ModalTitleProps, "children">;
             headerProps?: Omit<ModalHeaderProps, "children">;
             bodyProps?: Omit<ModalBodyProps, "children">;
-            SelectFilesButton?: ComponentType<SelectFilesButtonProps["functional"]>;
             AudioPlayer?: ComponentType<AudioPlayerProps["functional"]>;
         },
         {
@@ -24,9 +23,4 @@ export type UploadModalProps = StyledComponentPropsWithCSS<
     ModalStyles & {
         errorTextColor?: RequiredCSSProperties["color"];
     }
->;
-
-export type SelectFilesButtonProps = StyledComponentPropsWithCSS<
-    Omit<ButtonProps, "children">,
-    ButtonStyles
 >;

@@ -1,8 +1,7 @@
 import { RequiredCSSProperties, StyledComponentPropsWithCSS } from "@ptolemy2002/react-styled-component-utils";
 import { Override } from "@ptolemy2002/ts-utils";
 import { ComponentType, HTMLProps } from "react";
-import { ButtonProps, FormProps } from "react-bootstrap";
-import { ButtonStyles } from "styled-components";
+import { FormProps } from "react-bootstrap";
 
 export type ConversationSettingsPageProps = StyledComponentPropsWithCSS<
         Override<HTMLProps<HTMLDivElement>, {
@@ -13,16 +12,12 @@ export type ConversationSettingsPageProps = StyledComponentPropsWithCSS<
     }>
 ;
 
-export type ConversationSettingsPageBodyProps = StyledComponentPropsWithCSS<FormProps & {
-    SaveButton?: ComponentType<ConversationSettingsSaveButtonProps["functional"]>;
-}, {
-    formGroupGap?: RequiredCSSProperties["gap"];
-    marginBottom?: RequiredCSSProperties["marginBottom"];
-}>;
-
-export type ConversationSettingsSaveButtonProps = StyledComponentPropsWithCSS<
-    Omit<ButtonProps, "children">,
-    ButtonStyles
+export type ConversationSettingsPageBodyProps = StyledComponentPropsWithCSS<
+    FormProps,
+    {
+        formGroupGap?: RequiredCSSProperties["gap"];
+        marginBottom?: RequiredCSSProperties["marginBottom"];
+    }
 >;
 
 export type ConversationSettingsFormInputs = {

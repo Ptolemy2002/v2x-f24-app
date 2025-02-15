@@ -1,11 +1,15 @@
 import { InputContainerProps } from './Types';
 import { useInputContainerController } from './Controllers';
-import DefaultSendButton from './SendButtonStyled';
-import DefaultUploadButton from './UploadButtonStyled';
+import DefaultSendButton from './SendButton';
+import DefaultUploadButton from './UploadButton';
+import DefaultRightArrowIcon from 'src/components/icons/RightArrowIcon';
+import DefaultUploadIcon from 'src/components/icons/UploadIcon';
 
 export default function InputContainerBase({
     SendButton=DefaultSendButton,
     UploadButton=DefaultUploadButton,
+    RightArrowIcon=DefaultRightArrowIcon,
+    UploadIcon=DefaultUploadIcon,
     ...props
 }: InputContainerProps["functional"]) {
     const {
@@ -27,8 +31,13 @@ export default function InputContainerBase({
                 onChange={onMessageInputChanged}
             ></textarea>
 
-            <UploadButton />
-            <SendButton onClick={addText} disabled={sendDisabled} />
+            <UploadButton>
+                <UploadIcon />
+            </UploadButton>
+            
+            <SendButton onClick={addText} disabled={sendDisabled}>
+                <RightArrowIcon />
+            </SendButton>
         </div>
     );
 }

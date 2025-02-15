@@ -1,9 +1,6 @@
 import { HTMLProps, FC, MouseEventHandler } from 'react';
 import { RequiredCSSProperties, StyledComponentPropsWithCSS } from '@ptolemy2002/react-styled-component-utils';
-import { ButtonStyles } from 'styled-components';
-import { ButtonProps } from 'react-bootstrap';
-import { Override } from '@ptolemy2002/ts-utils';
-import { PencilIconProps } from '../icons/PencilIcon';
+import { PencilIconProps } from 'src/components/icons/PencilIcon';
 
 export type SidebarProps = StyledComponentPropsWithCSS<{
     colSize?: number;
@@ -29,18 +26,8 @@ export type ChatLinkProps = StyledComponentPropsWithCSS<{
     id: string;
     text: string;
     onClick?: MouseEventHandler<HTMLAnchorElement>;
-    ConversationEditTitleButton?: FC<ConversationEditButtonProps["functional"]>;
+    PencilIcon?: FC<PencilIconProps>;
 } & Omit<HTMLProps<HTMLLIElement>, "onClick">, {
     margin?: RequiredCSSProperties["marginLeft"];
     padding?: RequiredCSSProperties["padding"];
 }>;
-
-export type ConversationEditButtonProps = StyledComponentPropsWithCSS<
-    Override<
-        Omit<ButtonProps, "children">, 
-        {
-            id: string;
-            PencilIcon?: FC<PencilIconProps>;
-        }
-    >, ButtonStyles
->;

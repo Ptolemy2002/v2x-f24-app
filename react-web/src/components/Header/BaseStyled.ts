@@ -1,6 +1,5 @@
 import Base from "./Base";
 import styled from "styled-components";
-import { important } from "polished";
 import { WithCSSProp } from "@ptolemy2002/react-styled-component-utils";
 
 export default Object.assign(
@@ -15,8 +14,7 @@ export default Object.assign(
 
         > * {
             flex-grow: 1;
-            // important is used to override the default Bootstrap styles
-            ${important({width: "fit-content"})}
+            width: fit-content;
 
             margin: 0;
 
@@ -27,10 +25,6 @@ export default Object.assign(
 
         > #menu-button {
             flex-grow: 0;
-            width: 2em;
-            // important is used to override the default Bootstrap styles
-            ${({theme}) => important({backgroundColor: theme.sender.color})}
-            border: none;
         }
 
         ${({$css}) => $css}

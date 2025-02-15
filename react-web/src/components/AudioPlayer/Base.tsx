@@ -2,7 +2,10 @@ import DefaultAudioMedia from './AudioMedia';
 import DefaultAudioPlayerProgressBar from './ProgressBarStyled';
 import { AudioPlayerProps } from './Types';
 import { useAudioPlayerController } from './Controllers';
-import DefaultPausePlayButton from './PausePlayButtonStyled';
+import StyledButton from "src/components/StyledButton";
+import DefaultPauseIcon from 'src/components/icons/PauseIcon';
+import DefaultPlayIcon from 'src/components/icons/PlayIcon';
+import DefaultRestartIcon from 'src/components/icons/RestartIcon';
 
 export default function AudioPlayerBase({
     src,
@@ -10,8 +13,10 @@ export default function AudioPlayerBase({
     onLoadedMetadata,
     className: _className,
     AudioMedia = DefaultAudioMedia,
-    AudioPlayerProgressBar = DefaultAudioPlayerProgressBar,
-    PausePlayButton= DefaultPausePlayButton,
+    ProgressBar = DefaultAudioPlayerProgressBar,
+    PauseIcon = DefaultPauseIcon,
+    PlayIcon = DefaultPlayIcon,
+    RestartIcon = DefaultRestartIcon,
     ...props
 }: AudioPlayerProps["functional"]) {
     const {
@@ -45,23 +50,28 @@ export default function AudioPlayerBase({
                 onTimeUpdate={timeUpdateHandler}
             />
 
-            <PausePlayButton
-                isPaused={isPaused}
-                isEnded={isEnded}
+            <StyledButton
+                $variant="pausePlay"
                 onClick={buttonClickHandler}
-            />
+            >
+                {
+                    isPaused ? (
+                        isEnded ? <RestartIcon /> : <PlayIcon />
+                    ) : <PauseIcon />
+                }
+            </StyledButton>
             
             <span className="progress-label">
                 {progressText}
             </span>
             
-            <AudioPlayerProgressBar
+            <ProgressBar
                 progress={progress}
                 maxDuration={maxDuration}
                 onSeek={setProgress}
             >
                 {progressText}
-            </AudioPlayerProgressBar>
+            </ProgressBar>
         </div>
     );
 }

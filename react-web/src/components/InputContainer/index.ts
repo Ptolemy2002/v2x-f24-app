@@ -1,25 +1,18 @@
 import InputContainerBase from "./Base";
 import InputContainerStyled from "./BaseStyled";
-import SendButtonBase from "./SendButtonBase";
-import SendButtonStyled from "./SendButtonStyled";
-import UploadButtonBase from "./UploadButtonBase";
-import UploadButtonStyled from "./UploadButtonStyled";
+import SendButton from "./SendButton";
+import UploadButton from "./UploadButton";
 
 export const UnstyledInputContainer = Object.assign(InputContainerBase, {
-    SendButton: SendButtonBase,
-    UploadButton: UploadButtonBase,
+    SendButton, UploadButton
 });
 
 export default Object.assign(InputContainerStyled, {
-    SendButton: SendButtonStyled,
-    UploadButton: UploadButtonStyled,
+    SendButton, UploadButton
 });
 
-export const UnstyledSendButton = SendButtonBase;
-export const SendButton = SendButtonStyled;
-
-export const UnstyledUploadButton = UploadButtonBase;
-export const UploadButton = UploadButtonStyled;
+export { default as SendButton } from "./SendButton";
+export { default as UploadButton } from "./UploadButton";
 
 // Export the types and other resources as well.
 export * from "./Types";

@@ -45,7 +45,7 @@ export const NamedThemes: NamedTheme[] = [
                     radius: "5px",
                 },
 
-                conversationEdit: {
+                conversationTitleEdit: {
                     backgroundColor: "transparent",
                     hoverTextColor: senderColor,
                     radius: 0

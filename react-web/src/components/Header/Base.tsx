@@ -1,7 +1,8 @@
 import { HeaderProps } from "./Types";
-import { Button, Row } from "react-bootstrap";
+import { Row } from "react-bootstrap";
 import { BSMediaQuery } from "@ptolemy2002/react-bs-media-queries";
 import DefaultMenuIcon from "src/components/icons/MenuIcon";
+import StyledButton from "../StyledButton";
 
 export default function HeaderBase({
     onMenuClick,
@@ -12,9 +13,13 @@ export default function HeaderBase({
     return (
         <Row as="header" {...props}>
             <BSMediaQuery breakpoint="xl" comparison="max">
-                <Button id="menu-button" onClick={onMenuClick}>
+                <StyledButton
+                    $variant="menu"
+                    id="menu-button"
+                    onClick={onMenuClick}
+                >
                     <MenuIcon />
-                </Button>
+                </StyledButton>
             </BSMediaQuery>
 
             <BSMediaQuery breakpoint="xs" comparison="max">

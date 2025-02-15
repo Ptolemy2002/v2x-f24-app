@@ -10,7 +10,7 @@ declare module "styled-components" {
         linkColor: RequiredCSSProperties["color"]
     }>;
 
-    export type ButtonVariant = "conversationEdit" | "send" | "pausePlay" | "conversationSettingsSave" | "upload" | "selectFiles";
+    export type ButtonVariant = "menu" | "conversationTitleEdit" | "send" | "pausePlay" | "conversationSettingsSave" | "upload" | "selectFiles";
     export type ButtonStyles = Partial<{
         radius: RequiredCSSProperties["borderRadius"],
 
