@@ -2035,6 +2035,68 @@
           }
         ],
         "description": "The response for updating a conversation by name."
+      },
+      "FileMimeType": {
+        "type": "string",
+        "description": "The MIME type of a file",
+        "example": "image/png"
+      },
+      "ConversationUpload200ResponseBody": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "uploaded": {
+                "type": "boolean",
+                "enum": [
+                  true
+                ]
+              }
+            },
+            "required": [
+              "uploaded"
+            ],
+            "description": "The response body for the conversation upload endpoint"
+          },
+          {
+            "$ref": "#/components/schemas/SuccessResponseBase"
+          }
+        ]
+      },
+      "ConversationUploadResponseBody": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/ConversationUpload200ResponseBody"
+          },
+          {
+            "$ref": "#/components/schemas/ErrorResponse"
+          }
+        ],
+        "description": "The response body for the conversation upload endpoint"
+      },
+      "ConversationUploadFile": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "mimetype": {
+              "$ref": "#/components/schemas/FileMimeType"
+            },
+            "type": {
+              "$ref": "#/components/schemas/FileMimeType"
+            },
+            "size": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "description": "The size of the file in bytes"
+            }
+          },
+          "required": [
+            "size"
+          ],
+          "description": "The files to upload. Must specify either mimetype or type. Size must be less than or equal to 10 MB"
+        },
+        "minItems": 1
       }
     }
   }

@@ -14,3 +14,6 @@ export * from "./ConversationListName";
 
 export * from "./ConversationUpdateByID";
 export * from "./ConversationUpdateByName";
+
+export * from "./ConversationUpload";
+export * from "./FileMimeType";

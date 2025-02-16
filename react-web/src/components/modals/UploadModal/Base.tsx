@@ -1,12 +1,12 @@
 import { UploadModalProps } from "./Types";
 import { Button, Modal } from "react-bootstrap";
 import FilePicker, { FilePickerRenderFunctionProps } from "@ptolemy2002/react-file-picker";
-import { valueConditionMatches } from "@ptolemy2002/ts-utils";
-import { acceptedFileTypeCondition } from "./Other";
+import { acceptedFileTypeCondition, ZodConversationUploadFilesSchema } from "shared";
 import { useCallback, useState } from "react";
 import DefaultAudioPlayer, { AudioPlayerProgressBar } from "src/components/AudioPlayer";
 import { css } from "styled-components";
 import StyledButton from "src/components/StyledButton";
+import { interpretZodError } from "@ptolemy2002/regex-utils";
 
 export default function UploadModalBase({
     className,
@@ -27,11 +27,16 @@ export default function UploadModalBase({
     const [error, setError] = useState<string | null>(null);
 
     const fileValidateHandler = useCallback((files: readonly File[]) => {
-        if (files.length === 0) {
-            setError("No files selected");
-            return false;
-        } else if (files.some((file) => !valueConditionMatches(file.type, acceptedFileTypeCondition))) {
-            setError("Invalid file type for one or more files");
+        const { success, error } = ZodConversationUploadFilesSchema.safeParse(files);
+
+        if (!success) {
+            const interpretedError = interpretZodError(error);
+            if (Array.isArray(interpretedError)) {
+                setError(interpretedError.join(", "));
+            } else {
+                setError(interpretedError);
+            }
+
             return false;
         }
 
@@ -41,30 +46,35 @@ export default function UploadModalBase({
 
     const fileRenderHandler = useCallback(({ input, files, urls, modifyInputFiles }: FilePickerRenderFunctionProps) => {
         let fileElements;
-        if (!error && files.length > 0) {
+        if (files.length > 0) {
             fileElements = files.map((file, i) => {
                 const url = urls[i];
                 const [type] = file.type.split("/");
 
-                return type === "image" ? (
-                    <img className={"img-fluid"} src={url} alt={file.name} />
-                ) : (
-                    <AudioPlayer src={url}
-                        ProgressBar={
-                            (props) => {
-                                return <AudioPlayerProgressBar
-                                    {...props}
-                                    $css={css`
-                                        // Manually adjusting height until I can figure out why
-                                        // any percentage-based height is resulting in 0.
-                                        height: 16px;
-                                    `}
-                                />
-                            }
-                        } 
-                    />
+                return (
+                    type === "image" ? (
+                        <img className={"img-fluid"} src={url} alt={file.name} />
+                    ) : type === "audio" ? (
+                        <AudioPlayer src={url}
+                            ProgressBar={
+                                (props) => {
+                                    return <AudioPlayerProgressBar
+                                        {...props}
+                                        $css={css`
+                                            // Manually adjusting height until I can figure out why
+                                            // any percentage-based height is resulting in 0.
+                                            height: 16px;
+                                        `}
+                                    />
+                                }
+                            } 
+                        />
+                    ) : <>
+                        <br />
+                        Unsupported file type: {file.type}
+                    </>
                 );
-            });
+        });
         }
 
         return (

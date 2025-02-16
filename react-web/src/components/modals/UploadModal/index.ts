@@ -5,4 +5,3 @@ export const UnstyledUploadModal = UploadModalBase;
 export default UploadModalStyled;
 
 export * from "./Types";
-export * from "./Other";
