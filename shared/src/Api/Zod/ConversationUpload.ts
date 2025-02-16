@@ -1,6 +1,6 @@
 import { swaggerRegistry } from "src/Swagger";
 import { zodSuccessResponseSchema } from "./SuccessResponse";
-import { z } from "zod";
+import { z, ZodOptional } from "zod";
 import { ZodErrorResponseSchema } from "./ErrorResponse";
 import { ZodFileMimeTypeSchema } from "./FileMimeType";
 
@@ -44,11 +44,24 @@ export const ZodConversationUploadFilesSchema = swaggerRegistry.register(
         })
         .passthrough()
         .refine(
-            (v) => v.mimetype || v.type,
+            (v) => v.mimetype !== undefined || v.type !== undefined,
             {
                 message: "Either mimetype or type must be provided"
             }
         )
+        .transform((v) => {
+            if (v.mimetype === undefined) {
+                v.type = v.mimetype;
+            } else if (v.type === undefined) {
+                v.mimetype = v.type;
+            }
+
+            // Make every key required because we've filled in the missing values
+            type V = typeof v;
+            return v as {
+                [K in keyof V]-?: V[K];
+            };
+        })
         .openapi({
             description: "The files to upload. Must specify either mimetype or type. Size must be less than or equal to 10 MB"
         })
