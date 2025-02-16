@@ -1,5 +1,5 @@
 import express from 'express';
-import { createMulter } from 'services/multer';
+import { cleanMulterUploads, createMulter } from 'services/multer';
 
 const router = express.Router();
 const upload = createMulter();
@@ -30,6 +30,7 @@ router.post('/api/v1/test-file', upload.single('file'), (req, res) => {
         }
     */
     console.log(req.file);
+    cleanMulterUploads();
     res.send('File uploaded');
 });
 
