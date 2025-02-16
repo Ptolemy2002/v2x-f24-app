@@ -13,6 +13,8 @@ export type RouteHandlerRequestData = {
     params: unknown;
     query: unknown;
     body: unknown;
+    file?: Express.Multer.File;
+    files?: Express.Multer.File[] | Record<string, Express.Multer.File[]>;
 };
 
 export type RouteHandlerResponseData = {

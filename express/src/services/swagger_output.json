@@ -758,6 +758,31 @@
           }
         }
       }
+    },
+    "/api/v1/test-file": {
+      "post": {
+        "description": "Upload a file.",
+        "responses": {
+          "200": {
+            "description": "File uploaded."
+          }
+        },
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {

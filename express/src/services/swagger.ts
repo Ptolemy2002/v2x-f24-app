@@ -29,7 +29,7 @@ const doc = {
   },
   host: baseUrl,
   schemes: [process.env.NODE_ENV === "production" ? "https" : "http"],
-  consumes: ["application/json"],
+  consumes: ["application/json", "multipart/form-data"],
   produces: ["application/json"],
 
   components: {
