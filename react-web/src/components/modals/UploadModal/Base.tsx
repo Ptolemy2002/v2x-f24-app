@@ -30,7 +30,9 @@ export default function UploadModalBase({
         const { success, error } = ZodConversationUploadFilesSchema.safeParse(files);
 
         if (!success) {
-            const interpretedError = interpretZodError(error);
+            const interpretedError = interpretZodError(error, {
+                prefix: "files"
+            });
             if (Array.isArray(interpretedError)) {
                 setError(interpretedError.join(", "));
             } else {
@@ -71,7 +73,7 @@ export default function UploadModalBase({
                         />
                     ) : <>
                         <br />
-                        Unsupported file type: {file.type}
+                        <span className="error-text">Unsupported file type: {file.type}</span>
                     </>
                 );
         });

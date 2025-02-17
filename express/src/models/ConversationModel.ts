@@ -99,7 +99,7 @@ ConversationSchema.method("removeUnsetFields", function() {
     this.set("messages", this.get("messages").filter(x => x !== null));
 });
 
-ConversationSchema.path("messages").validate(zodValidateWithErrors(ZodMongoConversationSchema.shape.messages, true));
+ConversationSchema.path("messages").validate(zodValidateWithErrors(ZodMongoConversationSchema.shape.messages, {_throw: true, prefix: "messages" }));
 
 const ConversationModel = model<MongoDocumentConversation, ConversationModelWithStatics>('conversations', ConversationSchema);
 export default ConversationModel;

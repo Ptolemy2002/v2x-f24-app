@@ -15,7 +15,7 @@ export default Object.assign(
         ${props => modalStyles(props)}
 
         .modal-body {
-            > .error-text {
+            .error-text {
                 color: ${({ $errorTextColor }) => $errorTextColor};
             }
 
