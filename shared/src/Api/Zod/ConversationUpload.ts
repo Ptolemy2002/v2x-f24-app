@@ -28,7 +28,10 @@ export const ZodConversationUploadFilesSchema = swaggerRegistry.register(
     z.array(
         z.object({
             mimetype: ZodFileMimeTypeSchema.optional(),
-            type: ZodFileMimeTypeSchema.optional(),
+            type: ZodFileMimeTypeSchema.optional()
+                .openapi({
+                    description: "Alternative to mimetype"
+                }),
             size: z.number()
                 .positive()
                 .refine(

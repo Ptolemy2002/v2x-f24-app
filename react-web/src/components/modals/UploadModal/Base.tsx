@@ -1,5 +1,5 @@
 import { UploadModalProps } from "./Types";
-import { Button, Modal } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import FilePicker, { FilePickerRenderFunctionProps } from "@ptolemy2002/react-file-picker";
 import { acceptedFileTypeCondition, ZodConversationUploadFilesSchema } from "shared";
 import { useCallback, useState } from "react";
@@ -7,6 +7,7 @@ import DefaultAudioPlayer, { AudioPlayerProgressBar } from "src/components/Audio
 import { css } from "styled-components";
 import StyledButton from "src/components/StyledButton";
 import { interpretZodError } from "@ptolemy2002/regex-utils";
+import { Spacer } from "@ptolemy2002/react-utils";
 
 export default function UploadModalBase({
     className,
@@ -94,14 +95,19 @@ export default function UploadModalBase({
                             <li key={urls[i]}>
                                 {files[i]!.name}
                                 {e}
-                                
-                                <Button onClick={() => {
-                                    modifyInputFiles((files) => {
-                                        files.splice(i, 1);
-                                    });
-                                }}>
+
+                                <Spacer />
+                                <StyledButton
+                                    $variant="removeFile"
+                                    onClick={() => {
+                                        modifyInputFiles((files) => {
+                                            files.splice(i, 1);
+                                        });
+                                    }}
+                                >
                                     Remove
-                                </Button>
+                                </StyledButton>
+                                <Spacer />
                             </li>
                         ))
                     }

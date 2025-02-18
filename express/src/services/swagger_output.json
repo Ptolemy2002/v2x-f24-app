@@ -2139,7 +2139,14 @@
               "$ref": "#/components/schemas/FileMimeType"
             },
             "type": {
-              "$ref": "#/components/schemas/FileMimeType"
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/FileMimeType"
+                },
+                {
+                  "description": "Alternative to mimetype"
+                }
+              ]
             },
             "size": {
               "type": "number",
