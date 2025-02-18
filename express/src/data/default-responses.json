@@ -34,7 +34,7 @@
         {
             "triggers": ["send me a song", "send me some music"],
             "type": "audio",
-            "src": "/aud-test.wav"
+            "src": "placeholder-audio"
         },
 
         {

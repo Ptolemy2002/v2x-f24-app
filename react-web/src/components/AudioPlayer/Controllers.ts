@@ -175,7 +175,7 @@ export function useAudioPlayerProgressBarController({
         if (e.nativeEvent instanceof MouseEvent) {
             handleSeek(e.nativeEvent.clientX, progressRef.current!, onSeek);
         } else {
-            const touch = e.nativeEvent.touches[0];
+            const touch = e.nativeEvent.touches[0]!;
             handleSeek(touch.clientX, progressRef.current!, onSeek);
         }
     }, [onSeek]);
@@ -200,7 +200,7 @@ export function useAudioPlayerProgressBarController({
 
         touchMoveEventListenerRef.current = (e) => {
             if (touchedRef.current) {
-                handleSeek(e.touches[0].clientX, progressRef.current!, onSeek);
+                handleSeek(e.touches[0]!.clientX, progressRef.current!, onSeek);
             }
         };
         window.addEventListener("touchmove", touchMoveEventListenerRef.current);

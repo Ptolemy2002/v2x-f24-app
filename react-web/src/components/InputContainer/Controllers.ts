@@ -29,8 +29,7 @@ export function useInputContainerController() {
     const addImage = useCallback(() => {
         conversationData.addMessage(createImageMessage("sender", () => ({
             // Just a placeholder image for now.
-            src: "/placeholder-image.png",
-            alt: "Placeholder image"
+            src: "placeholder-image"
         })));
 
         // Start the bot's response
@@ -40,7 +39,7 @@ export function useInputContainerController() {
     const addAudio = useCallback(() => {
         conversationData.addMessage(createAudioMessage("sender", () => ({
             // Just a placeholder audio for now.
-            src: "/aud-test.wav"
+            src: "placeholder-audio"
         })));
 
         // Start the bot's response
@@ -77,13 +76,13 @@ export function useInputContainerController() {
             // Send an image when the user presses Control + I and an audio when the user presses Control + M.
             if (event.key === 'i') {
                 event.preventDefault();
-                if (!sendDisabled) addImage();
+                if (!conversationData.requestInProgress && !conversationData.hasFailedRequest("queryBot")) addImage();
             } else if (event.key === 'm') {
                 event.preventDefault();
-                if (!sendDisabled) addAudio();
+                if (!conversationData.requestInProgress && !conversationData.hasFailedRequest("queryBot")) addAudio();
             }
         }
-    }, [addText, addImage, addAudio, sendDisabled]);
+    }, [addText, addImage, addAudio, sendDisabled, conversationData]);
 
     return {
         emptyMessage,

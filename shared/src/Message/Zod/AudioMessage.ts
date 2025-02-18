@@ -6,8 +6,11 @@ export const ZodAudioMessageBaseSchema = swaggerRegistry.register(
     "AudioMessageBase",
     z.object({
         src: z.string().openapi({
-            description: "The source of the audio.",
-            example: "https://example.com/audio.mp3"
+            description: "The source of the audio, being a key that is part of the 'files' property in the conversation it belongs to.",
+            example: "example-audio"
+        }),
+        alt: z.string().optional().openapi({
+            description: "The alt text for the audio, if applicable."
         })
     }).openapi({
         description: "The base schema for an audio message."
@@ -21,8 +24,8 @@ export const ZodAudioMessageSchema = swaggerRegistry.register(
             description: "The type of message."
         })
     })).openapi({
-        description: "An audio message."
-    })
+            description: "An audio message."
+        })
 );
 
 export const ZodMongoAudioMessageSchema = swaggerRegistry.register(

@@ -22,7 +22,8 @@
     "baseUrl": "./",
     "paths": {
       "src/*": ["src/*"]
-    }
+    },
+    "noUncheckedIndexedAccess": true
   },
   "include": ["src", "external-libs.d.ts", "types/**/*.d.ts"],
 }

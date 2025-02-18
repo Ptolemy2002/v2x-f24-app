@@ -60,7 +60,17 @@ class ConversationNewHandler extends RouteHandler<ConversationNew200ResponseBody
 
         if (!anonymous) {
             const conversation = await ConversationModel.createWithUniqueName("Untitled Conversation", {
-                messages: defaultMessages
+                messages: defaultMessages,
+                files: {
+                    "placeholder-image": {
+                        url: "/placeholder-image.png",
+                        alt: "placeholder image"
+                    },
+                    "placeholder-audio": {
+                        url: "/aud-test.wav",
+                        alt: "placeholder audio"
+                    }
+                }
             });
 
             return {
@@ -75,7 +85,17 @@ class ConversationNewHandler extends RouteHandler<ConversationNew200ResponseBody
                 _id: "anonymous",
                 name: "Anonymous Conversation",
                 messages: defaultMessages,
-                createdAt: new Date().toISOString()
+                createdAt: new Date().toISOString(),
+                files: {
+                    "placeholder-image": {
+                        url: "/placeholder-image.png",
+                        alt: "placeholder image"
+                    },
+                    "placeholder-audio": {
+                        url: "/aud-test.wav",
+                        alt: "placeholder audio"
+                    }
+                }
             };
 
             return {

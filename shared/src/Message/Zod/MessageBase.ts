@@ -29,6 +29,10 @@ export const ZodMongoMessageBaseSchema = swaggerRegistry.register(
         date: true
     }).merge(z.object({
         date: z.string({invalid_type_error: "Mongo only supports string dates."})
+            .datetime({
+                offset: true,
+                message: "date must be a valid ISO 8601 date string."
+            })
             .openapi({
                 description: "The date the message was initially sent.",
                 example: "2021-01-01T00:00:00.000Z"

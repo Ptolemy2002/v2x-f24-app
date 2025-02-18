@@ -127,6 +127,15 @@ export default class ConversationData extends MongoData<
             readOnly: true
         });
 
+        this.defineProperty("files", {
+            mongoName: "files",
+            initial: {},
+            toMongo: (files) => files,
+            fromMongo: (files) => files,
+
+            validate: zodValidateWithErrors(ZodConversationSchema.shape.files)
+        });
+
         this.defineRequestType("queryBot", async function(this: CompletedConversationData, ac) {
             const api = getApi();
             const { data } = await api.post("/bot/query", {

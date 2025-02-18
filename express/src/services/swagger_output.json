@@ -866,6 +866,7 @@
           },
           "date": {
             "type": "string",
+            "format": "date-time",
             "description": "The date the message was initially sent.",
             "example": "2021-01-01T00:00:00.000Z"
           }
@@ -950,6 +951,7 @@
           },
           "date": {
             "type": "string",
+            "format": "date-time",
             "description": "The date the message was initially sent.",
             "example": "2021-01-01T00:00:00.000Z"
           },
@@ -973,8 +975,8 @@
         "properties": {
           "src": {
             "type": "string",
-            "description": "The source of the image.",
-            "example": "https://example.com/image.jpg"
+            "description": "The source of the image, being a key that is part of the 'files' property in the conversation it belongs to.",
+            "example": "example-image"
           },
           "alt": {
             "type": "string",
@@ -983,8 +985,7 @@
           }
         },
         "required": [
-          "src",
-          "alt"
+          "src"
         ],
         "description": "The base schema for an image message."
       },
@@ -1013,8 +1014,8 @@
           },
           "src": {
             "type": "string",
-            "description": "The source of the image.",
-            "example": "https://example.com/image.jpg"
+            "description": "The source of the image, being a key that is part of the 'files' property in the conversation it belongs to.",
+            "example": "example-image"
           },
           "alt": {
             "type": "string",
@@ -1027,8 +1028,7 @@
           "origin",
           "type",
           "date",
-          "src",
-          "alt"
+          "src"
         ],
         "description": "An image message."
       },
@@ -1052,13 +1052,14 @@
           },
           "date": {
             "type": "string",
+            "format": "date-time",
             "description": "The date the message was initially sent.",
             "example": "2021-01-01T00:00:00.000Z"
           },
           "src": {
             "type": "string",
-            "description": "The source of the image.",
-            "example": "https://example.com/image.jpg"
+            "description": "The source of the image, being a key that is part of the 'files' property in the conversation it belongs to.",
+            "example": "example-image"
           },
           "alt": {
             "type": "string",
@@ -1071,8 +1072,7 @@
           "origin",
           "type",
           "date",
-          "src",
-          "alt"
+          "src"
         ],
         "description": "The MongoDB representation of an image message."
       },
@@ -1081,8 +1081,12 @@
         "properties": {
           "src": {
             "type": "string",
-            "description": "The source of the audio.",
-            "example": "https://example.com/audio.mp3"
+            "description": "The source of the audio, being a key that is part of the 'files' property in the conversation it belongs to.",
+            "example": "example-audio"
+          },
+          "alt": {
+            "type": "string",
+            "description": "The alt text for the audio, if applicable."
           }
         },
         "required": [
@@ -1115,8 +1119,12 @@
           },
           "src": {
             "type": "string",
-            "description": "The source of the audio.",
-            "example": "https://example.com/audio.mp3"
+            "description": "The source of the audio, being a key that is part of the 'files' property in the conversation it belongs to.",
+            "example": "example-audio"
+          },
+          "alt": {
+            "type": "string",
+            "description": "The alt text for the audio, if applicable."
           }
         },
         "required": [
@@ -1148,13 +1156,18 @@
           },
           "date": {
             "type": "string",
+            "format": "date-time",
             "description": "The date the message was initially sent.",
             "example": "2021-01-01T00:00:00.000Z"
           },
           "src": {
             "type": "string",
-            "description": "The source of the audio.",
-            "example": "https://example.com/audio.mp3"
+            "description": "The source of the audio, being a key that is part of the 'files' property in the conversation it belongs to.",
+            "example": "example-audio"
+          },
+          "alt": {
+            "type": "string",
+            "description": "The alt text for the audio, if applicable."
           }
         },
         "required": [
@@ -1239,16 +1252,37 @@
           "messages": {
             "$ref": "#/components/schemas/UniqueMessageArray"
           },
+          "files": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "properties": {
+                "url": {
+                  "type": "string",
+                  "description": "The URL of the file."
+                },
+                "alt": {
+                  "type": "string",
+                  "description": "The alt text for the file, if applicable."
+                }
+              },
+              "required": [
+                "url"
+              ]
+            },
+            "description": "A map of files available to the conversation to their URLs."
+          },
           "createdAt": {
             "type": "string",
             "description": "The date and time the conversation was created.",
-            "example": "2021-07-01T00:00:00.000Z"
+            "example": "new Date(2021-07-01T00:00:00.000Z)"
           }
         },
         "required": [
           "id",
           "name",
           "messages",
+          "files",
           "createdAt"
         ],
         "description": "A conversation."
@@ -1256,6 +1290,40 @@
       "MongoConversation": {
         "type": "object",
         "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the conversation.",
+            "example": "Untitled Conversation"
+          },
+          "messages": {
+            "$ref": "#/components/schemas/UniqueMongoMessageArray"
+          },
+          "files": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "properties": {
+                "url": {
+                  "type": "string",
+                  "description": "The URL of the file."
+                },
+                "alt": {
+                  "type": "string",
+                  "description": "The alt text for the file, if applicable."
+                }
+              },
+              "required": [
+                "url"
+              ]
+            },
+            "description": "A map of files available to the conversation to their URLs."
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date and time the conversation was created.",
+            "example": "2021-07-01T00:00:00.000Z"
+          },
           "_id": {
             "anyOf": [
               {
@@ -1270,26 +1338,14 @@
             ],
             "description": "The ID of the conversation or 'anonymous' if the conversation should not be saved to the database.",
             "example": "abc123"
-          },
-          "name": {
-            "type": "string",
-            "description": "The name of the conversation.",
-            "example": "Untitled Conversation"
-          },
-          "messages": {
-            "$ref": "#/components/schemas/UniqueMongoMessageArray"
-          },
-          "createdAt": {
-            "type": "string",
-            "description": "The date and time the conversation was created.",
-            "example": "2021-07-01T00:00:00.000Z"
           }
         },
         "required": [
-          "_id",
           "name",
           "messages",
-          "createdAt"
+          "files",
+          "createdAt",
+          "_id"
         ],
         "description": "The MongoDB representation of a conversation."
       },

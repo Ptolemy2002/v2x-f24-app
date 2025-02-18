@@ -18,9 +18,20 @@ export const ZodConversationSchema = swaggerRegistry.register(
             example: "Untitled Conversation"
         }),
         messages: ZodUniqueMessageArraySchema,
+        files: z.record(z.string(), z.object({
+            url: z.string().openapi({
+                description: "The URL of the file."
+            }),
+            alt: z.string().openapi({
+                description: "The alt text for the file, if applicable."
+            }).optional()
+        }))
+        .openapi({
+                description: "A map of files available to the conversation to their URLs."
+            }),
         createdAt: z.date().openapi({
             description: "The date and time the conversation was created.",
-            example: "2021-07-01T00:00:00.000Z"
+            example: "new Date(2021-07-01T00:00:00.000Z)"
         })
     })
     .openapi({
@@ -30,20 +41,15 @@ export const ZodConversationSchema = swaggerRegistry.register(
 
 export const ZodMongoConversationSchema = swaggerRegistry.register(
     "MongoConversation",
-    z.object({
-        _id: z.union([
-            ZodConversationIDSchema,
-            z.literal("anonymous")
-        ]).openapi({
-            description: "The ID of the conversation or 'anonymous' if the conversation should not be saved to the database.",
-            example: "abc123"
-        }),
-        name: z.string().openapi({
-            description: "The name of the conversation.",
-            example: "Untitled Conversation"
-        }),
+    ZodConversationSchema.omit({
+        id: true
+    }).extend({
+        _id: ZodConversationSchema.shape.id,
         messages: ZodUniqueMongoMessageArraySchema,
-        createdAt: z.string().openapi({
+        createdAt: z.string().datetime({
+            offset: true,
+            message: "createdAt must be a valid ISO 8601 date string."
+        }).openapi({
             description: "The date and time the conversation was created.",
             example: "2021-07-01T00:00:00.000Z"
         })

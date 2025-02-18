@@ -130,18 +130,25 @@ export class BotQueryHandler extends RouteHandler<BotQuery200ResponseBody> {
 
         let newMessage: MongoMessage;
         if (response.type === "text") {
-            newMessage = createMongoTextMessage("recepient", () => ({
-                text: response.text ?? "[No text provided]"
-            }));
+            if (!response.text) {
+                newMessage = createMongoTextMessage("recepient", () => ({
+                    text: "I'm sorry, I had trouble sending a text message."
+                }));
+            } else {
+                newMessage = createMongoTextMessage("recepient", () => ({
+                    text: response.text!
+                }));
+            }
         } else if (response.type === "image") {
             if (!response.src) {
                 newMessage = createMongoTextMessage("recepient", () => ({
                     text: "I'm sorry, I had trouble sending an image."
                 }));
             } else {
+                const src = response.src!;
+
                 newMessage = createMongoImageMessage("recepient", () => ({
-                    src: response.src!,
-                    alt: response.alt ?? "[No alt text provided]"
+                    src, alt: response.alt
                 }));
             }
         } else if (response.type === "audio") {
@@ -150,8 +157,10 @@ export class BotQueryHandler extends RouteHandler<BotQuery200ResponseBody> {
                     text: "I'm sorry, I had trouble sending an audio message."
                 }));
             } else {
+                const src = response.src!;
+
                 newMessage = createMongoAudioMessage("recepient", () => ({
-                    src: response.src!
+                    src, alt: response.alt
                 }));
             }
         } else {

@@ -50,7 +50,7 @@ export default function UploadModalBase({
         let fileElements;
         if (files.length > 0) {
             fileElements = files.map((file, i) => {
-                const url = urls[i];
+                const url = urls[i]!;
                 const [type] = file.type.split("/");
 
                 return (
@@ -92,7 +92,7 @@ export default function UploadModalBase({
                     {
                         fileElements?.map((e, i) => (
                             <li key={urls[i]}>
-                                {files[i].name}
+                                {files[i]!.name}
                                 {e}
                                 
                                 <Button onClick={() => {

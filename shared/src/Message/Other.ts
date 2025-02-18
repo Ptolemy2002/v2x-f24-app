@@ -13,7 +13,8 @@ export const MongoConversationChildPathLookup: Readonly<Record<keyof MongoConver
     _id: [],
     name: [],
     createdAt: [],
-    messages: [0]
+    messages: [0],
+    files: [],
 } as const;
 
 export function parseConversationPath(

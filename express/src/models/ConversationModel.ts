@@ -1,6 +1,7 @@
 import { MongoConversation, ZodMongoConversationSchema } from "shared";
 import { HydratedDocumentFromSchema, Model, Schema, Types, model } from "mongoose";
 import { zodValidateWithErrors } from "@ptolemy2002/regex-utils";
+import { nanoid } from "nanoid";
 
 export type MongoDocumentConversation =
     // Here we're manually defining the _id field an ObjectId
@@ -21,7 +22,9 @@ export type MongoDocumentConversation =
 export type ConversationInstanceMethods = {
     toClientJSON: () => MongoConversation,
     makeNameUnique: () => Promise<void>,
-    removeUnsetFields: () => void
+    removeUnsetFields: () => void,
+    addFile: (file: File, url: string, alt?: string, name?: string) => string,
+    removeFile: (key: string) => MongoConversation["files"][string]
 };
 export type ConversationModel = Model<MongoDocumentConversation, {}, ConversationInstanceMethods>;
 
@@ -43,6 +46,11 @@ const ConversationSchema = new Schema<MongoDocumentConversation, ConversationMod
 
     messages: {
         type: [Object]
+    },
+
+    files: {
+        type: Object,
+        default: {}
     }
 }, {
     timestamps: {
@@ -99,7 +107,32 @@ ConversationSchema.method("removeUnsetFields", function() {
     this.set("messages", this.get("messages").filter(x => x !== null));
 });
 
+ConversationSchema.method("addFile", function(file: File, url: string, alt?: string, name?: string) {
+    const files = {...this.get("files")};
+
+    const key = name ?? nanoid();
+    files[key] = {url, alt};
+    this.set("files", files);
+
+    // TODO: Also upload to Google Cloud Storage when we have it set up
+
+    return key;
+});
+
+ConversationSchema.method("removeFile", function(key: string) {
+    const files = {...this.get("files")};
+
+    const prev = files[key];
+    delete files[key];
+    this.set("files", files);
+
+    // TODO: Also remove from Google Cloud Storage when we have it set up
+
+    return prev;
+});
+
 ConversationSchema.path("messages").validate(zodValidateWithErrors(ZodMongoConversationSchema.shape.messages, {_throw: true, prefix: "messages" }));
+ConversationSchema.path("files").validate(zodValidateWithErrors(ZodMongoConversationSchema.shape.files, {_throw: true, prefix: "files" }));
 
 const ConversationModel = model<MongoDocumentConversation, ConversationModelWithStatics>('conversations', ConversationSchema);
 export default ConversationModel;

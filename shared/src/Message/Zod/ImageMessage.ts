@@ -6,10 +6,10 @@ export const ZodImageMessageBaseSchema = swaggerRegistry.register(
     "ImageMessageBase",
     z.object({
         src: z.string().openapi({
-            description: "The source of the image.",
-            example: "https://example.com/image.jpg"
+            description: "The source of the image, being a key that is part of the 'files' property in the conversation it belongs to.",
+            example: "example-image"
         }),
-        alt: z.string().openapi({
+        alt: z.string().optional().openapi({
             description: "The alt text for the image.",
             example: "An image of a cat."
         })
