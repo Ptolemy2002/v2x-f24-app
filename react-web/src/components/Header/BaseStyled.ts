@@ -1,8 +1,8 @@
-import Base from "./Base";
+import Base, { applySubComponents } from "./Base";
 import styled from "styled-components";
 import { WithCSSProp } from "@ptolemy2002/react-styled-component-utils";
 
-export default Object.assign(
+export default applySubComponents(Object.assign(
     styled(Base).attrs<WithCSSProp>(
         (props) => ({
             $css: props.$css ?? null
@@ -32,4 +32,4 @@ export default Object.assign(
     {
         displayName: "styled(Header)"
     }
-);
+));

@@ -4,7 +4,7 @@ import DefaultSpeechBubbleTimestamp from "./TimestampStyled";
 import DefaultScreenReaderText from "./ScreenReaderText";
 import clsx from "clsx";
 
-export default function SpeechBubbleTextBase({
+function SpeechBubbleTextBase({
     message,
     className,
     TimestampWrapper = DefaultTimestampWrapper,
@@ -37,3 +37,15 @@ export default function SpeechBubbleTextBase({
         </div>
     );
 }
+
+export function applySubComponents<
+    T extends typeof SpeechBubbleTextBase
+>(C: T) {
+    return Object.assign(C, {
+        TimestampWrapper: DefaultTimestampWrapper,
+        SpeechBubbleTimestamp: DefaultSpeechBubbleTimestamp,
+        ScreenReaderText: DefaultScreenReaderText,
+    });
+}
+
+export default applySubComponents(SpeechBubbleTextBase);

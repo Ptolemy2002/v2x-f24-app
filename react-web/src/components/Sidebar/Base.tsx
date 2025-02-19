@@ -9,7 +9,7 @@ import getApi from "src/Api";
 import { ErrorBoundary } from "react-error-boundary";
 import ConversationInfo from "src/context/ConversationInfo";
 
-export default function SidebarBase({
+function SidebarBase({
     className,
     colSize=1,
     SidebarLabel = DefaultSidebarLabel,
@@ -46,3 +46,14 @@ export default function SidebarBase({
         </Col>
     );
 }
+
+export function applySubComponents<
+    T extends typeof SidebarBase
+>(C: T) {
+    return Object.assign(C, {
+        SidebarLabel: DefaultSidebarLabel,
+        ChatLink: DefaultChatLink
+    });
+}
+
+export default applySubComponents(SidebarBase);

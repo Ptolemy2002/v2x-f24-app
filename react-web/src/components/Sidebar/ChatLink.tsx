@@ -44,3 +44,13 @@ export default function ChatLinkBase({
         </li>
     );
 }
+
+export function applySubComponents<
+    T extends typeof ChatLinkBase
+>(C: T) {
+    return Object.assign(C, {
+        PencilIcon: DefaultPencilIcon
+    });
+}
+
+applySubComponents(ChatLinkBase);

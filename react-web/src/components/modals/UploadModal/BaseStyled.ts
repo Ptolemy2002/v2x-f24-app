@@ -1,10 +1,10 @@
 import { UploadModalProps } from "./Types";
-import Base from "./Base";
+import Base, { applySubComponents } from "./Base";
 import styled from "styled-components";
 import { WithCSSProp } from "@ptolemy2002/react-styled-component-utils";
 import { evaluateModalStyles, modalStyles } from "src/lib/Styles";
 
-export default Object.assign(
+export default applySubComponents(Object.assign(
     styled(Base).attrs<WithCSSProp<UploadModalProps["style"]>>(
         ({ theme, ...props }) => ({
             ...evaluateModalStyles(theme, props, "upload"),
@@ -32,4 +32,4 @@ export default Object.assign(
     {
         displayName: "styled(UploadModal)",
     }
-);
+));

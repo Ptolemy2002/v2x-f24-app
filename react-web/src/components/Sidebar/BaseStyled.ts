@@ -1,9 +1,9 @@
 import { SidebarProps } from "./Types";
-import Base from "./Base";
+import Base, {applySubComponents} from "./Base";
 import { paddingX, paddingY } from "@ptolemy2002/react-styled-component-utils";
 import styled from "styled-components";
 
-export default Object.assign(
+export default applySubComponents(Object.assign(
     styled(Base).attrs<SidebarProps["style"]>(
         (props) => ({
             $paddingX: props.$paddingX ?? "10px",
@@ -30,4 +30,4 @@ export default Object.assign(
     {
         displayName: "styled(Sidebar)",
     }
-);
+));

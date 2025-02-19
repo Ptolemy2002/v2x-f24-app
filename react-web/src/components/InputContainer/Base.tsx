@@ -5,7 +5,7 @@ import DefaultUploadButton from './UploadButton';
 import DefaultRightArrowIcon from 'src/components/icons/RightArrowIcon';
 import DefaultUploadIcon from 'src/components/icons/UploadIcon';
 
-export default function InputContainerBase({
+function InputContainerBase({
     SendButton=DefaultSendButton,
     UploadButton=DefaultUploadButton,
     RightArrowIcon=DefaultRightArrowIcon,
@@ -41,3 +41,16 @@ export default function InputContainerBase({
         </div>
     );
 }
+
+export function applySubComponents<
+    T extends typeof InputContainerBase
+>(C: T) {
+    return Object.assign(C, {
+        SendButton: DefaultSendButton,
+        UploadButton: DefaultUploadButton,
+        RightArrowIcon: DefaultRightArrowIcon,
+        UploadIcon: DefaultUploadIcon
+    });
+}
+
+export default applySubComponents(InputContainerBase);

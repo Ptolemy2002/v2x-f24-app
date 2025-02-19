@@ -9,7 +9,7 @@ import { SpeechContainerProps } from "./Types";
 import clsx from "clsx";
 import { useSpeechContainerController } from "./Controllers";
 
-export default function SpeechContainerBase({
+function SpeechContainerBase({
     SpeechBubbleText=DefaultSpeechBubbleText,
     SpeechBubbleImage=DefaultSpeechBubbleImage,
     SpeechBubbleAudio=DefaultSpeechBubbleAudio,
@@ -52,3 +52,17 @@ export default function SpeechContainerBase({
         </div>
     );
 }
+
+export function applySubComponents<
+    T extends typeof SpeechContainerBase
+>(C: T) {
+    return Object.assign(C, {
+        SpeechBubbleText: DefaultSpeechBubbleText,
+        SpeechBubbleImage: DefaultSpeechBubbleImage,
+        SpeechBubbleAudio: DefaultSpeechBubbleAudio,
+        SpeechBubbleTyping: DefaultSpeechBubbleTyping,
+        SpeechBubbleDanger: DefaultSpeechBubbleDanger
+    });
+}
+
+export default applySubComponents(SpeechContainerBase);

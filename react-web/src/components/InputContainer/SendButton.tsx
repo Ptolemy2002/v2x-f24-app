@@ -6,7 +6,7 @@ export type SendButtonProps = Omit<StyledButtonProps["all"], "$variant"> & {
     $padding?: RequiredCSSProperties["padding"];
 };
 
-export default function SendButton({
+function SendButton({
     $padding,
     $css,
     ...props
@@ -29,3 +29,11 @@ export default function SendButton({
         />
     );
 }
+
+export function applySubComponents<
+    T extends typeof SendButton
+>(C: T) {
+    return Object.assign(C, {});
+}
+
+export default applySubComponents(SendButton);

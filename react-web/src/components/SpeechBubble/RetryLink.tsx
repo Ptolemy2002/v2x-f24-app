@@ -2,7 +2,7 @@ import clsx from "clsx";
 import { SpeechBubbleRetryLinkProps } from "./Types";
 import ConversationData from "src/data/ConversationData";
 
-export default function SpeechBubbleRetryLinkBase(
+function SpeechBubbleRetryLinkBase(
     {
         className,
         children,
@@ -22,3 +22,11 @@ export default function SpeechBubbleRetryLinkBase(
         </a>
     );
 }
+
+export function applySubComponents<
+    T extends typeof SpeechBubbleRetryLinkBase
+>(C: T) {
+    return Object.assign(C, {});
+}
+
+export default applySubComponents(SpeechBubbleRetryLinkBase);

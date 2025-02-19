@@ -1,9 +1,9 @@
 import { InputContainerProps } from "./Types";
-import Base from "./Base";
+import Base, { applySubComponents } from "./Base";
 import styled from "styled-components";
 import { WithCSSProp } from "@ptolemy2002/react-styled-component-utils";
 
-export default Object.assign(
+export default applySubComponents(Object.assign(
     styled(Base).attrs<WithCSSProp<InputContainerProps["style"]>>(
         (props) => ({
             $gap: props.$gap ?? "10px",
@@ -37,4 +37,4 @@ export default Object.assign(
     {
         displayName: "styled(InputContainer)",
     }
-);
+));

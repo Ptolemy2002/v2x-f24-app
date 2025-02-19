@@ -7,7 +7,7 @@ import clsx from "clsx";
 import ConversationData from "src/data/ConversationData";
 import { ReactNode } from "react";
 
-export default function SpeechBubbleAudioBase({
+function SpeechBubbleAudioBase({
     message,
     className,
     scrollToEnd,
@@ -44,3 +44,16 @@ export default function SpeechBubbleAudioBase({
         </div>
     );
 }
+
+export function applySubComponents<
+    T extends typeof SpeechBubbleAudioBase
+>(C: T) {
+    return Object.assign(C, {
+        AudioPlayer: DefaultAudioPlayer,
+        ScreenReaderText: DefaultScreenReaderText,
+        TimestampWrapper: DefaultTimestampWrapper,
+        SpeechBubbleTimestamp: DefaultSpeechBubbleTimestamp
+    });
+}
+
+export default applySubComponents(SpeechBubbleAudioBase);

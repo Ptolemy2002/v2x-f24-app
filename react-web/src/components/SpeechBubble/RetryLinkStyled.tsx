@@ -1,8 +1,8 @@
 import { SpeechBubbleRetryLinkProps } from "./Types";
-import RetryLink from "./RetryLink";
+import RetryLink, {applySubComponents} from "./RetryLink";
 import styled from "styled-components";
 
-export default Object.assign(
+export default applySubComponents(Object.assign(
     styled(RetryLink).attrs<SpeechBubbleRetryLinkProps["style"]>(
         (props) => ({
             $cursor: props.$cursor ?? "pointer",
@@ -15,4 +15,4 @@ export default Object.assign(
     {
         displayName: "styled(SpeechBubbleDanger)",
     }
-);
+));

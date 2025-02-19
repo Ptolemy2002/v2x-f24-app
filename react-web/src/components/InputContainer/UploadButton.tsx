@@ -10,7 +10,7 @@ export type UploadButtonProps = Omit<StyledButtonProps["all"], "$variant"> & {
     $padding?: RequiredCSSProperties["padding"];
 };
 
-export default function UploadButton({
+function UploadButton({
     onClick,
     $padding,
     $css,
@@ -50,3 +50,13 @@ export default function UploadButton({
         </StyledButton>
     </>;
 }
+
+export function applySubComponents<
+    T extends typeof UploadButton
+>(C: T) {
+    return Object.assign(C, {
+        UploadModal: DefaultUploadModal
+    });
+}
+
+export default applySubComponents(UploadButton);

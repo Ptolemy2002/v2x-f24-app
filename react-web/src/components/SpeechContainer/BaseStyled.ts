@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import Base from "./Base";
+import Base, {applySubComponents} from "./Base";
 import { SpeechContainerProps } from "./Types";
 
-export default Object.assign(
+export default applySubComponents(Object.assign(
     styled(Base).attrs<SpeechContainerProps["style"]>(
         (props) => ({
             $marginBottom: props.$marginBottom ?? "20px",
@@ -31,4 +31,4 @@ export default Object.assign(
     {
         displayName: "styled(SpeechContainer)"
     }
-);
+));

@@ -6,7 +6,7 @@ import { ConversationContainerProps } from "./Types";
 import useAppSearchParamState from "src/SearchParams";
 import { ErrorBoundary } from "react-error-boundary";
 
-export default function ConversationContainerBase({
+function ConversationContainerBase({
     className,
     SpeechContainer = DefaultSpeechContainer,
     InputContainer = DefaultInputContainer,
@@ -43,3 +43,13 @@ export default function ConversationContainerBase({
         </ConversationData.Provider>
     );
 }
+export function applySubComponents<
+    T extends typeof ConversationContainerBase
+>(C: T) {
+    return Object.assign(C, {
+        SpeechContainer: DefaultSpeechContainer,
+        InputContainer: DefaultInputContainer,
+    });
+}
+
+export default applySubComponents(ConversationContainerBase);

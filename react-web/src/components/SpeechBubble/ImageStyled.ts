@@ -1,10 +1,10 @@
 import { speechBubbleBaseStyle } from "./Other";
 import { SpeechBubbleImageProps } from "./Types";
-import Image from "./Image";
+import Image, {applySubComponents} from "./Image";
 import styled from "styled-components";
 import { border } from "polished";
 
-export default Object.assign(
+export default applySubComponents(Object.assign(
     styled(Image).attrs<SpeechBubbleImageProps["style"]>(
         (props) => ({
             $maxWidth: props.$maxWidth ?? "50%",
@@ -34,4 +34,4 @@ export default Object.assign(
     {
         displayName: "styled(SpeechBubbleImage)",
     }
-);
+));

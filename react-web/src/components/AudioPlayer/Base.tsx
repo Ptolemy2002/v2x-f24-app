@@ -7,7 +7,7 @@ import DefaultPauseIcon from 'src/components/icons/PauseIcon';
 import DefaultPlayIcon from 'src/components/icons/PlayIcon';
 import DefaultRestartIcon from 'src/components/icons/RestartIcon';
 
-export default function AudioPlayerBase({
+function AudioPlayerBase({
     src,
     onCanPlay,
     onLoadedMetadata,
@@ -75,3 +75,17 @@ export default function AudioPlayerBase({
         </div>
     );
 }
+
+export function applySubComponents<
+    T extends typeof AudioPlayerBase
+>(C: T) {
+    return Object.assign(C, {
+        AudioMedia: DefaultAudioMedia,
+        ProgressBar: DefaultAudioPlayerProgressBar,
+        PauseIcon: DefaultPauseIcon,
+        PlayIcon: DefaultPlayIcon,
+        RestartIcon: DefaultRestartIcon
+    });
+}
+
+export default applySubComponents(AudioPlayerBase);

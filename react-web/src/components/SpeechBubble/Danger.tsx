@@ -6,7 +6,7 @@ import DefaultRetryLink from "./RetryLinkStyled";
 import DefaultIcon from "src/components/icons/DangerIcon";
 import clsx from "clsx";
 
-export default function SpeechBubbleDangerBase({
+function SpeechBubbleDangerBase({
     origin,
     date,
     className,
@@ -35,3 +35,17 @@ export default function SpeechBubbleDangerBase({
         </div>
     );
 }
+
+export function applySubComponents<
+    T extends typeof SpeechBubbleDangerBase
+>(C: T) {
+    return Object.assign(C, {
+        TimestampWrapper: DefaultTimestampWrapper,
+        SpeechBubbleTimestamp: DefaultSpeechBubbleTimestamp,
+        ScreenReaderText: DefaultScreenReaderText,
+        RetryLink: DefaultRetryLink,
+        Icon: DefaultIcon,
+    });
+}
+
+export default applySubComponents(SpeechBubbleDangerBase);

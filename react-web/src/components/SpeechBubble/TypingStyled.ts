@@ -1,10 +1,10 @@
 import { math } from "polished";
 import { speechBubbleBaseStyle } from "./Other";
 import { SpeechBubbleTypingProps } from "./Types";
-import Typing from "./Typing";
+import Typing, {applySubComponents} from "./Typing";
 import styled from "styled-components";
 
-export default Object.assign(
+export default applySubComponents(Object.assign(
     styled(Typing).attrs<SpeechBubbleTypingProps["style"]>(
         (props) => ({
             $maxWidth: props.$maxWidth ?? "75%",
@@ -37,4 +37,4 @@ export default Object.assign(
     {
         displayName: "styled(SpeechBubbleTyping)",
     }
-);
+));

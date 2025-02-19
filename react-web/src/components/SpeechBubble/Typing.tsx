@@ -2,7 +2,7 @@ import {SpeechBubbleTypingProps} from "./Types";
 import DefaultScreenReaderText from "./ScreenReaderText";
 import { useSpeechBubbleTypingController } from "./Controllers";
 
-export default function SpeechBubbleTypingBase({
+function SpeechBubbleTypingBase({
     origin,
     className: _className,
     interval=500,
@@ -35,3 +35,13 @@ export default function SpeechBubbleTypingBase({
         </div>
     );
 }
+
+export function applySubComponents<
+    T extends typeof SpeechBubbleTypingBase
+>(C: T) {
+    return Object.assign(C, {
+        ScreenReaderText: DefaultScreenReaderText,
+    });
+}
+
+export default applySubComponents(SpeechBubbleTypingBase);

@@ -1,9 +1,9 @@
 import { SidebarLabelProps } from "./Types";
-import SidebarLabel from "./SidebarLabel";
+import SidebarLabel, {applySubComponents} from "./SidebarLabel";
 import { baseSidebarItemStyle } from "./Other";
 import styled from "styled-components";
 
-export default Object.assign(styled(SidebarLabel).attrs<SidebarLabelProps["style"]>(
+export default applySubComponents(Object.assign(styled(SidebarLabel).attrs<SidebarLabelProps["style"]>(
         (props) => ({
             $underline: props.$underline ?? true,
             $margin: props.$margin ?? "0.5em",
@@ -19,4 +19,4 @@ export default Object.assign(styled(SidebarLabel).attrs<SidebarLabelProps["style
     {
         displayName: "styled(SidebarLabel)",
     }
-);
+));

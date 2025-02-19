@@ -1,7 +1,7 @@
 import { SidebarLabelProps } from "./Types";
 import clsx from "clsx";
 
-export default function SidebarLabelBase({text, screenReaderText="Last Accessed", className, ...props}: SidebarLabelProps["functional"]) {
+function SidebarLabelBase({text, screenReaderText="Last Accessed", className, ...props}: SidebarLabelProps["functional"]) {
     return (
         <p className={clsx("time-label", className)} {...props}>
             <span className="visually-hidden">{screenReaderText}</span>
@@ -9,3 +9,11 @@ export default function SidebarLabelBase({text, screenReaderText="Last Accessed"
         </p>
     );
 }
+
+export function applySubComponents<
+    T extends typeof SidebarLabelBase
+>(C: T) {
+    return Object.assign(C, {});
+}
+
+export default applySubComponents(SidebarLabelBase);

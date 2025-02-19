@@ -1,7 +1,4 @@
-import UploadModalBase from "./Base";
-import UploadModalStyled from "./BaseStyled";
-
-export const UnstyledUploadModal = UploadModalBase;
-export default UploadModalStyled;
+export { default as UnstyledUploadModal } from "./Base";
+export { default } from "./BaseStyled"; 
 
 export * from "./Types";

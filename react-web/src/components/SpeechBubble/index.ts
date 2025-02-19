@@ -1,67 +1,20 @@
 // Since this is index.tsx, importing the folder itself will import this file.
 // Don't put any other code in this file, just export the necessary resources.
-import _UnstyledSpeechBubbleText from "./Text";
-import _SpeechBubbleText from "./TextStyled";
-import _UnstyledSpeechBubbleImage from "./Image";
-import _SpeechBubbleImage from "./ImageStyled";
-import _UnstyledSpeechBubbleAudio from "./Audio";
-import _SpeechBubbleAudio from "./AudioStyled";
-import _UnstyledSpeechBubbleTyping from "./Typing";
-import _SpeechBubbleTyping from "./TypingStyled";
-import _UnstyledSpeechBubbleDanger from "./Danger";
-import _SpeechBubbleDanger from "./DangerStyled";
-import _UnstyledSpeechBubbleTimestamp from "./Timestamp";
-import _SpeechBubbleTimestamp from "./TimestampStyled";
-import _UnstyledRetryLink from "./RetryLink";
-import _RetryLink from "./RetryLinkStyled";
-import _ScreenReaderText from "./ScreenReaderText";
-import _DangerScreenReaderText from "./DangerScreenReaderText";
 
+export {default as UnstyledSpeechBubbleAudio} from "./Audio";
+export {default as SpeechBubbleAudio} from "./AudioStyled";
 
-export const UnstyledSpeechBubbleText = Object.assign(_UnstyledSpeechBubbleText, {
-    Timestamp: _UnstyledSpeechBubbleTimestamp,
-    ScreenReaderText: _ScreenReaderText
-});
-export const SpeechBubbleText = Object.assign(_SpeechBubbleText, {
-    Timestamp: _SpeechBubbleTimestamp,
-    ScreenReaderText: _ScreenReaderText
-});
+export {default as UnstyledSpeechBubbleText} from "./Text";
+export {default as SpeechBubbleText} from "./TextStyled";
 
-export const UnstyledSpeechBubbleImage = Object.assign(_UnstyledSpeechBubbleImage, {
-    Timestamp: _UnstyledSpeechBubbleTimestamp,
-    ScreenReaderText: _ScreenReaderText
-});
-export const SpeechBubbleImage = Object.assign(_SpeechBubbleImage, {
-    Timestamp: _SpeechBubbleTimestamp,
-    ScreenReaderText: _ScreenReaderText
-});
+export {default as UnstyledSpeechBubbleImage} from "./Image";
+export {default as SpeechBubbleImage} from "./ImageStyled";
 
-export const UnstyledSpeechBubbleAudio = Object.assign(_UnstyledSpeechBubbleAudio, {
-    Timestamp: _UnstyledSpeechBubbleTimestamp,
-    ScreenReaderText: _ScreenReaderText
-});
-export const SpeechBubbleAudio = Object.assign(_SpeechBubbleAudio, {
-    Timestamp: _SpeechBubbleTimestamp,
-    ScreenReaderText: _ScreenReaderText
-});
+export {default as UnstyledSpeechBubbleTyping} from "./Typing";
+export {default as SpeechBubbleTyping} from "./TypingStyled";
 
-export const UnstyledSpeechBubbleTyping = Object.assign(_UnstyledSpeechBubbleTyping, {
-    ScreenReaderText: _ScreenReaderText
-});
-export const SpeechBubbleTyping = Object.assign(_SpeechBubbleTyping, {
-    ScreenReaderText: _ScreenReaderText
-});
-
-export const UnstyledSpeechBubbleDanger = Object.assign(_UnstyledSpeechBubbleDanger, {
-    Timestamp: _UnstyledSpeechBubbleTimestamp,
-    ScreenReaderText: _DangerScreenReaderText,
-    RetryLink: _UnstyledRetryLink
-});
-export const SpeechBubbleDanger = Object.assign(_SpeechBubbleDanger, {
-    Timestamp: _SpeechBubbleTimestamp,
-    ScreenReaderText: _DangerScreenReaderText,
-    RetryLink: _RetryLink
-});
+export {default as UnstyledSpeechBubbleDanger} from "./Danger";
+export {default as SpeechBubbleDanger} from "./DangerStyled";
 
 export {default as UnstyledSpeechBubbleTimestamp} from "./Timestamp";
 export {default as SpeechBubbleTimestamp} from "./TimestampStyled";

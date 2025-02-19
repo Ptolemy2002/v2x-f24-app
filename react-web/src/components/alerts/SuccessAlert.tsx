@@ -10,7 +10,7 @@ export type SuccessAlertProps = PropsWithCustomChildren<
     }
 >;
 
-export default function SuccessAlert({
+function SuccessAlert({
     children: { head, body } = {},
     ...props
 }: SuccessAlertProps) {
@@ -24,3 +24,8 @@ export default function SuccessAlert({
         </Alert>
     );
 }
+
+export default Object.assign(SuccessAlert, {
+    Heading: Alert.Heading,
+    Link: Alert.Link
+});

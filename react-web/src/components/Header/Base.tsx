@@ -4,7 +4,7 @@ import { BSMediaQuery } from "@ptolemy2002/react-bs-media-queries";
 import DefaultMenuIcon from "src/components/icons/MenuIcon";
 import StyledButton from "../StyledButton";
 
-export default function HeaderBase({
+function HeaderBase({
     onMenuClick,
     MenuIcon = DefaultMenuIcon,
     ...props
@@ -32,3 +32,13 @@ export default function HeaderBase({
         </Row>
     );
 }
+
+export function applySubComponents<
+    T extends typeof HeaderBase
+>(C: T) {
+    return Object.assign(C, {
+        MenuIcon: DefaultMenuIcon,
+    });
+}
+
+export default applySubComponents(HeaderBase);

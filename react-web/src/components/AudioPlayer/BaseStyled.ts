@@ -1,8 +1,8 @@
-import Base from "./Base";
+import Base, { applySubComponents } from "./Base";
 import { AudioPlayerProps } from "./Types";
 import styled from "styled-components";
 
-export default Object.assign(
+export default applySubComponents(Object.assign(
     styled(Base).attrs<AudioPlayerProps["style"]>(
         (props) => ({
             $gap: props.$gap ?? "20px",
@@ -23,6 +23,6 @@ export default Object.assign(
         ${({$css}) => $css}
     `,
     {
-        displayName: "styled(AudioPlayer)",
+        displayName: "styled(AudioPlayer)"
     }
-);
+));

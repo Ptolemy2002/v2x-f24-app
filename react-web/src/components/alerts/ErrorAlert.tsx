@@ -10,7 +10,7 @@ export type ErrorAlertProps = PropsWithCustomChildren<
     }
 >;
 
-export default function ErrorAlert({
+function ErrorAlert({
     children: { head, body } = {},
     ...props
 }: ErrorAlertProps) {
@@ -24,3 +24,8 @@ export default function ErrorAlert({
         </Alert>
     );
 }
+
+export default Object.assign(ErrorAlert, {
+    Heading: Alert.Heading,
+    Link: Alert.Link
+});

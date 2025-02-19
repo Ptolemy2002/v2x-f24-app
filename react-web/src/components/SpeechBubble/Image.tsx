@@ -6,7 +6,7 @@ import clsx from "clsx";
 import ConversationData from "src/data/ConversationData";
 import { ReactNode } from "react";
 
-export default function SpeechBubbleImageBase({
+function SpeechBubbleImageBase({
     message,
     scrollToEnd,
     className,
@@ -44,3 +44,15 @@ export default function SpeechBubbleImageBase({
         </div>
     );
 }
+
+export function applySubComponents<
+    T extends typeof SpeechBubbleImageBase
+>(C: T) {
+    return Object.assign(C, {
+        TimestampWrapper: DefaultTimestampWrapper,
+        SpeechBubbleTimestamp: DefaultSpeechBubbleTimestamp,
+        ScreenReaderText: DefaultScreenReaderText,
+    });
+}
+
+export default applySubComponents(SpeechBubbleImageBase);

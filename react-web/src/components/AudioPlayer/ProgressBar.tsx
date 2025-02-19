@@ -1,7 +1,7 @@
 import { AudioPlayerProgressBarProps } from './Types';
 import { useAudioPlayerProgressBarController } from './Controllers';
 
-export default function AudioPlayerProgressBarBase({
+function AudioPlayerProgressBarBase({
     progress,
     maxDuration: duration,
     onSeek,
@@ -28,3 +28,11 @@ export default function AudioPlayerProgressBarBase({
         </progress>
     );
 }
+
+export function applySubComponents<
+    T extends typeof AudioPlayerProgressBarBase
+>(C: T) {
+    return Object.assign(C, {});
+}
+
+export default applySubComponents(AudioPlayerProgressBarBase);

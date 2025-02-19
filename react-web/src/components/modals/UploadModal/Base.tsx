@@ -9,7 +9,7 @@ import StyledButton from "src/components/StyledButton";
 import { interpretZodError } from "@ptolemy2002/regex-utils";
 import { Spacer } from "@ptolemy2002/react-utils";
 
-export default function UploadModalBase({
+function UploadModalBase({
     className,
     children: {
         title="File Upload",
@@ -148,3 +148,13 @@ export default function UploadModalBase({
         </Modal>
     )
 }
+
+export function applySubComponents<
+    T extends typeof UploadModalBase
+>(C: T) {
+    return Object.assign(C, {
+        AudioPlayer: DefaultAudioPlayer
+    });
+}
+
+export default applySubComponents(UploadModalBase);
