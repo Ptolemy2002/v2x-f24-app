@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router';
 import { useMountEffect } from '@ptolemy2002/react-mount-effects';
 import DefaultBody from './BodyStyled';
 
-export default function ConversationSettingsPageBase({
+function ConversationSettingsPageBase({
     className,
     Body=DefaultBody,
     ...props
@@ -36,3 +36,13 @@ export default function ConversationSettingsPageBase({
         </ConversationData.Provider>
     );
 }
+
+export function applySubComponents<
+    T extends typeof ConversationSettingsPageBase
+>(C: T) {
+    return Object.assign(C, {
+        Body: DefaultBody,
+    });
+}
+
+export default applySubComponents(ConversationSettingsPageBase);

@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { NotFoundPageProps } from './Types';
 
-export default function NotFoundPageBase({
+function NotFoundPageBase({
     className,
     ...props
 }: NotFoundPageProps["functional"]) {
@@ -12,3 +12,11 @@ export default function NotFoundPageBase({
         </div>
     );
 }
+
+export function applySubComponents<
+    T extends typeof NotFoundPageBase
+>(C: T) {
+    return Object.assign(C, {});
+}
+
+export default applySubComponents(NotFoundPageBase);

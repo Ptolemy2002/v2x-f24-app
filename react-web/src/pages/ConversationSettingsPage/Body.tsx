@@ -14,7 +14,7 @@ import SuccessAlert from "src/components/alerts/SuccessAlert";
 import StyledButton from "src/components/StyledButton";
 import { css } from "styled-components";
 
-export default function ConversationSettingsPageBodyBase(props: ConversationSettingsPageBodyProps["functional"]) {
+function ConversationSettingsPageBodyBase(props: ConversationSettingsPageBodyProps["functional"]) {
     const [conversation] = ConversationData.useContextNonNullable([]);
 
     return (
@@ -150,3 +150,13 @@ function InternalForm(
         </Form>
     );
 }
+
+export function applySubComponents<
+    T extends typeof ConversationSettingsPageBodyBase
+>(C: T) {
+    return Object.assign(C, {
+        Form: InternalForm
+    })
+}
+
+export default applySubComponents(ConversationSettingsPageBodyBase);

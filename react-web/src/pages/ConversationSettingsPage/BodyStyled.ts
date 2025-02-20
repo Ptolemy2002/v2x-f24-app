@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import { ConversationSettingsPageBodyProps } from "./Types";
-import Base from "./Body";
+import Base, {applySubComponents} from "./Body";
 
-export default Object.assign(
+export default applySubComponents(Object.assign(
     styled(Base).attrs<ConversationSettingsPageBodyProps["style"]>(
         (props) => ({
             $marginBottom: props.$marginBottom ?? "1rem",
@@ -31,4 +31,4 @@ export default Object.assign(
     {
         displayName: "styled(ConversationSettingsPage.Body)",
     }
-);
+));

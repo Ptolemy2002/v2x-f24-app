@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import { ConversationSettingsPageProps } from "./Types";
-import Base from "./Base";
+import Base, {applySubComponents} from "./Base";
 
-export default Object.assign(
+export default applySubComponents(Object.assign(
     styled(Base).attrs<ConversationSettingsPageProps["style"]>(
         (props) => ({
             $padding: props.$padding ?? "10px",
@@ -18,4 +18,4 @@ export default Object.assign(
     {
         displayName: "styled(ConversationSettingsPage)",
     }
-);
+));
