@@ -3,7 +3,7 @@ import { router } from 'src/Browser';
 import { RouterProvider } from 'react-router-dom';
 import ConversationInfo from 'src/context/ConversationInfo';
 
-export default function AppBase({className}: AppProps["functional"]) {
+function AppBase({className}: AppProps["functional"]) {
     return (
         <div className={className}>
             <ConversationInfo.Provider value={new ConversationInfo()}>
@@ -12,3 +12,11 @@ export default function AppBase({className}: AppProps["functional"]) {
         </div>
     );
 }
+
+export function applySubComponents<
+    T extends typeof AppBase
+>(C: T) {
+    return Object.assign(C, {});
+}
+
+export default applySubComponents(AppBase);
