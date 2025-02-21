@@ -1,8 +1,9 @@
 import { swaggerRegistry } from "src/Swagger";
 import { zodSuccessResponseSchema } from "./SuccessResponse";
-import { z, ZodOptional } from "zod";
+import { z } from "zod";
 import { ZodErrorResponseSchema } from "./ErrorResponse";
 import { ZodFileMimeTypeSchema } from "./FileMimeType";
+import { ZodConversationIDSchema } from "src/Message";
 
 export const ZodConversationUpload200ResponseBodySchema = swaggerRegistry.register(
     "ConversationUpload200ResponseBody",
@@ -23,8 +24,18 @@ export const ZodConversationUploadResponseBody = swaggerRegistry.register(
     })
 );
 
+export const ZodConversationUploadURLParamsSchema = swaggerRegistry.register(
+    "ConversationUploadURLParams",
+    z.object({
+        id: ZodConversationIDSchema
+    }).openapi({
+        description: "The URL parameters for uploading files to a conversation"
+    })
+);
+
+
 export const ZodConversationUploadFilesSchema = swaggerRegistry.register(
-    "ConversationUploadFile",
+    "ConversationUploadFiles",
     z.array(
         z.object({
             mimetype: ZodFileMimeTypeSchema.optional(),
@@ -73,6 +84,7 @@ export const ZodConversationUploadFilesSchema = swaggerRegistry.register(
     })
 );
 
+export type ConversationUploadURLParams = z.infer<typeof ZodConversationUploadURLParamsSchema>;
 export type ConversationUpload200ResponseBody = z.infer<typeof ZodConversationUpload200ResponseBodySchema>;
 export type ConversationUploadResponseBody = z.infer<typeof ZodConversationUploadResponseBody>;
 export type ConversationUploadFiles = z.infer<typeof ZodConversationUploadFilesSchema>;

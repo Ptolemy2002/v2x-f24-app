@@ -1,6 +1,5 @@
 import express from 'express';
 import indexRoutes from './indexRoutes';
-import testFileRouter from './test-file';
 const router = express.Router();
 
 router.use("/", indexRoutes
@@ -30,8 +29,6 @@ router.use("/", indexRoutes
         }
     */
 );
-
-router.use("/", testFileRouter);
 
 const indexRouter = router;
 export default indexRouter;

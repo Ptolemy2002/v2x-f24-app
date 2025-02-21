@@ -1,5 +1,5 @@
 import express from 'express';
-import { cleanMulterUploads, createMulter } from 'services/multer';
+import { cleanTempUploads, createMulter } from 'services/multer';
 
 const router = express.Router();
 const upload = createMulter();
@@ -11,6 +11,7 @@ router.post('/api/v1/test-file', upload.single('file'), (req, res) => {
         #swagger.description = 'Upload a file.'
         #swagger.requestBody = {
             content: {
+                required: true,
                 'multipart/form-data': {
                     schema: {
                         type: 'object',
@@ -30,7 +31,7 @@ router.post('/api/v1/test-file', upload.single('file'), (req, res) => {
         }
     */
     console.log(req.file);
-    cleanMulterUploads();
+    cleanTempUploads();
     res.send('File uploaded');
 });
 

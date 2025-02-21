@@ -759,23 +759,114 @@
         }
       }
     },
-    "/api/v1/test-file": {
+    "/api/v1/conversation/upload/{id}": {
       "post": {
-        "description": "Upload a file.",
+        "tags": [
+          "Conversation"
+        ],
+        "description": "Upload files to be used in a conversation.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID of the conversation to upload files to."
+          }
+        ],
         "responses": {
           "200": {
-            "description": "File uploaded."
+            "description": "File uploaded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConversationUpload200ResponseBody"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConversationUpload200ResponseBody"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Conversation not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "ok": false,
+                  "code": "NOT_FOUND",
+                  "message": "No conversation found with the specified ID.",
+                  "help": "http://example.com/docs"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "501": {
+            "description": "Not implemented",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse501"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse501"
+                }
+              }
+            }
           }
         },
         "requestBody": {
           "content": {
+            "required": true,
             "multipart/form-data": {
               "schema": {
                 "type": "object",
                 "properties": {
-                  "file": {
-                    "type": "string",
-                    "format": "binary"
+                  "files": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    }
                   }
                 }
               }
@@ -2130,7 +2221,19 @@
         ],
         "description": "The response body for the conversation upload endpoint"
       },
-      "ConversationUploadFile": {
+      "ConversationUploadURLParams": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/ConversationID"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "description": "The URL parameters for uploading files to a conversation"
+      },
+      "ConversationUploadFiles": {
         "type": "array",
         "items": {
           "type": "object",

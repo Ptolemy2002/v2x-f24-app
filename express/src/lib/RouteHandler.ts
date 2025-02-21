@@ -3,11 +3,17 @@ import { ErrorCode, ErrorResponse, ErrorResponse400, ErrorResponse404, ErrorResp
 import { ZodError } from 'zod';
 import { interpretZodError, InterpretZodErrorOptions } from '@ptolemy2002/regex-utils';
 import { Response } from 'express';
+import { cleanTempUploads, tempUploadsPath } from 'services/multer';
 
 export type GeneratedResonse<SuccessResponse extends SuccessResponseBase> = {
     status: number;
-    response: ErrorResponse | SuccessResponse;
-};
+} & (
+    {
+        response: ErrorResponse | SuccessResponse;
+    } | {
+        filePath: string;
+    }
+);
 
 export type RouteHandlerRequestData = {
     params: unknown;
@@ -136,7 +142,15 @@ export default class RouteHandler<SuccessResponse extends SuccessResponseBase> {
     }
 
     async handle(req: RouteHandlerRequestData, res: Response) {
-        const { status, response } = await this.generateResponse(req, res);
-        res.status(status).json(response);
+        const result = await this.generateResponse(req, res);
+
+        res.status(result.status);
+        if ("response" in result) {
+            res.json(result.response);
+        } else if ("filePath" in result) {
+            res.sendFile(`${tempUploadsPath}/${result.filePath}`);
+        }
+
+        cleanTempUploads();
     }
 }

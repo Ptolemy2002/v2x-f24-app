@@ -2,6 +2,7 @@ import { MongoConversation, ZodMongoConversationSchema } from "shared";
 import { HydratedDocumentFromSchema, Model, Schema, Types, model } from "mongoose";
 import { zodValidateWithErrors } from "@ptolemy2002/regex-utils";
 import { nanoid } from "nanoid";
+import { conversationBucket } from "services/gcloud/storage";
 
 export type MongoDocumentConversation =
     // Here we're manually defining the _id field an ObjectId
@@ -23,8 +24,8 @@ export type ConversationInstanceMethods = {
     toClientJSON: () => MongoConversation,
     makeNameUnique: () => Promise<void>,
     removeUnsetFields: () => void,
-    addFile: (file: File, url: string, alt?: string, name?: string) => string,
-    removeFile: (key: string) => MongoConversation["files"][string]
+    addFile: (filePath: string, url: string, alt?: string, name?: string) => Promise<string>,
+    removeFile: (key: string) => Promise<MongoConversation["files"][string]>
 };
 export type ConversationModel = Model<MongoDocumentConversation, {}, ConversationInstanceMethods>;
 
@@ -107,26 +108,32 @@ ConversationSchema.method("removeUnsetFields", function() {
     this.set("messages", this.get("messages").filter(x => x !== null));
 });
 
-ConversationSchema.method("addFile", function(file: File, url: string, alt?: string, name?: string) {
+ConversationSchema.method("addFile", async function(filePath: string, url: string, alt?: string, name?: string) {
     const files = {...this.get("files")};
 
     const key = name ?? nanoid();
     files[key] = {url, alt};
     this.set("files", files);
 
-    // TODO: Also upload to Google Cloud Storage when we have it set up
+    await conversationBucket.upload(
+        filePath,
+        {
+            destination: `${this.get("_id")}/${key}`,
+            public: false
+        }
+    )    
 
     return key;
 });
 
-ConversationSchema.method("removeFile", function(key: string) {
+ConversationSchema.method("removeFile", async function(key: string) {
     const files = {...this.get("files")};
 
     const prev = files[key];
     delete files[key];
     this.set("files", files);
 
-    // TODO: Also remove from Google Cloud Storage when we have it set up
+    await conversationBucket.file(`${this.get("_id")}/${key}`).delete();
 
     return prev;
 });

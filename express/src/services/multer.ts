@@ -1,8 +1,10 @@
 import multer, { Options } from 'multer';
 import fs from 'fs';
 
+export const tempUploadsPath = 'uploads/tmp';
+
 export const defaultMulterOptions: Options = {
-    dest: 'uploads/tmp',
+    dest: tempUploadsPath
 };
 
 export function createMulterOptions(opt: Options = {}) {
@@ -14,7 +16,7 @@ export function createMulter(opt: Options = {}) {
     return multer(fullOptions);
 }
 
-export function cleanMulterUploads(opt: Options = {}) {
+export function cleanTempUploads(opt: Options = {}) {
     const path = createMulterOptions(opt).dest;
-    if (path) fs.rmdirSync(path, { recursive: true });
+    if (path) fs.rmSync(path, { recursive: true });
 }

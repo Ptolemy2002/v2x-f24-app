@@ -17,6 +17,7 @@
     "directory": "express"
   },
   "dependencies": {
+    "@google-cloud/storage": "^7.15.2",
     "@ptolemy2002/express-utils": "^2.0.3",
     "@ptolemy2002/js-utils": "^3.2.2",
     "@ptolemy2002/mongoose-utils": "^1.0.0",

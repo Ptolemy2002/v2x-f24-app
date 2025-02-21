@@ -53,6 +53,7 @@ export const EnvSchema = z.object({
     DEV_CLIENT_URL: url("http://localhost:3000", false),
     PROD_CLIENT_URL: nullableUrl(null),
     MONGO_CONNECTION_STRING: z.string().url(), 
+    GCLOUD_CONVERSATION_BUCKET: z.string(),
     
     // Additional environment variables here
 });
@@ -71,6 +72,9 @@ export type EnvType = {
     clientURL: string,
     getDocsURL: (version: number) => string,
     mongoConnectionString: string,
+    gcloud: {
+        conversationBucket: string
+    }
 
     // Additional environment variables here
 };
@@ -101,7 +105,11 @@ export default function getEnv(createNew=false): EnvType {
             mongoConnectionString: Env.MONGO_CONNECTION_STRING,
             apiURL,
             clientURL,
-            getDocsURL: (v) => (/\/api\/v\d+$/.test(apiURL) ? stripWords(apiURL, "/", 0, 2) : apiURL) + `/api/v${v}/docs`
+            getDocsURL: (v) => (/\/api\/v\d+$/.test(apiURL) ? stripWords(apiURL, "/", 0, 2) : apiURL) + `/api/v${v}/docs`,
+
+            gcloud: {
+                conversationBucket: Env.GCLOUD_CONVERSATION_BUCKET
+            }
         });
     }
 
