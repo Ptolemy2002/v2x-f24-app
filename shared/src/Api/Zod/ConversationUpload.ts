@@ -64,9 +64,9 @@ export const ZodConversationUploadFilesSchema = swaggerRegistry.register(
             }
         )
         .transform((v) => {
-            if (v.mimetype === undefined) {
+            if (v.mimetype !== undefined) {
                 v.type = v.mimetype;
-            } else if (v.type === undefined) {
+            } else if (v.type !== undefined) {
                 v.mimetype = v.type;
             }
 

@@ -762,7 +762,8 @@
     "/api/v1/conversation/upload/{id}": {
       "post": {
         "tags": [
-          "Conversation"
+          "Conversation",
+          "Files"
         ],
         "description": "Upload files to be used in a conversation.",
         "parameters": [
@@ -778,7 +779,7 @@
         ],
         "responses": {
           "200": {
-            "description": "File uploaded.",
+            "description": "Files uploaded.",
             "content": {
               "application/json": {
                 "schema": {
@@ -855,8 +856,8 @@
           }
         },
         "requestBody": {
+          "required": true,
           "content": {
-            "required": true,
             "multipart/form-data": {
               "schema": {
                 "type": "object",

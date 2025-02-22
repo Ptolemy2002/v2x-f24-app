@@ -147,10 +147,11 @@ export default class RouteHandler<SuccessResponse extends SuccessResponseBase> {
         res.status(result.status);
         if ("response" in result) {
             res.json(result.response);
+            cleanTempUploads();
         } else if ("filePath" in result) {
-            res.sendFile(`${tempUploadsPath}/${result.filePath}`);
+            res.sendFile(`${tempUploadsPath}/${result.filePath}`, () => {
+                cleanTempUploads();
+            });
         }
-
-        cleanTempUploads();
     }
 }

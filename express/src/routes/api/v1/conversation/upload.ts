@@ -1,6 +1,6 @@
 import { asyncErrorHandler } from "@ptolemy2002/express-utils";
 import { Router } from "express";
-import RouteHandler, { GeneratedResonse, RouteHandlerRequestData } from "lib/RouteHandler";
+import RouteHandler, { RouteHandlerRequestData } from "lib/RouteHandler";
 import ConversationModel from "models/ConversationModel";
 import { createMulter } from "services/multer";
 import { ConversationUpload200ResponseBody, ZodConversationUploadFilesSchema, ZodConversationUploadURLParamsSchema } from "shared";
@@ -11,6 +11,7 @@ const upload = createMulter();
 export class ConversationUploadHandler extends RouteHandler<ConversationUpload200ResponseBody> {
     /*
         #swagger.start
+        #swagger.tags = ['Conversation', 'Files']
         #swagger.path = '/api/v1/conversation/upload/{id}'
         #swagger.method = 'post'
         #swagger.description = 'Upload files to be used in a conversation.'
@@ -21,8 +22,8 @@ export class ConversationUploadHandler extends RouteHandler<ConversationUpload20
         }
 
         #swagger.requestBody = {
+            required: true,
             content: {
-                required: true,
                 'multipart/form-data': {
                     schema: {
                         type: 'object',
@@ -41,7 +42,7 @@ export class ConversationUploadHandler extends RouteHandler<ConversationUpload20
         }
 
         #swagger.responses[200] = {
-            description: 'File uploaded.',
+            description: 'Files uploaded.',
             schema: {
                 $ref: "#/components/schemas/ConversationUpload200ResponseBody"
             }

@@ -1,7 +1,8 @@
 import multer, { Options } from 'multer';
 import fs from 'fs';
+import path from 'path';
 
-export const tempUploadsPath = 'uploads/tmp';
+export const tempUploadsPath = path.join(__dirname, '../../uploads/tmp');
 
 export const defaultMulterOptions: Options = {
     dest: tempUploadsPath
@@ -17,6 +18,18 @@ export function createMulter(opt: Options = {}) {
 }
 
 export function cleanTempUploads(opt: Options = {}) {
-    const path = createMulterOptions(opt).dest;
-    if (path) fs.rmSync(path, { recursive: true });
+    const dirPath = createMulterOptions(opt).dest;
+    if (dirPath) {
+        fs.readdir(dirPath, (err, files) => {
+            if (err) throw err;
+
+            for (const file of files) {
+                fs.unlink(path.join(dirPath, file), err => {
+                    if (err) throw err;
+                });
+            }
+        });
+    }
 }
+
+console.log('multer loaded');
