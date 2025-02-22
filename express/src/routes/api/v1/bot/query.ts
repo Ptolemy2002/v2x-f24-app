@@ -9,7 +9,8 @@ import {
     createMongoAudioMessage,
     ZodBotQueryRequestBodySchema,
     BotQuery200ResponseBody,
-    MongoMessage
+    MongoMessage,
+    isAnonymousID
 } from 'shared';
 import RouteHandler, { RouteHandlerRequestData } from 'lib/RouteHandler';
 import ConversationModel from 'models/ConversationModel';
@@ -170,7 +171,7 @@ export class BotQueryHandler extends RouteHandler<BotQuery200ResponseBody> {
             };
         }
 
-        if (body.conversation._id !== "anonymous") {
+        if (!isAnonymousID(body.conversation._id)) {
             // Update the database with the new message
             const conversation = await ConversationModel.findById(body.conversation._id);
             if (conversation) {

@@ -112,7 +112,7 @@ ConversationSchema.method("addFile", async function(filePath: string, url: strin
     const files = {...this.get("files")};
 
     const key = name ?? nanoid();
-    files[key] = {url, alt};
+    files[key] = {key, url, alt};
     this.set("files", files);
 
     await conversationBucket.upload(

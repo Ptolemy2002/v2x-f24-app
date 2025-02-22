@@ -1,24 +1,21 @@
 import { swaggerRegistry } from "src/Swagger";
 import { z } from "zod";
 import { ZodUniqueMessageArraySchema, ZodUniqueMongoMessageArraySchema } from "./UniqueMessageArray";
-import { ZodConversationIDSchema } from "./ConversationID";
+import { ZodConversationIDWithAnonymousSchema } from "./ConversationID";
 
 export const ZodConversationSchema = swaggerRegistry.register(
     "Conversation",
     z.object({
-        id: z.union([
-            ZodConversationIDSchema,
-            z.literal("anonymous")
-        ]).openapi({
-            description: "The ID of the conversation or 'anonymous' if the conversation should not be saved to the database.",
-            example: "abc123"
-        }),
+        id: ZodConversationIDWithAnonymousSchema,
         name: z.string().openapi({
             description: "The name of the conversation.",
             example: "Untitled Conversation"
         }),
         messages: ZodUniqueMessageArraySchema,
         files: z.record(z.string(), z.object({
+            key: z.string().openapi({
+                description: "The key of the file, unique among every file in the conversation."
+            }),
             url: z.string().openapi({
                 description: "The URL of the file."
             }),

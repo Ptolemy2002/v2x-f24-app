@@ -3,8 +3,22 @@ import { Router } from "express";
 import ConversationModel from "models/ConversationModel";
 import { ConversationNew200ResponseBody, createMongoTextMessage, MongoConversation, ZodConversationNewQueryParamsSchema } from "shared";
 import { asyncErrorHandler } from "@ptolemy2002/express-utils";
+import { nanoid } from "nanoid";
 
 const router = Router();
+
+const defaultFiles = {
+    "placeholder-image": {
+        key: "placeholder-image",
+        url: "/placeholder-image.png",
+        alt: "placeholder image"
+    },
+    "placeholder-audio": {
+        key: "placeholder-audio",
+        url: "/aud-test.wav",
+        alt: "placeholder audio"
+    }
+};
 
 class ConversationNewHandler extends RouteHandler<ConversationNew200ResponseBody> {
     /*
@@ -61,16 +75,7 @@ class ConversationNewHandler extends RouteHandler<ConversationNew200ResponseBody
         if (!anonymous) {
             const conversation = await ConversationModel.createWithUniqueName("Untitled Conversation", {
                 messages: defaultMessages,
-                files: {
-                    "placeholder-image": {
-                        url: "/placeholder-image.png",
-                        alt: "placeholder image"
-                    },
-                    "placeholder-audio": {
-                        url: "/aud-test.wav",
-                        alt: "placeholder audio"
-                    }
-                }
+                files: defaultFiles
             });
 
             return {
@@ -82,20 +87,11 @@ class ConversationNewHandler extends RouteHandler<ConversationNew200ResponseBody
         } else {
             // Create a new conversation, but don't save it to the database
             const conversation: MongoConversation = {
-                _id: "anonymous",
+                _id: "anonymous-" + nanoid(),
                 name: "Anonymous Conversation",
                 messages: defaultMessages,
                 createdAt: new Date().toISOString(),
-                files: {
-                    "placeholder-image": {
-                        url: "/placeholder-image.png",
-                        alt: "placeholder image"
-                    },
-                    "placeholder-audio": {
-                        url: "/aud-test.wav",
-                        alt: "placeholder audio"
-                    }
-                }
+                files: defaultFiles
             };
 
             return {

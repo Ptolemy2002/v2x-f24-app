@@ -3,7 +3,7 @@ import { zodSuccessResponseSchema } from "./SuccessResponse";
 import { z } from "zod";
 import { ZodErrorResponseSchema } from "./ErrorResponse";
 import { ZodFileMimeTypeSchema } from "./FileMimeType";
-import { ZodConversationIDSchema } from "src/Message";
+import { ZodConversationIDWithAnonymousSchema } from "src/Message";
 
 export const ZodConversationUpload200ResponseBodySchema = swaggerRegistry.register(
     "ConversationUpload200ResponseBody",
@@ -27,7 +27,7 @@ export const ZodConversationUploadResponseBody = swaggerRegistry.register(
 export const ZodConversationUploadURLParamsSchema = swaggerRegistry.register(
     "ConversationUploadURLParams",
     z.object({
-        id: ZodConversationIDSchema
+        id: ZodConversationIDWithAnonymousSchema
     }).openapi({
         description: "The URL parameters for uploading files to a conversation"
     })

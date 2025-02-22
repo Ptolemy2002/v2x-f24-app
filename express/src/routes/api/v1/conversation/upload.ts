@@ -3,7 +3,7 @@ import { Router } from "express";
 import RouteHandler, { RouteHandlerRequestData } from "lib/RouteHandler";
 import ConversationModel from "models/ConversationModel";
 import { createMulter } from "services/multer";
-import { ConversationUpload200ResponseBody, ZodConversationUploadFilesSchema, ZodConversationUploadURLParamsSchema } from "shared";
+import { ConversationUpload200ResponseBody, isAnonymousID, ZodConversationUploadFilesSchema, ZodConversationUploadURLParamsSchema } from "shared";
 
 const router = Router();
 const upload = createMulter();
@@ -100,21 +100,28 @@ export class ConversationUploadHandler extends RouteHandler<ConversationUpload20
 
         const { id } = params;
 
-        const conversation = await ConversationModel.findById(id);
+        if (!isAnonymousID(id)) {
+            const conversation = await ConversationModel.findById(id);
 
-        if (conversation === null) {
+            if (conversation === null) {
+                return {
+                    status: 404,
+                    response: this.buildNotFoundResponse("No conversation found with the specified ID.")
+                };
+            }
+
+            console.log(files);
+
             return {
-                status: 404,
-                response: this.buildNotFoundResponse("No conversation found with the specified ID.")
+                status: 501,
+                response: this.buildNotImplementedResponse()
+            };
+        } else {
+            return {
+                status: 501,
+                response: this.buildNotImplementedResponse("Cannot upload files to an anonymous conversation yet.")
             };
         }
-
-        console.log(files);
-
-        return {
-            status: 501,
-            response: this.buildNotImplementedResponse()
-        };
     }
 }
 

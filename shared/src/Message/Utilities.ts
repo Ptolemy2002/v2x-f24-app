@@ -12,6 +12,7 @@ import {
     Message,
     MongoMessage,
     MessageType,
+    ZodAnonymousConversationIDSchema,
 } from "./Zod";
 import { nanoid } from "nanoid";
 
@@ -136,4 +137,8 @@ export function toMessage(message: MongoMessage): Message {
         ...message,
         date: new Date(message.date)
     };
+}
+
+export function isAnonymousID(id: string): boolean {
+    return ZodAnonymousConversationIDSchema.safeParse(id).success;
 }
