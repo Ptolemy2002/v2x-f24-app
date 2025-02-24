@@ -3,7 +3,7 @@ import { Col } from "react-bootstrap";
 import DefaultSidebarLabel from "./SidebarLabelStyled";
 import DefaultChatLink from "./ChatLinkStyled";
 import clsx from "clsx";
-import { SuspenseBoundary } from "@ptolemy2002/react-suspense";
+import { SuspenseBoundary, SuspenseBoundaryProps } from "@ptolemy2002/react-suspense";
 import useManualErrorHandling from "@ptolemy2002/react-manual-error-handling";
 import getApi from "src/Api";
 import { ErrorBoundary } from "react-error-boundary";
@@ -17,33 +17,47 @@ function SidebarBase({
     onLinkClick,
     ...props
 }: SidebarProps["functional"]) {
-    const api = getApi();
     const [conversationInfo] = ConversationInfo.useContext();
-    const {_try} = useManualErrorHandling();
 
     return (
         // We need to explicitly set the "col" class here so LESS can recognize it as a column.
         // We also need to set the "as" prop after spreading the others to make sure it doesn't get overridden.
         <Col id="sidebar" xs={colSize} className={clsx("col", className)} {...props} as="ul">
             <SidebarLabel text="Conversations" />
-            <ErrorBoundary fallback={<SidebarLabel text="Cannot get conversation list" $underline={false} />}>
-                <SuspenseBoundary
+            <ErrorBoundary fallback={
+                <SidebarLabel className="error-text" text="Cannot get conversation list" $underline={false} />
+            }>
+                <SidebarInternalBody
                     fallback={<SidebarLabel text="Loading..." $underline={false} />}
-                    init={() => _try(async () => {
-                        const { data } = await api.get("/conversation/list-name");
-
-                        if (data.ok) {
-                            conversationInfo.setEntries(data.entries);
-                        }
-                    })}
                     renderDeps={[conversationInfo.entries]}
                 >
                     {conversationInfo.entries.map(({_id, name}) => (
                         <ChatLink key={_id} text={name} name={name} id={_id} onClick={onLinkClick} />
                     ))}
-                </SuspenseBoundary>
+                </SidebarInternalBody>
             </ErrorBoundary>
         </Col>
+    );
+}
+
+// The SuspenseBoundary must be a separate component so that errors can be caught and displayed.
+function SidebarInternalBody(props: Omit<SuspenseBoundaryProps, "init">) {
+    const {_try} = useManualErrorHandling();
+    const [conversationInfo] = ConversationInfo.useContext();
+    const api = getApi();
+
+    return (
+        <SuspenseBoundary
+            init={() => _try(async () => {
+                const { data } = await api.get("/conversation/list-name");
+
+                if (data.ok) {
+                    conversationInfo.setEntries(data.entries);
+                }
+            })}
+            renderDeps={[conversationInfo.entries]}
+            {...props}
+        />
     );
 }
 

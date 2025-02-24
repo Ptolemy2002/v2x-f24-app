@@ -3,7 +3,7 @@ import clsx from "clsx";
 
 function SidebarLabelBase({text, screenReaderText="Last Accessed", className, ...props}: SidebarLabelProps["functional"]) {
     return (
-        <p className={clsx("time-label", className)} {...props}>
+        <p className={clsx("sidebar-label", className)} {...props}>
             <span className="visually-hidden">{screenReaderText}</span>
             {text}
         </p>

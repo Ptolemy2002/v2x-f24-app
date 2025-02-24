@@ -1,4 +1,4 @@
-import { RequiredCSSProperties, StyledComponentPropsWithCSS } from "@ptolemy2002/react-styled-component-utils";
+import { StyledComponentPropsWithCSS } from "@ptolemy2002/react-styled-component-utils";
 import { ModalHeaderProps, ModalProps, ModalTitleProps } from "react-bootstrap";
 import { ModalStyles } from "styled-components";
 import { PropsWithCustomChildren } from "@ptolemy2002/react-utils";
@@ -20,7 +20,5 @@ export type UploadModalProps = StyledComponentPropsWithCSS<
             body: ReactNode;
         }
     >,
-    ModalStyles & {
-        errorTextColor?: RequiredCSSProperties["color"];
-    }
+    ModalStyles
 >;

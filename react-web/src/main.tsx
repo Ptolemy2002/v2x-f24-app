@@ -41,6 +41,10 @@ export const GlobalStyle = createGlobalStyle`
         overflow-anchor: none; // Fixes a few React bugs
     }
 
+    .error-text {
+        color: ${({ theme }) => theme.errorTextColor};
+    }
+
     // Override Bootstrap Alert styles where applicable
     ${({ theme }) => {
         if (!theme.alerts) return null;
