@@ -20,8 +20,8 @@ export const ZodConversationUpdateByIDRequestBodySchema = swaggerRegistry.regist
             $set: z.record(
                 z.string().refine((s) => parseConversationPath(s, [
                     "name",
-                    (s) => s.startsWith("messages."),
-                    (s) => s.startsWith("files.")
+                    (s: string) => s.startsWith("messages."),
+                    (s: string) => s.startsWith("files.")
                 ]), {
                     message: "Either an invalid path or one that does not allow direct setting"
                 }),
