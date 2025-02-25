@@ -1318,23 +1318,28 @@
         "description": "The ID of a conversation in the database",
         "example": "abc123"
       },
+      "AnonymousConversationID": {
+        "type": "string",
+        "pattern": "^anonymous-[\\w-]+",
+        "description": "The ID of an anonymous conversation",
+        "example": "anonymous-abc123"
+      },
+      "ConversationIDWithAnonymous": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/ConversationID"
+          },
+          {
+            "$ref": "#/components/schemas/AnonymousConversationID"
+          }
+        ],
+        "description": "The ID of the conversation or 'anonymous-<id>' if the conversation should not be saved to the database."
+      },
       "Conversation": {
         "type": "object",
         "properties": {
           "id": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/ConversationID"
-              },
-              {
-                "type": "string",
-                "enum": [
-                  "anonymous"
-                ]
-              }
-            ],
-            "description": "The ID of the conversation or 'anonymous' if the conversation should not be saved to the database.",
-            "example": "abc123"
+            "$ref": "#/components/schemas/ConversationIDWithAnonymous"
           },
           "name": {
             "type": "string",
@@ -1349,6 +1354,10 @@
             "additionalProperties": {
               "type": "object",
               "properties": {
+                "key": {
+                  "type": "string",
+                  "description": "The key of the file, unique among every file in the conversation."
+                },
                 "url": {
                   "type": "string",
                   "description": "The URL of the file."
@@ -1359,6 +1368,7 @@
                 }
               },
               "required": [
+                "key",
                 "url"
               ]
             },
@@ -1395,6 +1405,10 @@
             "additionalProperties": {
               "type": "object",
               "properties": {
+                "key": {
+                  "type": "string",
+                  "description": "The key of the file, unique among every file in the conversation."
+                },
                 "url": {
                   "type": "string",
                   "description": "The URL of the file."
@@ -1405,6 +1419,7 @@
                 }
               },
               "required": [
+                "key",
                 "url"
               ]
             },
@@ -1417,19 +1432,7 @@
             "example": "2021-07-01T00:00:00.000Z"
           },
           "_id": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/ConversationID"
-              },
-              {
-                "type": "string",
-                "enum": [
-                  "anonymous"
-                ]
-              }
-            ],
-            "description": "The ID of the conversation or 'anonymous' if the conversation should not be saved to the database.",
-            "example": "abc123"
+            "$ref": "#/components/schemas/ConversationIDWithAnonymous"
           }
         },
         "required": [
@@ -1966,6 +1969,8 @@
                   "messages": {
                     "$each": [
                       {
+                        "id": "abc123",
+                        "date": "2021-07-01T00:00:00.000Z",
                         "type": "text",
                         "origin": "sender",
                         "text": "Hello, world!"
@@ -1993,6 +1998,8 @@
                   "messages": {
                     "$in": [
                       {
+                        "id": "abc123",
+                        "date": "2021-07-01T00:00:00.000Z",
                         "type": "text",
                         "origin": "sender",
                         "text": "Hello, world!"
@@ -2104,6 +2111,8 @@
                   "messages": {
                     "$each": [
                       {
+                        "id": "abc123",
+                        "date": "2021-07-01T00:00:00.000Z",
                         "type": "text",
                         "origin": "sender",
                         "text": "Hello, world!"
@@ -2131,6 +2140,8 @@
                   "messages": {
                     "$in": [
                       {
+                        "id": "abc123",
+                        "date": "2021-07-01T00:00:00.000Z",
                         "type": "text",
                         "origin": "sender",
                         "text": "Hello, world!"
@@ -2226,7 +2237,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "$ref": "#/components/schemas/ConversationID"
+            "$ref": "#/components/schemas/ConversationIDWithAnonymous"
           }
         },
         "required": [

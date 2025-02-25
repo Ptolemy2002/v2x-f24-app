@@ -18,11 +18,12 @@ export const ZodConversationUpdateByIDRequestBodySchema = swaggerRegistry.regist
     z.object({
         difference: z.object({
             $set: z.record(
-                z.string().refine((s) => parseConversationPath(s, [{
-                    key: "name",
-                    allowNested: false
-                }]), {
-                    message: "Invalid path"
+                z.string().refine((s) => parseConversationPath(s, [
+                    "name",
+                    (s) => s.startsWith("messages."),
+                    (s) => s.startsWith("files.")
+                ]), {
+                    message: "Either an invalid path or one that does not allow direct setting"
                 }),
                 z.unknown()
             )
@@ -35,16 +36,14 @@ export const ZodConversationUpdateByIDRequestBodySchema = swaggerRegistry.regist
             }),
 
             $unset: z.record(
-                z.string().refine((s) => parseConversationPath(s, [{
-                    key: "name",
-                    allowDirect: false,
-                    allowNested: false
-                }, {
-                    key: "messages",
-                    allowDirect: false,
-                    allowNested: true
-                }]), {
-                    message: "Invalid path"
+                z.string().refine((s) => parseConversationPath(s, [
+                    // Only direct indexes and alt text can be unset
+                    "messages.<number>",
+                    "messages.<number>.alt",
+                    "files.<string>",
+                    "files.<string>.alt"
+                ]), {
+                    message: "Either an invalid path or one that does not allow unsetting"
                 }),
                 z.literal("")
             )
@@ -57,16 +56,10 @@ export const ZodConversationUpdateByIDRequestBodySchema = swaggerRegistry.regist
             }),
 
             $push: z.record(
-                z.string().refine((s) => parseConversationPath(s, [{
-                    key: "name",
-                    allowDirect: false,
-                    allowNested: false
-                }, {
-                    key: "messages",
-                    allowDirect: true,
-                    allowNested: false
-                }]), {
-                    message: "Invalid path"
+                z.string().refine((s) => parseConversationPath(s, [
+                    "messages"
+                ]), {
+                    message: "Either an invalid path or one that does not allow pushing"
                 }),
                 z.object({
                     $each: z.array(z.unknown())
@@ -79,6 +72,8 @@ export const ZodConversationUpdateByIDRequestBodySchema = swaggerRegistry.regist
                     messages: {
                         $each: [
                             {
+                                id: "abc123",
+                                date: "2021-07-01T00:00:00.000Z",
                                 type: "text",
                                 origin: "sender",
                                 text: "Hello, world!"
@@ -89,16 +84,10 @@ export const ZodConversationUpdateByIDRequestBodySchema = swaggerRegistry.regist
             }),
 
             $pullAll: z.record(
-                z.string().refine((s) => parseConversationPath(s, [{
-                    key: "name",
-                    allowDirect: false,
-                    allowNested: false
-                }, {
-                    key: "messages",
-                    allowDirect: true,
-                    allowNested: false
-                }]), {
-                    message: "Invalid path"
+                z.string().refine((s) => parseConversationPath(s, [
+                    "messages"
+                ]), {
+                    message: "Either an invalid path or one that does not allow pulling"
                 }),
                 z.object({
                     $in: z.array(z.unknown())
@@ -111,6 +100,8 @@ export const ZodConversationUpdateByIDRequestBodySchema = swaggerRegistry.regist
                     messages: {
                         $in: [
                             {
+                                id: "abc123",
+                                date: "2021-07-01T00:00:00.000Z",
                                 type: "text",
                                 origin: "sender",
                                 text: "Hello, world!"
