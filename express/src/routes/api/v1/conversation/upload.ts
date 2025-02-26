@@ -99,29 +99,32 @@ export class ConversationUploadHandler extends RouteHandler<ConversationUpload20
         }
 
         const { id } = params;
+        const anonymous = isAnonymousID(id);
 
-        if (!isAnonymousID(id)) {
-            const conversation = await ConversationModel.findById(id);
+        for (const file of files) {
+            const {conversation} = await ConversationModel.addFile(
+                id,
+                file.path as string,
+                `${this.env.apiURL}/conversation/${id}/file/${file.name}`,
+                file.name as string
+            );
 
-            if (conversation === null) {
+            if (conversation) {
+                await conversation.save();
+            } else if (!anonymous) {
                 return {
-                    status: 404,
-                    response: this.buildNotFoundResponse("No conversation found with the specified ID.")
+                    response: this.buildErrorResponse("NOT_FOUND", "No conversation found with the specified ID."),
+                    status: 404
                 };
             }
-
-            console.log(files);
-
-            return {
-                status: 501,
-                response: this.buildNotImplementedResponse()
-            };
-        } else {
-            return {
-                status: 501,
-                response: this.buildNotImplementedResponse("Cannot upload files to an anonymous conversation yet.")
-            };
         }
+
+        return {
+            response: this.buildSuccessResponse({
+                uploaded: true
+            }),
+            status: 200
+        };
     }
 }
 
