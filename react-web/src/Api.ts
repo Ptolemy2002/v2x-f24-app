@@ -51,7 +51,7 @@ export type ApiRoutes = RouteDefArray<[
 ]>;
 
 export default function getApi(
-    options: CreateAxiosDefaults={},
+    options: Omit<CreateAxiosDefaults, "baseURL">={},
     cacheOptions: CacheOptions={
         ttl: minutesToMilliseconds(5)
     },
