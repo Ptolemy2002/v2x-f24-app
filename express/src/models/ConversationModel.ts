@@ -1,4 +1,4 @@
-import { MongoConversation, ZodMongoConversationSchema } from "shared";
+import { MongoConversation, ZodMongoConversationSchema, isAnonymousID } from "shared";
 import { HydratedDocumentFromSchema, Model, Schema, Types, model } from "mongoose";
 import { zodValidateWithErrors } from "@ptolemy2002/regex-utils";
 import { nanoid } from "nanoid";
@@ -29,6 +29,11 @@ export type ConversationInstanceMethods = {
 };
 export type ConversationModel = Model<MongoDocumentConversation, {}, ConversationInstanceMethods>;
 
+export type FileOperationResult<T> = {
+    result: T;
+    conversation: HydratedDocumentFromSchema<typeof ConversationSchema> | null;
+};
+
 export interface ConversationModelWithStatics extends ConversationModel {
     getUniqueName: (name: string) => Promise<string>,
     createWithUniqueName:
@@ -36,6 +41,8 @@ export interface ConversationModelWithStatics extends ConversationModel {
             HydratedDocumentFromSchema<typeof ConversationSchema>
         >,
     getPaths(): string[];
+    addFile: (id: string, filePath: string, url: string, alt?: string, name?: string) => Promise<FileOperationResult<string>>,
+    removeFile: (id: string, key: string) => Promise<FileOperationResult<MongoConversation["files"][string]>>
 };
 
 const ConversationSchema = new Schema<MongoDocumentConversation, ConversationModel, ConversationInstanceMethods>({
@@ -98,6 +105,59 @@ ConversationSchema.static("getPaths", function() {
     return Object.keys(this.schema.paths);
 });
 
+ConversationSchema.static("addFile", async function(id: string, filePath: string, url: string, alt?: string, name?: string) {
+    const key = name ?? nanoid();
+    let conversation = null;
+    
+    await conversationBucket.upload(
+        filePath,
+        {
+            destination: `${id}/${key}`,
+            public: false
+        }
+    );
+    
+    // If this is for a real conversation (not anonymous), update the database
+    if (!isAnonymousID(id)) {
+        conversation = await this.findById(id);
+        if (conversation) {
+            const files = {...conversation.get("files")};
+            files[key] = {key, url, alt};
+            conversation.set("files", files);
+            // No save - caller will save when ready
+        }
+    }
+    
+    return {
+        result: key,
+        conversation
+    };
+});
+
+ConversationSchema.static("removeFile", async function(id: string, key: string) {
+    let prev = null;
+    let conversation = null;
+    
+    // If this is for a real conversation (not anonymous), update the database
+    if (!isAnonymousID(id)) {
+        conversation = await this.findById(id);
+        if (conversation) {
+            const files = {...conversation.get("files")};
+            prev = files[key];
+            delete files[key];
+            conversation.set("files", files);
+            // No save - caller will save when ready
+        }
+    }
+    
+    await conversationBucket.file(`${id}/${key}`).delete();
+    
+    return {
+        result: prev,
+        conversation
+    };
+});
+
 ConversationSchema.method("makeNameUnique", async function() {
     const name = await ConversationModel.getUniqueName(this.get("name"));
     this.set("name", name);
@@ -109,33 +169,13 @@ ConversationSchema.method("removeUnsetFields", function() {
 });
 
 ConversationSchema.method("addFile", async function(filePath: string, url: string, alt?: string, name?: string) {
-    const files = {...this.get("files")};
-
-    const key = name ?? nanoid();
-    files[key] = {key, url, alt};
-    this.set("files", files);
-
-    await conversationBucket.upload(
-        filePath,
-        {
-            destination: `${this.get("_id")}/${key}`,
-            public: false
-        }
-    )    
-
-    return key;
+    const { result } = await ConversationModel.addFile(this.get("_id").toString(), filePath, url, alt, name);
+    return result;
 });
 
 ConversationSchema.method("removeFile", async function(key: string) {
-    const files = {...this.get("files")};
-
-    const prev = files[key];
-    delete files[key];
-    this.set("files", files);
-
-    await conversationBucket.file(`${this.get("_id")}/${key}`).delete();
-
-    return prev;
+    const { result } = await ConversationModel.removeFile(this.get("_id").toString(), key);
+    return result;
 });
 
 ConversationSchema.path("messages").validate(zodValidateWithErrors(ZodMongoConversationSchema.shape.messages, {_throw: true, prefix: "messages" }));
