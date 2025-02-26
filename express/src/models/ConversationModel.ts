@@ -109,6 +109,19 @@ ConversationSchema.static("addFile", async function(id: string, filePath: string
     const key = name ?? nanoid();
     let conversation = null;
     
+    // If this is a real conversation (not anonymous), verify it exists first
+    if (!isAnonymousID(id)) {
+        conversation = await this.findById(id);
+        if (!conversation) {
+            // Conversation not found, don't upload the file
+            return {
+                result: key,
+                conversation: null
+            };
+        }
+    }
+    
+    // Only upload the file if conversation exists or if it's anonymous
     await conversationBucket.upload(
         filePath,
         {
@@ -117,15 +130,12 @@ ConversationSchema.static("addFile", async function(id: string, filePath: string
         }
     );
     
-    // If this is for a real conversation (not anonymous), update the database
-    if (!isAnonymousID(id)) {
-        conversation = await this.findById(id);
-        if (conversation) {
-            const files = {...conversation.get("files")};
-            files[key] = {key, url, alt};
-            conversation.set("files", files);
-            // No save - caller will save when ready
-        }
+    // Update the database for real conversations
+    if (conversation) {
+        const files = {...conversation.get("files")};
+        files[key] = {key, url, alt};
+        conversation.set("files", files);
+        // No save - caller will save when ready
     }
     
     return {
@@ -138,18 +148,26 @@ ConversationSchema.static("removeFile", async function(id: string, key: string) 
     let prev = null;
     let conversation = null;
     
-    // If this is for a real conversation (not anonymous), update the database
+    // If this is for a real conversation (not anonymous), verify it exists first
     if (!isAnonymousID(id)) {
         conversation = await this.findById(id);
-        if (conversation) {
-            const files = {...conversation.get("files")};
-            prev = files[key];
-            delete files[key];
-            conversation.set("files", files);
-            // No save - caller will save when ready
+        if (!conversation) {
+            // Conversation not found, don't delete the file
+            return {
+                result: prev,
+                conversation: null
+            };
         }
+        
+        // Update the database for real conversations
+        const files = {...conversation.get("files")};
+        prev = files[key];
+        delete files[key];
+        conversation.set("files", files);
+        // No save - caller will save when ready
     }
     
+    // Only delete the file if conversation exists or if it's anonymous
     await conversationBucket.file(`${id}/${key}`).delete();
     
     return {
