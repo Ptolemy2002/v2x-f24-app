@@ -10,15 +10,17 @@ const router = Router();
 const defaultFiles = {
     "placeholder-image": {
         key: "placeholder-image",
+        type: "image",
         url: "/placeholder-image.png",
         alt: "placeholder image"
     },
     "placeholder-audio": {
         key: "placeholder-audio",
+        type: "audio",
         url: "/aud-test.wav",
         alt: "placeholder audio"
     }
-};
+} as const;
 
 class ConversationNewHandler extends RouteHandler<ConversationNew200ResponseBody> {
     /*

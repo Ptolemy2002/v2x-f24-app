@@ -105,6 +105,7 @@ export class ConversationUploadHandler extends RouteHandler<ConversationUpload20
             const {conversation} = await ConversationModel.addFile(
                 id,
                 file.path as string,
+                file.type.split("/")[0] === "image" ? "image" : "audio",
                 `${this.env.apiURL}/conversation/${id}/file/${file.name}`,
                 file.name as string
             );

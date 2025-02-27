@@ -20,7 +20,9 @@ function SpeechBubbleImageBase({
 
     let element: ReactNode;
     if (!file) {
-        element = `Unrecognized image file: ${message.src}`;
+        element = `Unrecognized file key: ${message.src}`;
+    } else if (file.type !== "image") {
+        throw new Error(`Unable to render image message with non-image file type: ${file.type}`);
     } else {
         element = (
             <img

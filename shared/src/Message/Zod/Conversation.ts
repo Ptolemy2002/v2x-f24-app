@@ -19,6 +19,12 @@ export const ZodConversationSchema = swaggerRegistry.register(
             url: z.string().openapi({
                 description: "The URL of the file."
             }),
+            type: z.union([
+                z.literal("image"),
+                z.literal("audio"),
+            ]).openapi({
+                description: "The high-level type of the file - used to determine what kind of message to send when it is selected."
+            }),
             alt: z.string().openapi({
                 description: "The alt text for the file, if applicable."
             }).optional()

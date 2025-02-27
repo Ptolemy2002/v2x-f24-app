@@ -22,7 +22,9 @@ function SpeechBubbleAudioBase({
 
     let element: ReactNode;
     if (!file) {
-        element = `Unrecognized audio file: ${message.src}`;
+        element = `Unrecognized file key: ${message.src}`;
+    } else if (file.type !== "audio") {
+        throw new Error(`Unable to render audio message with non-audio file type: ${file.type}`);
     } else {
         element = (
             <AudioPlayer
