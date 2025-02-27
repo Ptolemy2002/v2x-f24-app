@@ -1,5 +1,5 @@
 # V2X Fall 2024 App - Express Server
-Before running this, you must be authorized with Google Cloud with an account that has access to the project, and therefore our bucket. To do so, simply run `gcloud auth login` and follow the instructions.
+Before running this, you must authorize ADC with Google Cloud Platform. You can do this by running `gcloud auth application-default login` in the terminal. More information can be found [here](https://cloud.google.com/docs/authentication/application-default-credentials#personal).
 
 ## Commands
 The following commands exist in the project:
