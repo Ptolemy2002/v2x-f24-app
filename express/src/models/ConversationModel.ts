@@ -133,7 +133,10 @@ ConversationSchema.static("addFile", async function(id: string, filePath: string
     // Update the database for real conversations
     if (conversation) {
         const files = {...conversation.get("files")};
+
+        url = url.replace("$key", key);
         files[key] = {type, key, url, alt};
+        
         conversation.set("files", files);
         // No save - caller will save when ready
     }
