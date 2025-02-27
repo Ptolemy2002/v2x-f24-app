@@ -1,24 +1,24 @@
 import { Router } from "express";
 import RouteHandler, { RouteHandlerRequestData } from "lib/RouteHandler";
 import ConversationModel from "models/ConversationModel";
-import { ConversationUpdateByID200ResponseBody, ZodConversationUpdateByIDRequestBodySchema, ZodConversationUpdateByIDURLParamsSchema } from "shared";
+import { ConversationUpdate200ResponseBody, ZodConversationUpdateRequestBodySchema, ZodConversationUpdateURLParamsSchema } from "shared";
 import { Error } from "mongoose";
 import { MongoServerError } from "mongodb";
 import { asyncErrorHandler } from "@ptolemy2002/express-utils";
 
 const router = Router();
 
-export class UpdateConversationByIDHandler extends RouteHandler<ConversationUpdateByID200ResponseBody> {
+export class UpdateConversationHandler extends RouteHandler<ConversationUpdate200ResponseBody> {
     /*
         #swagger.start
-        #swagger.path = '/api/v1/conversation/update/by-id/{id}'
+        #swagger.path = '/api/v1/conversation/update/{id}'
         #swagger.method = 'post'
         #swagger.description = 'Update an existing conversation in the database.'
 
         #swagger.requestBody = {
             required: true,
             schema: {
-                $ref: "#/components/schemas/ConversationUpdateByIDRequestBody"
+                $ref: "#/components/schemas/ConversationUpdateRequestBody"
             }
         }
 
@@ -31,7 +31,7 @@ export class UpdateConversationByIDHandler extends RouteHandler<ConversationUpda
 
         #swagger.responses[200] = {
             schema: {
-                $ref: "#/components/schemas/ConversationUpdateByID200ResponseBody"
+                $ref: "#/components/schemas/ConversationUpdate200ResponseBody"
             }
         }
 
@@ -49,7 +49,7 @@ export class UpdateConversationByIDHandler extends RouteHandler<ConversationUpda
         #swagger.end
     */
     constructor() {
-        super(1, "/#/Conversation/post_api_v1_conversation_update_by_id__id_");
+        super(1, "/#/Conversation/post_api_v1_conversation_update__id_");
     }
 
     async generateResponse(req: RouteHandlerRequestData) {
@@ -57,7 +57,7 @@ export class UpdateConversationByIDHandler extends RouteHandler<ConversationUpda
             success: bodySuccess,
             error: bodyError,
             data: body
-        } = ZodConversationUpdateByIDRequestBodySchema.safeParse(req.body);
+        } = ZodConversationUpdateRequestBodySchema.safeParse(req.body);
 
         if (!bodySuccess) {
             return {
@@ -70,7 +70,7 @@ export class UpdateConversationByIDHandler extends RouteHandler<ConversationUpda
             success: paramsSuccess,
             error: paramsError,
             data: params
-        } = ZodConversationUpdateByIDURLParamsSchema.safeParse(req.params);
+        } = ZodConversationUpdateURLParamsSchema.safeParse(req.params);
 
         if (!paramsSuccess) {
             return {
@@ -135,11 +135,11 @@ export class UpdateConversationByIDHandler extends RouteHandler<ConversationUpda
     }
 }
 
-router.post("/update/by-id/:id", asyncErrorHandler(async (req, res) => {
+router.post("/update/:id", asyncErrorHandler(async (req, res) => {
     // #swagger.ignore = true
-    const handler = new UpdateConversationByIDHandler();
+    const handler = new UpdateConversationHandler();
     return await handler.handle(req, res);
 }));
 
-const conversationUpdateByIDRouter = router;
-export default conversationUpdateByIDRouter;
+const conversationUpdateRouter = router;
+export default conversationUpdateRouter;

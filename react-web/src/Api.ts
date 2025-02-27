@@ -1,4 +1,4 @@
-import { BotQueryRequestBody, BotQueryResponseBody, ConversationGetResponseBody, ConversationGetURLParams, ConversationListNameResponseBody, ConversationUpdateByIDRequestBodyInput, ConversationUpdateByIDResponseBody, ConversationUpdateByIDURLParams, ConversationUpdateByNameRequestBodyInput, ConversationUpdateByNameResponseBody, ConversationUpdateByNameURLParams } from "shared";
+import { BotQueryRequestBody, BotQueryResponseBody, ConversationGetResponseBody, ConversationGetURLParams, ConversationListNameResponseBody, ConversationUpdateRequestBodyInput, ConversationUpdateResponseBody, ConversationUpdateURLParams } from "shared";
 import axios, { AxiosInstance, CreateAxiosDefaults } from "axios";
 import { TypedAxios, RouteDef } from "typed-axios-instance";
 import getEnv from "src/Env";
@@ -34,19 +34,11 @@ export type ApiRoutes = RouteDefArray<[
     },
 
     {
-        route: `/conversation/update/by-id/${ConversationUpdateByIDURLParams["id"]}`,
+        route: `/conversation/update/${ConversationUpdateURLParams["id"]}`,
         method: "POST",
 
-        jsonBody: ConversationUpdateByIDRequestBodyInput,
-        jsonResponse: ConversationUpdateByIDResponseBody
-    },
-
-    {
-        route: `/conversation/update/by-name/${ConversationUpdateByNameURLParams["name"]}`,
-        method: "POST",
-
-        jsonBody: ConversationUpdateByNameRequestBodyInput,
-        jsonResponse: ConversationUpdateByNameResponseBody
+        jsonBody: ConversationUpdateRequestBodyInput,
+        jsonResponse: ConversationUpdateResponseBody
     }
 ]>;
 

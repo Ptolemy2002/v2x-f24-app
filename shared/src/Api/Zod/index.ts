@@ -12,8 +12,9 @@ export * from "./ConversationGet";
 export * from "./ConversationNew";
 export * from "./ConversationListName";
 
-export * from "./ConversationUpdateByID";
-export * from "./ConversationUpdateByName";
+export * from "./ConversationUpdate";
 
 export * from "./ConversationUpload";
 export * from "./FileMimeType";
+
+export * from "./ConversationDelete";

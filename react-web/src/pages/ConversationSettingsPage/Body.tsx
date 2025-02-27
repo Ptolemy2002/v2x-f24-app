@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form";
 import useManualErrorHandling from "@ptolemy2002/react-manual-error-handling";
 import ConversationInfo from "src/context/ConversationInfo";
 import { AxiosError } from "axios";
-import { ConversationUpdateByIDResponseBody } from "shared";
+import { ConversationUpdateResponseBody } from "shared";
 import ErrorAlert from "src/components/alerts/ErrorAlert";
 import SuccessAlert from "src/components/alerts/SuccessAlert";
 import StyledButton from "src/components/StyledButton";
@@ -64,7 +64,7 @@ function InternalForm(
                     // Update the name in the conversation entries list
                     conversationInfo.updateEntry(conversation.id, () => ({name: conversation.name}));
                 }
-            ).catch((e: AxiosError<ConversationUpdateByIDResponseBody>) => {
+            ).catch((e: AxiosError<ConversationUpdateResponseBody>) => {
                 if (e.status === 409) {
                     // These checks should theoretically never pass,
                     // but we'll be safe.

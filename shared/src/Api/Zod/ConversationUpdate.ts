@@ -4,8 +4,8 @@ import { z } from "zod";
 import { zodSuccessResponseSchema } from "./SuccessResponse";
 import { ZodErrorResponseSchema } from "./ErrorResponse";
 
-export const ZodConversationUpdateByIDURLParamsSchema = swaggerRegistry.register(
-    "ConversationUpdateByIDURLParams",
+export const ZodConversationUpdateURLParamsSchema = swaggerRegistry.register(
+    "ConversationUpdateURLParams",
     z.object({
         id: ZodConversationIDSchema
     }).openapi({
@@ -13,8 +13,8 @@ export const ZodConversationUpdateByIDURLParamsSchema = swaggerRegistry.register
     })
 );
 
-export const ZodConversationUpdateByIDRequestBodySchema = swaggerRegistry.register(
-    "ConversationUpdateByIDRequestBody",
+export const ZodConversationUpdateRequestBodySchema = swaggerRegistry.register(
+    "ConversationUpdateRequestBody",
     z.object({
         difference: z.object({
             $set: z.record(
@@ -116,8 +116,8 @@ export const ZodConversationUpdateByIDRequestBodySchema = swaggerRegistry.regist
     })
 );
 
-export const ZodConversationUpdateByID200ResponseBodySchema = swaggerRegistry.register(
-    "ConversationUpdateByID200ResponseBody",
+export const ZodConversationUpdate200ResponseBodySchema = swaggerRegistry.register(
+    "ConversationUpdate200ResponseBody",
     zodSuccessResponseSchema(
         z.object({
             conversation: ZodMongoConversationSchema
@@ -131,20 +131,20 @@ export const ZodConversationUpdateByID200ResponseBodySchema = swaggerRegistry.re
     })
 );
 
-export const ZodConversationUpdateByIDResponseBodySchema = swaggerRegistry.register(
-    "ConversationUpdateByIDResponseBody",
+export const ZodConversationUpdateResponseBodySchema = swaggerRegistry.register(
+    "ConversationUpdateResponseBody",
     z.union([
-        ZodConversationUpdateByID200ResponseBodySchema,
+        ZodConversationUpdate200ResponseBodySchema,
         ZodErrorResponseSchema
     ]).openapi({
         description: "The response for updating a conversation"
     })
 );
 
-export type ConversationUpdateByIDURLParams = z.infer<typeof ZodConversationUpdateByIDURLParamsSchema>;
+export type ConversationUpdateURLParams = z.infer<typeof ZodConversationUpdateURLParamsSchema>;
 
-export type ConversationUpdateByIDRequestBodyInput = z.input<typeof ZodConversationUpdateByIDRequestBodySchema>;
-export type ConversationUpdateByIDRequestBodyOutput = z.output<typeof ZodConversationUpdateByIDRequestBodySchema>;
+export type ConversationUpdateRequestBodyInput = z.input<typeof ZodConversationUpdateRequestBodySchema>;
+export type ConversationUpdateRequestBodyOutput = z.output<typeof ZodConversationUpdateRequestBodySchema>;
 
-export type ConversationUpdateByID200ResponseBody = z.infer<typeof ZodConversationUpdateByID200ResponseBodySchema>;
-export type ConversationUpdateByIDResponseBody = z.infer<typeof ZodConversationUpdateByIDResponseBodySchema>;
+export type ConversationUpdate200ResponseBody = z.infer<typeof ZodConversationUpdate200ResponseBodySchema>;
+export type ConversationUpdateResponseBody = z.infer<typeof ZodConversationUpdateResponseBodySchema>;

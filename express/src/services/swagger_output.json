@@ -513,7 +513,7 @@
         }
       }
     },
-    "/api/v1/conversation/update/by-id/{id}": {
+    "/api/v1/conversation/update/{id}": {
       "post": {
         "tags": [
           "Conversation"
@@ -536,12 +536,12 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ConversationUpdateByID200ResponseBody"
+                  "$ref": "#/components/schemas/ConversationUpdate200ResponseBody"
                 }
               },
               "application/xml": {
                 "schema": {
-                  "$ref": "#/components/schemas/ConversationUpdateByID200ResponseBody"
+                  "$ref": "#/components/schemas/ConversationUpdate200ResponseBody"
                 }
               }
             }
@@ -624,135 +624,12 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ConversationUpdateByIDRequestBody"
+                "$ref": "#/components/schemas/ConversationUpdateRequestBody"
               }
             },
             "application/xml": {
               "schema": {
-                "$ref": "#/components/schemas/ConversationUpdateByIDRequestBody"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/conversation/update/by-name/{name}": {
-      "post": {
-        "tags": [
-          "Conversation"
-        ],
-        "description": "Update an existing conversation in the database.",
-        "parameters": [
-          {
-            "name": "name",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "The name of the conversation to update."
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ConversationUpdateByNameResponseBody"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/ConversationUpdateByNameResponseBody"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse400"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse400"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Conflict",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse",
-                  "example": {
-                    "ok": false,
-                    "code": "VALIDATION",
-                    "message": "Conversation with the name you're setting already exists",
-                    "help": "https://example.com/docs"
-                  }
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse",
-                  "example": {
-                    "ok": false,
-                    "code": "VALIDATION",
-                    "message": "Conversation with the name you're setting already exists",
-                    "help": "https://example.com/docs"
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "501": {
-            "description": "Not implemented",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse501"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse501"
-                }
-              }
-            }
-          }
-        },
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ConversationUpdateByNameRequestBody"
-              }
-            },
-            "application/xml": {
-              "schema": {
-                "$ref": "#/components/schemas/ConversationUpdateByNameRequestBody"
+                "$ref": "#/components/schemas/ConversationUpdateRequestBody"
               }
             }
           }
@@ -1362,6 +1239,23 @@
                   "type": "string",
                   "description": "The URL of the file."
                 },
+                "type": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "enum": [
+                        "image"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "enum": [
+                        "audio"
+                      ]
+                    }
+                  ],
+                  "description": "The high-level type of the file - used to determine what kind of message to send when it is selected."
+                },
                 "alt": {
                   "type": "string",
                   "description": "The alt text for the file, if applicable."
@@ -1369,7 +1263,8 @@
               },
               "required": [
                 "key",
-                "url"
+                "url",
+                "type"
               ]
             },
             "description": "A map of files available to the conversation to their URLs."
@@ -1413,6 +1308,23 @@
                   "type": "string",
                   "description": "The URL of the file."
                 },
+                "type": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "enum": [
+                        "image"
+                      ]
+                    },
+                    {
+                      "type": "string",
+                      "enum": [
+                        "audio"
+                      ]
+                    }
+                  ],
+                  "description": "The high-level type of the file - used to determine what kind of message to send when it is selected."
+                },
                 "alt": {
                   "type": "string",
                   "description": "The alt text for the file, if applicable."
@@ -1420,7 +1332,8 @@
               },
               "required": [
                 "key",
-                "url"
+                "url",
+                "type"
               ]
             },
             "description": "A map of files available to the conversation to their URLs."
@@ -1911,7 +1824,7 @@
         ],
         "description": "The response body for the conversation list name endpoint"
       },
-      "ConversationUpdateByIDURLParams": {
+      "ConversationUpdateURLParams": {
         "type": "object",
         "properties": {
           "id": {
@@ -1923,7 +1836,7 @@
         ],
         "description": "The URL parameters for updating a conversation"
       },
-      "ConversationUpdateByIDRequestBody": {
+      "ConversationUpdateRequestBody": {
         "type": "object",
         "properties": {
           "difference": {
@@ -2016,7 +1929,7 @@
         ],
         "description": "The request body for updating a conversation"
       },
-      "ConversationUpdateByID200ResponseBody": {
+      "ConversationUpdate200ResponseBody": {
         "allOf": [
           {
             "type": "object",
@@ -2042,158 +1955,16 @@
         ],
         "description": "The 200 response body from updating a conversation"
       },
-      "ConversationUpdateByIDResponseBody": {
+      "ConversationUpdateResponseBody": {
         "anyOf": [
           {
-            "$ref": "#/components/schemas/ConversationUpdateByID200ResponseBody"
+            "$ref": "#/components/schemas/ConversationUpdate200ResponseBody"
           },
           {
             "$ref": "#/components/schemas/ErrorResponse"
           }
         ],
         "description": "The response for updating a conversation"
-      },
-      "ConversationUpdateByNameURLParams": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "name"
-        ],
-        "description": "The URL parameters for updating a conversation by name."
-      },
-      "ConversationUpdateByNameRequestBody": {
-        "type": "object",
-        "properties": {
-          "difference": {
-            "type": "object",
-            "properties": {
-              "$set": {
-                "type": "object",
-                "additionalProperties": {},
-                "description": "The fields to set. Each key is a path to a field.",
-                "example": {
-                  "name": "New Name"
-                }
-              },
-              "$unset": {
-                "type": "object",
-                "additionalProperties": {
-                  "type": "string",
-                  "enum": [
-                    ""
-                  ]
-                },
-                "description": "The fields to unset. Each key is a path to a field. Cannot be a direct path to a field, must be nested from a list field.",
-                "example": {
-                  "messages.0": ""
-                }
-              },
-              "$push": {
-                "type": "object",
-                "additionalProperties": {
-                  "type": "object",
-                  "properties": {
-                    "$each": {
-                      "type": "array",
-                      "items": {}
-                    }
-                  },
-                  "required": [
-                    "$each"
-                  ]
-                },
-                "description": "The fields to push. Each key is a path to a field. Must be a direct path to a list field.",
-                "example": {
-                  "messages": {
-                    "$each": [
-                      {
-                        "id": "abc123",
-                        "date": "2021-07-01T00:00:00.000Z",
-                        "type": "text",
-                        "origin": "sender",
-                        "text": "Hello, world!"
-                      }
-                    ]
-                  }
-                }
-              },
-              "$pullAll": {
-                "type": "object",
-                "additionalProperties": {
-                  "type": "object",
-                  "properties": {
-                    "$in": {
-                      "type": "array",
-                      "items": {}
-                    }
-                  },
-                  "required": [
-                    "$in"
-                  ]
-                },
-                "description": "The fields to pull. Each key is a path to a field. Must be a direct path to a list field.",
-                "example": {
-                  "messages": {
-                    "$in": [
-                      {
-                        "id": "abc123",
-                        "date": "2021-07-01T00:00:00.000Z",
-                        "type": "text",
-                        "origin": "sender",
-                        "text": "Hello, world!"
-                      }
-                    ]
-                  }
-                }
-              }
-            }
-          }
-        },
-        "required": [
-          "difference"
-        ],
-        "description": "The request body for updating a conversation"
-      },
-      "ConversationUpdateByName200ResponseBody": {
-        "allOf": [
-          {
-            "type": "object",
-            "properties": {
-              "conversation": {
-                "allOf": [
-                  {
-                    "$ref": "#/components/schemas/MongoConversation"
-                  },
-                  {
-                    "description": "The conversation that was updated"
-                  }
-                ]
-              }
-            },
-            "required": [
-              "conversation"
-            ]
-          },
-          {
-            "$ref": "#/components/schemas/SuccessResponseBase"
-          }
-        ],
-        "description": "The 200 response body from updating a conversation"
-      },
-      "ConversationUpdateByNameResponseBody": {
-        "anyOf": [
-          {
-            "$ref": "#/components/schemas/ConversationUpdateByName200ResponseBody"
-          },
-          {
-            "$ref": "#/components/schemas/ErrorResponse"
-          }
-        ],
-        "description": "The response for updating a conversation by name."
       },
       "FileMimeType": {
         "type": "string",
@@ -2275,6 +2046,57 @@
           "description": "The files to upload. Must specify either mimetype or type. Size must be less than or equal to 10 MB"
         },
         "minItems": 1
+      },
+      "ConversationDelete200ResponseBody": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "deleted": {
+                "type": "boolean",
+                "description": "Whether the conversation was successfully deleted",
+                "example": true
+              }
+            },
+            "required": [
+              "deleted"
+            ],
+            "description": "The 200 response body for the conversation delete endpoint"
+          },
+          {
+            "$ref": "#/components/schemas/SuccessResponseBase"
+          }
+        ]
+      },
+      "ConversationDeleteResponseBody": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/ConversationDelete200ResponseBody"
+          },
+          {
+            "$ref": "#/components/schemas/ErrorResponse"
+          }
+        ],
+        "description": "The response body for the conversation delete endpoint"
+      },
+      "ConversationDeleteURLParams": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ConversationID"
+              },
+              {
+                "description": "ID of the conversation to delete."
+              }
+            ]
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "description": "The URL parameters for deleting a conversation"
       }
     }
   }

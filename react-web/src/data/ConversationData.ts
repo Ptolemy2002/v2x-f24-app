@@ -169,7 +169,7 @@ export default class ConversationData extends MongoData<
             const api = getApi();
             const difference = this.difference({ type: ["push", "pull", "botQuery"] });
             
-            const { data } = await api.post(`/conversation/update/by-id/${this.id}`, { difference }, {
+            const { data } = await api.post(`/conversation/update/${this.id}`, { difference }, {
                 signal: ac.signal
             });
 
