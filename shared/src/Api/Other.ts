@@ -1,4 +1,5 @@
 import { createAdvancedCondition, ValueCondition } from "@ptolemy2002/ts-utils";
+import {extensions} from "mime-types";
 
 export const ErrorCodeEnum = [
     "UNKNOWN",
@@ -11,6 +12,12 @@ export const ErrorCodeEnum = [
     "NOT_IMPLEMENTED",
     "VALIDATION"
 ] as const;
+
+// This is part of @ptolemy2002/react-file-picker
+// but we copy it here since we are not currently using React
+// and don't want to add a dependency just for this
+// value
+export const AllMimeTypes: string[] = Object.keys(extensions) as any;
 
 // Match the mime types of supported files
 export const acceptedFileTypeCondition: ValueCondition<string> = [
