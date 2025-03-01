@@ -1,4 +1,4 @@
-import { createAdvancedCondition, ValueCondition } from "@ptolemy2002/ts-utils";
+import { createAdvancedCondition, ValueCondition, valueConditionMatches } from "@ptolemy2002/ts-utils";
 import {extensions} from "mime-types";
 
 export const ErrorCodeEnum = [
@@ -41,3 +41,6 @@ export const acceptedFileTypeCondition: ValueCondition<string> = [
         }
     }),
 ];
+
+type NonEmptyStringArray = [string, ...string[]];
+export const acceptedFileTypes = AllMimeTypes.filter(v => valueConditionMatches(v, acceptedFileTypeCondition)) as NonEmptyStringArray;
