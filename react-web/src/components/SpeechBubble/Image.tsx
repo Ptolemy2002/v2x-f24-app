@@ -5,6 +5,7 @@ import DefaultScreenReaderText from "./ScreenReaderText";
 import clsx from "clsx";
 import ConversationData from "src/data/ConversationData";
 import { ReactNode } from "react";
+import getEnv from "src/Env";
 
 function SpeechBubbleImageBase({
     message,
@@ -17,6 +18,7 @@ function SpeechBubbleImageBase({
 }: SpeechBubbleImageProps["functional"]) {
     const [conversation] = ConversationData.useContextNonNullable(["files"]);
     const file = conversation.files[message.src];
+    const env = getEnv();
 
     let element: ReactNode;
     if (!file) {
@@ -27,7 +29,7 @@ function SpeechBubbleImageBase({
         element = (
             <img
                 onLoad={scrollToEnd}
-                src={file.url}
+                src={file.url.replace("$target", env.apiUrl)}
                 alt={message.alt ?? file.alt}
             />
         );

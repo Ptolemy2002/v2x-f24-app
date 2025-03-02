@@ -24,7 +24,12 @@ export type ConversationInstanceMethods = {
     toClientJSON: () => MongoConversation,
     makeNameUnique: () => Promise<void>,
     removeUnsetFields: () => void,
-    addFile: (filePath: string, type: MongoConversation["files"][string]["type"], url: string, alt?: string, name?: string) => Promise<string>,
+    addFile: (filePath: string, type: MongoConversation["files"][string]["type"], url: string, alt?: string, name?: string) => Promise<
+        {
+            result: string,
+            newFile: MongoConversation["files"][string]
+        }
+    >,
     removeFile: (key: string) => Promise<MongoConversation["files"][string]>
 };
 export type ConversationModel = Model<MongoDocumentConversation, {}, ConversationInstanceMethods>;
@@ -51,7 +56,9 @@ export interface ConversationModelWithStatics extends ConversationModel {
             HydratedDocumentFromSchema<typeof ConversationSchema>
         >,
     getPaths(): string[];
-    addFile: (id: string, filePath: string, type: MongoConversation["files"][string]["type"], url: string, options?: FileAddOptions) => Promise<FileOperationResult<string>>,
+    addFile: (id: string, filePath: string, type: MongoConversation["files"][string]["type"], url: string, options?: FileAddOptions) => Promise<
+        FileOperationResult<string> & { newFile: MongoConversation["files"][string] }
+    >,
     removeFile: (id: string, key: string, options?: FileRemoveOptions) => Promise<FileOperationResult<MongoConversation["files"][string]>>
 };
 
@@ -146,6 +153,8 @@ ConversationSchema.static("addFile", async function(
     );
     
     // Update the database for real conversations
+    url = url.replace("$key", key);
+    const newFile = {type, key, url, alt};
     if (conversation) {
         const files = {...conversation.get("files")};
 
@@ -158,7 +167,8 @@ ConversationSchema.static("addFile", async function(
     
     return {
         result: key,
-        conversation
+        conversation,
+        newFile
     };
 });
 
@@ -207,14 +217,17 @@ ConversationSchema.method("removeUnsetFields", function() {
 });
 
 ConversationSchema.method("addFile", async function(filePath: string, type: MongoConversation["files"][string]["type"], url: string, alt?: string, name?: string) {
-    const { result } = await ConversationModel.addFile(
+    const { result, newFile } = await ConversationModel.addFile(
         this.get("_id").toString(), 
         filePath, 
         type, 
         url, 
         { existingConversation: this, alt, name }
     );
-    return result;
+    return {
+        result,
+        newFile
+    };
 });
 
 ConversationSchema.method("removeFile", async function(key: string) {

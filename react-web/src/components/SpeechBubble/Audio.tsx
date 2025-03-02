@@ -6,6 +6,7 @@ import DefaultSpeechBubbleTimestamp from "./TimestampStyled";
 import clsx from "clsx";
 import ConversationData from "src/data/ConversationData";
 import { ReactNode } from "react";
+import getEnv from "src/Env";
 
 function SpeechBubbleAudioBase({
     message,
@@ -19,6 +20,7 @@ function SpeechBubbleAudioBase({
 }: SpeechBubbleAudioProps["functional"]) {
     const [conversation] = ConversationData.useContextNonNullable(["files"]);
     const file = conversation.files[message.src];
+    const env = getEnv();
 
     let element: ReactNode;
     if (!file) {
@@ -28,7 +30,7 @@ function SpeechBubbleAudioBase({
     } else {
         element = (
             <AudioPlayer
-                src={file.url}
+                src={file.url.replace("$target", env.apiUrl)}
                 alt={message.alt ?? file.alt}
                 onLoadedMetadata={scrollToEnd}
             />

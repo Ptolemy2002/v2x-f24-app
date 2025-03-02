@@ -56,14 +56,22 @@ export type EnvType = {
     devApiUrl: string,
     prodApiUrl: string | null,
     devClientUrl: string,
-    prodClientUrl: string | null
+    prodClientUrl: string | null,
+    apiUrl: string,
+    clientUrl: string
 };
 let Env: z.infer<typeof EnvSchema> | null = null;
 let EnvInstance: EnvType | null = null;
 
 export default function getEnv(createNew=false): EnvType {
     if (createNew || Env === null) Env = EnvSchema.parse(import.meta.env);
+
     if (createNew || !EnvInstance) {
+        if (Env.NODE_ENV === "production") {
+            if (!Env.VITE_PROD_API_URL) throw new Error("VITE_PROD_API_URL is required in production environment");
+            if (!Env.VITE_PROD_CLIENT_URL) throw new Error("VITE_PROD_CLIENT_URL is required in production environment");
+        }
+
         EnvInstance = Object.freeze({
             nodeEnv: Env.NODE_ENV,
             isProd: Env.NODE_ENV === "production",
@@ -72,7 +80,9 @@ export default function getEnv(createNew=false): EnvType {
             devApiUrl: Env.VITE_DEV_API_URL,
             prodApiUrl: Env.VITE_PROD_API_URL,
             devClientUrl: Env.VITE_DEV_CLIENT_URL,
-            prodClientUrl: Env.VITE_PROD_CLIENT_URL
+            prodClientUrl: Env.VITE_PROD_CLIENT_URL,
+            apiUrl: Env.NODE_ENV === "production" ? Env.VITE_PROD_API_URL! : Env.VITE_DEV_API_URL,
+            clientUrl: Env.NODE_ENV === "production" ? Env.VITE_PROD_CLIENT_URL! : Env.VITE_DEV_CLIENT_URL
         });
     }
 
