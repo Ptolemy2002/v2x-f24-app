@@ -29,6 +29,16 @@ export type ConversationInstanceMethods = {
 };
 export type ConversationModel = Model<MongoDocumentConversation, {}, ConversationInstanceMethods>;
 
+export type FileAddOptions = {
+    existingConversation?: HydratedDocumentFromSchema<typeof ConversationSchema>;
+    alt?: string;
+    name?: string;
+};
+
+export type FileRemoveOptions = {
+    existingConversation?: HydratedDocumentFromSchema<typeof ConversationSchema>;
+};
+
 export type FileOperationResult<T> = {
     result: T;
     conversation: HydratedDocumentFromSchema<typeof ConversationSchema> | null;
@@ -41,8 +51,8 @@ export interface ConversationModelWithStatics extends ConversationModel {
             HydratedDocumentFromSchema<typeof ConversationSchema>
         >,
     getPaths(): string[];
-    addFile: (id: string, filePath: string, type: MongoConversation["files"][string]["type"], url: string, alt?: string, name?: string) => Promise<FileOperationResult<string>>,
-    removeFile: (id: string, key: string) => Promise<FileOperationResult<MongoConversation["files"][string]>>
+    addFile: (id: string, filePath: string, type: MongoConversation["files"][string]["type"], url: string, options?: FileAddOptions) => Promise<FileOperationResult<string>>,
+    removeFile: (id: string, key: string, options?: FileRemoveOptions) => Promise<FileOperationResult<MongoConversation["files"][string]>>
 };
 
 const ConversationSchema = new Schema<MongoDocumentConversation, ConversationModel, ConversationInstanceMethods>({
@@ -105,12 +115,17 @@ ConversationSchema.static("getPaths", function() {
     return Object.keys(this.schema.paths);
 });
 
-ConversationSchema.static("addFile", async function(id: string, filePath: string, type: MongoConversation["files"][string]["type"], url: string, alt?: string, name?: string) {
+ConversationSchema.static("addFile", async function(
+    id: string,
+    filePath: string,
+    type: MongoConversation["files"][string]["type"],
+    url: string, { existingConversation, alt, name }: FileAddOptions = {}
+) {
     const key = name ?? nanoid();
-    let conversation = null;
+    let conversation = existingConversation || null;
     
-    // If this is a real conversation (not anonymous), verify it exists first
-    if (!isAnonymousID(id)) {
+    // If this is a real conversation (not anonymous) and we don't have an existing conversation instance, verify it exists first
+    if (!isAnonymousID(id) && !conversation) {
         conversation = await this.findById(id);
         if (!conversation) {
             // Conversation not found, don't upload the file
@@ -147,12 +162,12 @@ ConversationSchema.static("addFile", async function(id: string, filePath: string
     };
 });
 
-ConversationSchema.static("removeFile", async function(id: string, key: string) {
+ConversationSchema.static("removeFile", async function(id: string, key: string, { existingConversation }: FileRemoveOptions = {}) {
     let prev = null;
-    let conversation = null;
+    let conversation = existingConversation || null;
     
-    // If this is for a real conversation (not anonymous), verify it exists first
-    if (!isAnonymousID(id)) {
+    // If this is for a real conversation (not anonymous) and we don't have an existing conversation instance, verify it exists first
+    if (!isAnonymousID(id) && !conversation) {
         conversation = await this.findById(id);
         if (!conversation) {
             // Conversation not found, don't delete the file
@@ -161,8 +176,10 @@ ConversationSchema.static("removeFile", async function(id: string, key: string) 
                 conversation: null
             };
         }
-        
-        // Update the database for real conversations
+    }
+    
+    // Update the database for real conversations
+    if (conversation) {
         const files = {...conversation.get("files")};
         prev = files[key];
         delete files[key];
@@ -190,12 +207,22 @@ ConversationSchema.method("removeUnsetFields", function() {
 });
 
 ConversationSchema.method("addFile", async function(filePath: string, type: MongoConversation["files"][string]["type"], url: string, alt?: string, name?: string) {
-    const { result } = await ConversationModel.addFile(this.get("_id").toString(), filePath, type, url, alt, name);
+    const { result } = await ConversationModel.addFile(
+        this.get("_id").toString(), 
+        filePath, 
+        type, 
+        url, 
+        { existingConversation: this, alt, name }
+    );
     return result;
 });
 
 ConversationSchema.method("removeFile", async function(key: string) {
-    const { result } = await ConversationModel.removeFile(this.get("_id").toString(), key);
+    const { result } = await ConversationModel.removeFile(
+        this.get("_id").toString(), 
+        key, 
+        { existingConversation: this }
+    );
     return result;
 });
 

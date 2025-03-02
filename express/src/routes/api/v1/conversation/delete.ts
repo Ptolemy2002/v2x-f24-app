@@ -77,7 +77,7 @@ export class DeleteConversationHandler extends RouteHandler<ConversationDelete20
         // Delete all files from Google Cloud Storage
         for (const fileKey of fileKeys) {
             try {
-                await ConversationModel.removeFile(id, fileKey);
+                await conversation.removeFile(fileKey);
             } catch (err) {
                 // Check if this is a "file doesn't exist" error (404) using instanceof
                 if (err instanceof ApiError && err.code === 404) {
@@ -90,7 +90,7 @@ export class DeleteConversationHandler extends RouteHandler<ConversationDelete20
         }
 
         // Delete the conversation from MongoDB
-        await ConversationModel.findByIdAndDelete(id);
+        await conversation.deleteOne();
 
         return {
             status: 200,
