@@ -116,7 +116,7 @@ export class ConversationUploadHandler extends RouteHandler<ConversationUpload20
                 id,
                 file.path as string,
                 file.type.split("/")[0] === "image" ? "image" : "audio",
-                `$target/conversation/${id}/download/$key`,
+                `$target/conversation/download/${id}/$key`,
                 {
                     existingConversation: conversation,
                 }

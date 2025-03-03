@@ -10,7 +10,7 @@ export class ConversationDownloadHandler extends RouteHandler<{ ok: true }> {
     /*
         #swagger.start
         #swagger.tags = ['Conversation', 'Files']
-        #swagger.path = '/api/v1/conversation/{id}/download/{file}'
+        #swagger.path = '/api/v1/conversation/download/{id}/{file}'
         #swagger.method = 'get'
         #swagger.description = 'Download a file from a conversation.'
 
@@ -90,7 +90,7 @@ export class ConversationDownloadHandler extends RouteHandler<{ ok: true }> {
     }
 }
 
-router.get("/:id/download/:file", asyncErrorHandler(async (req, res) => {
+router.get("/download/:id/:file", asyncErrorHandler(async (req, res) => {
     // #swagger.ignore = true
     const handler = new ConversationDownloadHandler();
     return await handler.handle(req, res);
