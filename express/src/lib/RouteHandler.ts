@@ -149,8 +149,16 @@ export default class RouteHandler<SuccessResponse extends SuccessResponseBase = 
             res.json(result.response);
             cleanTempUploads();
         } else if ("filePath" in result) {
-            res.sendFile(`${tempUploadsPath}/${result.filePath}`, () => {
-                cleanTempUploads();
+            console.log(`Sending file ${result.filePath}`);
+            res.sendFile(`${tempUploadsPath}/${result.filePath}`, (e) => {
+                if (e) {
+                    console.error(`Error sending file: ${e.message}`);
+                    res.status(500).json(this.buildErrorResponse('INTERNAL', e.message));
+                } else {
+                    console.log(`Cleaning up...`);
+                    cleanTempUploads();
+                    console.log(`Successfully cleaned up.`);
+                }
             });
         }
     }

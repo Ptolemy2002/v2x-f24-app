@@ -850,7 +850,7 @@
         }
       }
     },
-    "/api/v1/conversation/{id}/download/{file}": {
+    "/api/v1/conversation/download/{id}/{file}": {
       "get": {
         "tags": [
           "Conversation",

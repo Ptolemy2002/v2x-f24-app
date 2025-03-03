@@ -3,7 +3,6 @@ import getEnv from "../env";
 import { stripWords } from '@ptolemy2002/js-utils';
 import {
   swaggerGenerator,
-  acceptedFileTypes,
 } from "shared";
 const env = getEnv();
 
@@ -31,7 +30,7 @@ const doc = {
   host: baseUrl,
   schemes: [process.env.NODE_ENV === "production" ? "https" : "http"],
   consumes: ["application/json", "multipart/form-data"],
-  produces: ["application/json", ...acceptedFileTypes],
+  produces: ["application/json", "application/octet-stream"],
 
   components: {
       parameters: genetatedParameters,

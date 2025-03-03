@@ -1,6 +1,8 @@
 import { asyncErrorHandler } from "@ptolemy2002/express-utils";
 import { Router } from "express";
 import RouteHandler, { RouteHandlerRequestData } from "lib/RouteHandler";
+import { conversationBucket } from "services/gcloud/storage";
+import { tempUploadsPath } from "services/multer";
 import { ConversationDownloadURLParams, ZodConversationDownloadURLParamsSchema } from "shared";
 
 const router = Router();
@@ -82,11 +84,20 @@ export class ConversationDownloadHandler extends RouteHandler<{ ok: true }> {
             };
         }
 
-        // Return not implemented for now
+        const { file, id } = params;
+
+        const destination = `${tempUploadsPath}/${file}`;
+
+        console.log(`Downloading file ${file} from conversation ${id} to [${destination}]...`);
+        await conversationBucket.file(`${id}/${file}`).download({
+            destination
+        });
+        console.log(`Successfully downloaded.`);
+
         return {
-            response: this.buildNotImplementedResponse(),
-            status: 501
-        };
+            status: 200,
+            filePath: file
+        }
     }
 }
 
