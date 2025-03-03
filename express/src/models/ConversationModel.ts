@@ -35,13 +35,13 @@ export type ConversationInstanceMethods = {
 export type ConversationModel = Model<MongoDocumentConversation, {}, ConversationInstanceMethods>;
 
 export type FileAddOptions = {
-    existingConversation?: HydratedDocumentFromSchema<typeof ConversationSchema>;
+    existingConversation?: HydratedDocumentFromSchema<typeof ConversationSchema> | null;
     alt?: string;
     name?: string;
 };
 
 export type FileRemoveOptions = {
-    existingConversation?: HydratedDocumentFromSchema<typeof ConversationSchema>;
+    existingConversation?: HydratedDocumentFromSchema<typeof ConversationSchema> | null;
 };
 
 export type FileOperationResult<T> = {

@@ -2,6 +2,7 @@ import { swaggerRegistry } from "src/Swagger";
 import { z } from "zod";
 import { ZodUniqueMessageArraySchema, ZodUniqueMongoMessageArraySchema } from "./UniqueMessageArray";
 import { ZodConversationIDWithAnonymousSchema } from "./ConversationID";
+import { ZodConversationFileEntrySchema } from "./ConversationFileEntry";
 
 export const ZodConversationSchema = swaggerRegistry.register(
     "Conversation",
@@ -12,23 +13,7 @@ export const ZodConversationSchema = swaggerRegistry.register(
             example: "Untitled Conversation"
         }),
         messages: ZodUniqueMessageArraySchema,
-        files: z.record(z.string(), z.object({
-            key: z.string().openapi({
-                description: "The key of the file, unique among every file in the conversation."
-            }),
-            url: z.string().openapi({
-                description: "The URL of the file."
-            }),
-            type: z.union([
-                z.literal("image"),
-                z.literal("audio"),
-            ]).openapi({
-                description: "The high-level type of the file - used to determine what kind of message to send when it is selected."
-            }),
-            alt: z.string().openapi({
-                description: "The alt text for the file, if applicable."
-            }).optional()
-        }))
+        files: z.record(z.string(), ZodConversationFileEntrySchema)
         .openapi({
                 description: "A map of files available to the conversation to their URLs."
             }),

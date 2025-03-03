@@ -3,12 +3,15 @@ import { zodSuccessResponseSchema } from "./SuccessResponse";
 import { z } from "zod";
 import { ZodErrorResponseSchema } from "./ErrorResponse";
 import { ZodFileMimeTypeSchema } from "./FileMimeType";
-import { ZodConversationIDWithAnonymousSchema } from "src/Message";
+import { ZodConversationFileEntrySchema, ZodConversationIDWithAnonymousSchema } from "src/Message";
 
 export const ZodConversationUpload200ResponseBodySchema = swaggerRegistry.register(
     "ConversationUpload200ResponseBody",
     zodSuccessResponseSchema(z.object({
-        uploaded: z.literal(true)
+        uploaded: z.literal(true),
+        newFiles: z.array(ZodConversationFileEntrySchema).openapi({
+            description: "The entries for each newly uploaded file"
+        })
     }).openapi({
         description: "The response body for the conversation upload endpoint"
     }))

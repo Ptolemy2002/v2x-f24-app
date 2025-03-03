@@ -15,6 +15,7 @@ export * from "./ConversationListName";
 export * from "./ConversationUpdate";
 
 export * from "./ConversationUpload";
+export * from "./ConversationDownload";
 export * from "./FileMimeType";
 
 export * from "./ConversationDelete";

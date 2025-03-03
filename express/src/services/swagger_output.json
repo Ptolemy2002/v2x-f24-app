@@ -849,6 +849,103 @@
           }
         }
       }
+    },
+    "/api/v1/conversation/{id}/download/{file}": {
+      "get": {
+        "tags": [
+          "Conversation",
+          "Files"
+        ],
+        "description": "Download a file from a conversation.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID of the conversation containing the file"
+          },
+          {
+            "name": "file",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The key of the file to download"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "File download",
+            "$ref": "#/components/responses/ConversationDownloadResponse"
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Conversation or file not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "ok": false,
+                  "code": "NOT_FOUND",
+                  "message": "No file found with the specified key in the conversation.",
+                  "help": "http://example.com/docs"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "501": {
+            "description": "Feature not implemented",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "ok": false,
+                  "code": "NOT_IMPLEMENTED",
+                  "message": "This feature is not yet implemented.",
+                  "help": "http://example.com/docs"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -2266,6 +2363,23 @@
           "description": "The files to upload. Must specify either mimetype or type. Size must be less than or equal to 10 MB"
         },
         "minItems": 1
+      },
+      "ConversationDownloadURLParams": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/ConversationIDWithAnonymous"
+          },
+          "file": {
+            "type": "string",
+            "description": "The key of the file to download, as provided in the `files` field of the conversation object."
+          }
+        },
+        "required": [
+          "id",
+          "file"
+        ],
+        "description": "The URL parameters for uploading files to a conversation"
       },
       "ConversationDelete200ResponseBody": {
         "allOf": [
