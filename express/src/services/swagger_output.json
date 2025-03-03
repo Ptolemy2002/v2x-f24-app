@@ -1406,6 +1406,46 @@
         ],
         "description": "The ID of the conversation or 'anonymous-<id>' if the conversation should not be saved to the database."
       },
+      "ConversationFileEntry": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "description": "The key of the file, unique among every file in the conversation."
+          },
+          "url": {
+            "type": "string",
+            "description": "The URL of the file."
+          },
+          "type": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "image"
+                ]
+              },
+              {
+                "type": "string",
+                "enum": [
+                  "audio"
+                ]
+              }
+            ],
+            "description": "The high-level type of the file - used to determine what kind of message to send when it is selected."
+          },
+          "alt": {
+            "type": "string",
+            "description": "The alt text for the file, if applicable."
+          }
+        },
+        "required": [
+          "key",
+          "url",
+          "type"
+        ],
+        "description": "A file available to the conversation."
+      },
       "Conversation": {
         "type": "object",
         "properties": {
@@ -1423,43 +1463,7 @@
           "files": {
             "type": "object",
             "additionalProperties": {
-              "type": "object",
-              "properties": {
-                "key": {
-                  "type": "string",
-                  "description": "The key of the file, unique among every file in the conversation."
-                },
-                "url": {
-                  "type": "string",
-                  "description": "The URL of the file."
-                },
-                "type": {
-                  "anyOf": [
-                    {
-                      "type": "string",
-                      "enum": [
-                        "image"
-                      ]
-                    },
-                    {
-                      "type": "string",
-                      "enum": [
-                        "audio"
-                      ]
-                    }
-                  ],
-                  "description": "The high-level type of the file - used to determine what kind of message to send when it is selected."
-                },
-                "alt": {
-                  "type": "string",
-                  "description": "The alt text for the file, if applicable."
-                }
-              },
-              "required": [
-                "key",
-                "url",
-                "type"
-              ]
+              "$ref": "#/components/schemas/ConversationFileEntry"
             },
             "description": "A map of files available to the conversation to their URLs."
           },
@@ -1492,43 +1496,7 @@
           "files": {
             "type": "object",
             "additionalProperties": {
-              "type": "object",
-              "properties": {
-                "key": {
-                  "type": "string",
-                  "description": "The key of the file, unique among every file in the conversation."
-                },
-                "url": {
-                  "type": "string",
-                  "description": "The URL of the file."
-                },
-                "type": {
-                  "anyOf": [
-                    {
-                      "type": "string",
-                      "enum": [
-                        "image"
-                      ]
-                    },
-                    {
-                      "type": "string",
-                      "enum": [
-                        "audio"
-                      ]
-                    }
-                  ],
-                  "description": "The high-level type of the file - used to determine what kind of message to send when it is selected."
-                },
-                "alt": {
-                  "type": "string",
-                  "description": "The alt text for the file, if applicable."
-                }
-              },
-              "required": [
-                "key",
-                "url",
-                "type"
-              ]
+              "$ref": "#/components/schemas/ConversationFileEntry"
             },
             "description": "A map of files available to the conversation to their URLs."
           },
@@ -2298,10 +2266,18 @@
                 "enum": [
                   true
                 ]
+              },
+              "newFiles": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ConversationFileEntry"
+                },
+                "description": "The entries for each newly uploaded file"
               }
             },
             "required": [
-              "uploaded"
+              "uploaded",
+              "newFiles"
             ],
             "description": "The response body for the conversation upload endpoint"
           },

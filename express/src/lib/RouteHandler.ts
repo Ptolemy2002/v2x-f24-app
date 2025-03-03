@@ -27,7 +27,7 @@ export type RouteHandlerResponseData = {
     locals: unknown;
 };
 
-export default class RouteHandler<SuccessResponse extends SuccessResponseBase> {
+export default class RouteHandler<SuccessResponse extends SuccessResponseBase = {ok: true}> {
     protected _docsEndpoint: string;
     protected _docsVersion: number;
     protected _env: EnvType;
