@@ -18,7 +18,7 @@ export default applySubComponents(Object.assign(
     )`
         ${({$maxWidth, $padding, $borderRadius}) => speechBubbleBaseStyle($maxWidth!, $borderRadius!, $padding!)}
         > .speech-bubble-content {
-            > img {
+            img {
                 max-width: 100%;
                 height: auto;
                 ${({$borderThickness, $borderStyle, $borderColor}) => border(

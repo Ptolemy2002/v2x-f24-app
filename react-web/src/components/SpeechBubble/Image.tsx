@@ -6,6 +6,7 @@ import clsx from "clsx";
 import ConversationData from "src/data/ConversationData";
 import { ReactNode } from "react";
 import getEnv from "src/Env";
+import IMG from "src/components/IMG";
 
 function SpeechBubbleImageBase({
     message,
@@ -27,10 +28,17 @@ function SpeechBubbleImageBase({
         throw new Error(`Unable to render image message with non-image file type: ${file.type}`);
     } else {
         element = (
-            <img
+            <IMG
                 onLoad={scrollToEnd}
-                src={file.url.replace("$target", env.apiUrl)}
-                alt={message.alt ?? file.alt}
+                srcSet={{
+                    success: file.url.replace("$target", env.apiUrl),
+                    loading: "/placeholder-image.png"
+                }}
+
+                altSet={{
+                    success: message.alt ?? file.alt,
+                    loading: "Loading image..."
+                }}
             />
         );
     }
