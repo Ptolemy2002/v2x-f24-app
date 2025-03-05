@@ -17,18 +17,24 @@ export function createMulter(opt: Options = {}) {
     return multer(fullOptions);
 }
 
-export function cleanTempUploads(opt: Options = {}) {
+export function cleanTempUploads(files: string[] | null = null, opt: Options = {}) {
     const dirPath = createMulterOptions(opt).dest;
     if (dirPath) {
-        fs.readdir(dirPath, (err, files) => {
-            if (err) throw err;
+        if (files === null) {
+            // Populate the variable with all files in the directory
+            fs.readdir(dirPath, (err, _files) => {
+                if (err) throw err;
+                files = _files;   
+            });
 
-            for (const file of files) {
-                fs.unlink(path.join(dirPath, file), err => {
-                    if (err) throw err;
-                });
-            }
-        });
+            files = files!;
+        }
+
+        for (const file of files) {
+            fs.unlink(path.join(dirPath, file), err => {
+                if (err) throw err;
+            });
+        }
     }
 }
 

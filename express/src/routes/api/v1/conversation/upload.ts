@@ -2,7 +2,8 @@ import { asyncErrorHandler } from "@ptolemy2002/express-utils";
 import { Router } from "express";
 import RouteHandler, { RouteHandlerRequestData } from "lib/RouteHandler";
 import ConversationModel from "models/ConversationModel";
-import { createMulter } from "services/multer";
+import multer from "multer";
+import { cleanTempUploads, createMulter } from "services/multer";
 import { ConversationUpload200ResponseBody, isAnonymousID, ZodConversationUploadFilesSchema, ZodConversationUploadURLParamsSchema } from "shared";
 
 const router = Router();
@@ -87,7 +88,7 @@ export class ConversationUploadHandler extends RouteHandler<ConversationUpload20
 
         const {
             success: filesSuccess,
-            data: files,
+            data: _files,
             error: filesError
         } = ZodConversationUploadFilesSchema.safeParse(req.files);
 
@@ -97,6 +98,9 @@ export class ConversationUploadHandler extends RouteHandler<ConversationUpload20
                 status: 400
             };
         }
+
+        // Since Zod passes through unknown fields, this is safe to do.
+        const files = _files as (typeof _files) & Express.Multer.File[];
 
         const { id } = params;
         const anonymous = isAnonymousID(id);
@@ -115,7 +119,7 @@ export class ConversationUploadHandler extends RouteHandler<ConversationUpload20
             console.log(`Uploading file ${file.originalname} to conversation ${id}...`);
             const {newFile} = await ConversationModel.addFile(
                 id,
-                file.path as string,
+                file.path,
                 file.type.split("/")[0] === "image" ? "image" : "audio",
                 `$target/conversation/download/${id}/$key`,
                 {
@@ -123,6 +127,10 @@ export class ConversationUploadHandler extends RouteHandler<ConversationUpload20
                 }
             );
             console.log(`Successfully uploaded as ${id}/${newFile.key}.`);
+
+            console.log(`Removing temp file ${file.filename}...`);
+            cleanTempUploads([file.filename]);
+            console.log(`Successfully removed temp file ${file.filename}.`);
 
             newFiles.push(newFile);
         }
