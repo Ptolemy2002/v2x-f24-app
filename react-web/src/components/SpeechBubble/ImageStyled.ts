@@ -18,14 +18,26 @@ export default applySubComponents(Object.assign(
     )`
         ${({$maxWidth, $padding, $borderRadius}) => speechBubbleBaseStyle($maxWidth!, $borderRadius!, $padding!)}
         > .speech-bubble-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
             img {
                 max-width: 100%;
                 height: auto;
-                ${({$borderThickness, $borderStyle, $borderColor}) => border(
-                    $borderThickness!,
-                    $borderStyle!,
-                    $borderColor!
-                )}
+
+                &:not(.loading-image) {
+                    ${({$borderThickness, $borderStyle, $borderColor}) => border(
+                        $borderThickness!,
+                        $borderStyle!,
+                        $borderColor!
+                    )}
+                }
+
+                &.loading-image {
+                    border: none;
+                    width: 50%;
+                }
             }
         }
 

@@ -35,7 +35,7 @@ export function speechBubbleBaseStyle(
 
             &.recepient {
                 background-color: ${({theme}) => theme.recepient.color};
-            color: ${({theme}) => theme.recepientTextColor ?? theme.textColor};
+                color: ${({theme}) => theme.recepientTextColor ?? theme.textColor};
             }
 
             &.sender {

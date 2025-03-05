@@ -13,7 +13,9 @@ export const ZodConversationFileEntrySchema = swaggerRegistry.register(
         type: z.union([
             z.literal("image"),
             z.literal("audio"),
-        ]).openapi({
+        ], {
+            message: "The file type must be either 'image' or 'audio'."
+        }).openapi({
             description: "The high-level type of the file - used to determine what kind of message to send when it is selected."
         }),
         alt: z.string().openapi({

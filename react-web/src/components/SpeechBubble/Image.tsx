@@ -32,7 +32,7 @@ function SpeechBubbleImageBase({
                 onLoad={scrollToEnd}
                 srcSet={{
                     success: file.url.replace("$target", env.apiUrl),
-                    loading: "/placeholder-image.png"
+                    loading: "/loading.gif"
                 }}
 
                 altSet={{

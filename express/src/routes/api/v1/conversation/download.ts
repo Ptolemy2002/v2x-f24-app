@@ -92,7 +92,7 @@ export class ConversationDownloadHandler extends RouteHandler<{ ok: true }> {
         await conversationBucket.file(`${id}/${file}`).download({
             destination
         });
-        console.log(`Successfully downloaded.`);
+        console.log(`Successfully downloaded at [${destination}].`);
 
         return {
             status: 200,

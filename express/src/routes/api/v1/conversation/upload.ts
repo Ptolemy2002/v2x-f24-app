@@ -112,6 +112,7 @@ export class ConversationUploadHandler extends RouteHandler<ConversationUpload20
         const newFiles = [];
 
         for (const file of files) {
+            console.log(`Uploading file ${file.originalname} to conversation ${id}...`);
             const {newFile} = await ConversationModel.addFile(
                 id,
                 file.path as string,
@@ -121,6 +122,7 @@ export class ConversationUploadHandler extends RouteHandler<ConversationUpload20
                     existingConversation: conversation,
                 }
             );
+            console.log(`Successfully uploaded as ${id}/${newFile.key}.`);
 
             newFiles.push(newFile);
         }
