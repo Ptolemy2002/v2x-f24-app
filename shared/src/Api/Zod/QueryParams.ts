@@ -44,9 +44,12 @@ export const ZodAltQueryParamSchema = swaggerRegistry.registerParameter(
                 }
 
                 if (!Array.isArray(parsedValue)) {
+                    const received = typeof parsedValue;
+
                     ctx.addIssue({
-                        code: z.ZodIssueCode.custom,
-                        message: "Value must be an array"
+                        code: z.ZodIssueCode.invalid_type,
+                        expected: "array",
+                        received
                     });
                 }
 
@@ -59,8 +62,7 @@ export const ZodAltQueryParamSchema = swaggerRegistry.registerParameter(
                             code: z.ZodIssueCode.invalid_type,
                             expected: "string",
                             received,
-                            path: [i],
-                            message: "Each element in the array must be a string"
+                            path: [i]
                         });
                     }
                 }
