@@ -1,5 +1,6 @@
 import { swaggerRegistry } from "src/Swagger";
 import { ZodCoercedBoolean } from "src/Utilities";
+import { z } from "zod";
 
 export const ZodAnonymousQueryParamSchema = swaggerRegistry.registerParameter(
     "anonymous",
@@ -22,6 +23,21 @@ export const ZodAnonymousShorthandQueryParamSchema = swaggerRegistry.registerPar
             description: "[Query Parameter] Shorthand for the `anonymous` query parameter.",
             param: {
                 name: "a",
+                in: "query"
+            }
+        })
+);
+
+export const ZodAltQueryParamSchema = swaggerRegistry.registerParameter(
+    "alt",
+    z.string()
+        .min(1)
+        .optional()
+        .openapi({
+            description: "[Query Parameter] Alternative text for the uploaded file.",
+            default: "f",
+            param: {
+                name: "alt",
                 in: "query"
             }
         })

@@ -4,6 +4,7 @@ import { z } from "zod";
 import { ZodErrorResponseSchema } from "./ErrorResponse";
 import { ZodFileMimeTypeSchema } from "./FileMimeType";
 import { ZodConversationFileEntrySchema, ZodConversationIDWithAnonymousSchema } from "src/Message";
+import { ZodAltQueryParamSchema } from "./QueryParams";
 
 export const ZodConversationUpload200ResponseBodySchema = swaggerRegistry.register(
     "ConversationUpload200ResponseBody",
@@ -36,6 +37,14 @@ export const ZodConversationUploadURLParamsSchema = swaggerRegistry.register(
     })
 );
 
+export const ZodConversationUploadQueryParamsSchema = swaggerRegistry.register(
+    "ConversationUploadQueryParams",
+    z.object({
+        alt: ZodAltQueryParamSchema.optional()
+    }).openapi({
+        description: "The query parameters for the conversation upload endpoint"
+    })
+);
 
 export const ZodConversationUploadFilesSchema = swaggerRegistry.register(
     "ConversationUploadFiles",
@@ -91,3 +100,4 @@ export type ConversationUploadURLParams = z.infer<typeof ZodConversationUploadUR
 export type ConversationUpload200ResponseBody = z.infer<typeof ZodConversationUpload200ResponseBodySchema>;
 export type ConversationUploadResponseBody = z.infer<typeof ZodConversationUploadResponseBody>;
 export type ConversationUploadFiles = z.infer<typeof ZodConversationUploadFilesSchema>;
+export type ConversationUploadQueryParams = z.infer<typeof ZodConversationUploadQueryParamsSchema>;

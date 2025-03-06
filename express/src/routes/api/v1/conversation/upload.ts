@@ -4,7 +4,7 @@ import RouteHandler, { RouteHandlerRequestData } from "lib/RouteHandler";
 import ConversationModel from "models/ConversationModel";
 import multer from "multer";
 import { cleanTempUploads, createMulter } from "services/multer";
-import { ConversationUpload200ResponseBody, isAnonymousID, ZodConversationUploadFilesSchema, ZodConversationUploadURLParamsSchema } from "shared";
+import { ConversationUpload200ResponseBody, isAnonymousID, ZodConversationUploadFilesSchema, ZodConversationUploadQueryParamsSchema, ZodConversationUploadURLParamsSchema } from "shared";
 
 const router = Router();
 const upload = createMulter();
@@ -21,6 +21,10 @@ export class ConversationUploadHandler extends RouteHandler<ConversationUpload20
             description: 'ID of the conversation to upload files to.',
             type: 'string'
         }
+
+        #swagger.parameters['$ref'] = [
+            "#/components/parameters/alt"
+        ]
 
         #swagger.requestBody = {
             required: true,
@@ -74,35 +78,49 @@ export class ConversationUploadHandler extends RouteHandler<ConversationUpload20
 
     async generateResponse(req: RouteHandlerRequestData) {
         const {
-            success: paramsSuccess,
-            data: params,
-            error: paramsError
+            success: urlSuccess,
+            data: urlData,
+            error: urlError
         } = ZodConversationUploadURLParamsSchema.safeParse(req.params);
 
-        if (!paramsSuccess) {
+        if (!urlSuccess) {
             return {
-                response: this.buildZodErrorResponse(paramsError, "BAD_URL"),
+                response: this.buildZodErrorResponse(urlError, "BAD_URL"),
                 status: 400
             };
         }
 
         const {
             success: filesSuccess,
-            data: _files,
+            data: filesData,
             error: filesError
         } = ZodConversationUploadFilesSchema.safeParse(req.files);
 
         if (!filesSuccess) {
             return {
-                response: this.buildZodErrorResponse(filesError, "BAD_BODY", { prefix: "files" }),
+                response: this.buildZodErrorResponse(filesError, "BAD_BODY", { prefix: "body.files" }),
+                status: 400
+            };
+        }
+
+        const {
+            success: paramsSuccess,
+            data: paramsData,
+            error: paramsError
+        } = ZodConversationUploadQueryParamsSchema.safeParse(req.query);
+
+        if (!paramsSuccess) {
+            return {
+                response: this.buildZodErrorResponse(paramsError, "BAD_QUERY"),
                 status: 400
             };
         }
 
         // Since Zod passes through unknown fields, this is safe to do.
-        const files = _files as (typeof _files) & Express.Multer.File[];
+        const files = filesData as (typeof filesData) & Express.Multer.File[];
 
-        const { id } = params;
+        const { id } = urlData;
+        const { alt } = paramsData;
         const anonymous = isAnonymousID(id);
 
         const conversation = await ConversationModel.findById(id);
@@ -124,6 +142,7 @@ export class ConversationUploadHandler extends RouteHandler<ConversationUpload20
                 `$target/conversation/download/${id}/$key`,
                 {
                     existingConversation: conversation,
+                    alt: alt ?? file.originalname
                 }
             );
             console.log(`Successfully uploaded as ${id}/${newFile.key}.`);
