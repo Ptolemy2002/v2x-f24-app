@@ -100,4 +100,5 @@ export type ConversationUploadURLParams = z.infer<typeof ZodConversationUploadUR
 export type ConversationUpload200ResponseBody = z.infer<typeof ZodConversationUpload200ResponseBodySchema>;
 export type ConversationUploadResponseBody = z.infer<typeof ZodConversationUploadResponseBody>;
 export type ConversationUploadFiles = z.infer<typeof ZodConversationUploadFilesSchema>;
-export type ConversationUploadQueryParams = z.infer<typeof ZodConversationUploadQueryParamsSchema>;
+export type ConversationUploadQueryParamsInput = z.input<typeof ZodConversationUploadQueryParamsSchema>;
+export type ConversationUploadQueryParamsOutput = z.output<typeof ZodConversationUploadQueryParamsSchema>;
