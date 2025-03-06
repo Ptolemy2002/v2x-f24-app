@@ -155,9 +155,10 @@ export default class RouteHandler<SuccessResponse extends SuccessResponseBase = 
                     console.error(`Error sending file: ${e.message}`);
                     res.status(500).json(this.buildErrorResponse('INTERNAL', e.message));
                 } else {
-                    console.log(`Cleaning up temp file ${result.filePath}`);
+                    console.log(`Successfully sent file ${result.filePath}`);
+                    console.log(`Cleaning up the sent file`);
                     cleanTempUploads([result.filePath]);
-                    console.log(`Successfully cleaned up temp file ${result.filePath}`);
+                    console.log(`Successfully cleaned up the file ${result.filePath}`);
                 }
             });
         }

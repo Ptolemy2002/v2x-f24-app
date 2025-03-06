@@ -652,6 +652,9 @@
               "type": "string"
             },
             "description": "ID of the conversation to upload files to."
+          },
+          {
+            "$ref": "#/components/parameters/alts"
           }
         ],
         "responses": {
@@ -964,6 +967,14 @@
         },
         "required": false,
         "name": "a",
+        "in": "query"
+      },
+      "alts": {
+        "schema": {
+          "$ref": "#/components/schemas/alts"
+        },
+        "required": false,
+        "name": "alts",
         "in": "query"
       }
     },
@@ -2308,6 +2319,19 @@
           "id"
         ],
         "description": "The URL parameters for uploading files to a conversation"
+      },
+      "alts": {
+        "type": "string",
+        "description": "[Query Parameter] Alternative texts for the uploaded files. Use JSON array format, specifying an array of strings."
+      },
+      "ConversationUploadQueryParams": {
+        "type": "object",
+        "properties": {
+          "alts": {
+            "$ref": "#/components/schemas/alts"
+          }
+        },
+        "description": "The query parameters for the conversation upload endpoint"
       },
       "ConversationUploadFiles": {
         "type": "array",

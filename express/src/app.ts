@@ -60,22 +60,24 @@ app.use('/', indexRouter);
 app.use(function(err: HttpError, req: Request, res: Response, next: NextFunction) {
     console.error(err.stack);
 
-    let code = err.code ?? "UNKNOWN";
-    const { success: codeSuccess } = ZodErrorCodeSchema.safeParse(code);
+    if (!res.headersSent) {
+        let code = err.code ?? "UNKNOWN";
+        const { success: codeSuccess } = ZodErrorCodeSchema.safeParse(code);
 
-    let help = err.help ?? getEnv().getDocsURL(1);
-    const { success: helpSuccess } = ZodHelpLinkSchema.safeParse(help);
+        let help = err.help ?? getEnv().getDocsURL(1);
+        const { success: helpSuccess } = ZodHelpLinkSchema.safeParse(help);
 
-    if (!codeSuccess) {
-        code = "UNKNOWN";
+        if (!codeSuccess) {
+            code = "UNKNOWN";
+        }
+
+        if (!helpSuccess) {
+            help = getEnv().getDocsURL(1);
+        }
+
+        res.status(err.status ?? 500);
+        res.json({ ok: false, code, message: err.message, help });
     }
-
-    if (!helpSuccess) {
-        help = getEnv().getDocsURL(1);
-    }
-
-    res.status(err.status ?? 500);
-    res.json({ ok: false, code, message: err.message, help });
 });
 
 export default app;

@@ -23,7 +23,7 @@ export class ConversationUploadHandler extends RouteHandler<ConversationUpload20
         }
 
         #swagger.parameters['$ref'] = [
-            "#/components/parameters/alt"
+            "#/components/parameters/alts"
         ]
 
         #swagger.requestBody = {

@@ -26,10 +26,9 @@ export function cleanTempUploads(files: string[] | null = null, opt: Options = {
                 if (err) throw err;
                 files = _files;   
             });
-
-            files = files!;
         }
 
+        if (!files) return;
         for (const file of files) {
             fs.unlink(path.join(dirPath, file), err => {
                 if (err) throw err;
