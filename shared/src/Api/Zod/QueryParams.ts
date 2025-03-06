@@ -29,15 +29,50 @@ export const ZodAnonymousShorthandQueryParamSchema = swaggerRegistry.registerPar
 );
 
 export const ZodAltQueryParamSchema = swaggerRegistry.registerParameter(
-    "alt",
+    "alts",
     z.string()
-        .min(1)
+        .transform(
+            (v, ctx) => {
+                let parsedValue;
+                try {
+                    parsedValue = JSON.parse(v);
+                } catch (e) {
+                    ctx.addIssue({
+                        code: z.ZodIssueCode.custom,
+                        message: "Invalid JSON string"
+                    });
+                }
+
+                if (!Array.isArray(parsedValue)) {
+                    ctx.addIssue({
+                        code: z.ZodIssueCode.custom,
+                        message: "Value must be an array"
+                    });
+                }
+
+                for (let i = 0; i < parsedValue.length; i++) {
+                    const alt = parsedValue[i];
+                    const received = typeof alt;
+
+                    if (typeof alt !== "string") {
+                        ctx.addIssue({
+                            code: z.ZodIssueCode.invalid_type,
+                            expected: "string",
+                            received,
+                            path: [i],
+                            message: "Each element in the array must be a string"
+                        });
+                    }
+                }
+
+                return parsedValue as string[];
+            }
+        )
         .optional()
         .openapi({
-            description: "[Query Parameter] Alternative text for the uploaded file.",
-            default: "f",
+            description: "[Query Parameter] Alternative texts for the uploaded files. Use JSON array format, specifying an array of strings.",
             param: {
-                name: "alt",
+                name: "alts",
                 in: "query"
             }
         })

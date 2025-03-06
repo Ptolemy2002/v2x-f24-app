@@ -40,7 +40,7 @@ export const ZodConversationUploadURLParamsSchema = swaggerRegistry.register(
 export const ZodConversationUploadQueryParamsSchema = swaggerRegistry.register(
     "ConversationUploadQueryParams",
     z.object({
-        alt: ZodAltQueryParamSchema.optional()
+        alts: ZodAltQueryParamSchema.optional()
     }).openapi({
         description: "The query parameters for the conversation upload endpoint"
     })

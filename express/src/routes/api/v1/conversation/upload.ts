@@ -117,10 +117,10 @@ export class ConversationUploadHandler extends RouteHandler<ConversationUpload20
         }
 
         // Since Zod passes through unknown fields, this is safe to do.
-        const files = filesData as (typeof filesData) & Express.Multer.File[];
+        const files = filesData as (typeof filesData[number] & Express.Multer.File)[];
 
         const { id } = urlData;
-        const { alt } = paramsData;
+        const { alts } = paramsData;
         const anonymous = isAnonymousID(id);
 
         const conversation = await ConversationModel.findById(id);
@@ -131,9 +131,10 @@ export class ConversationUploadHandler extends RouteHandler<ConversationUpload20
             };
         }
 
-        const newFiles = [];
-
-        for (const file of files) {
+        // Process all file uploads simultaneously using Promise.all
+        const fileUploadPromises = files.map(async (file, i) => {
+            const alt = alts?.[i];
+            
             console.log(`Uploading file ${file.originalname} to conversation ${id}...`);
             const {newFile} = await ConversationModel.addFile(
                 id,
@@ -151,8 +152,10 @@ export class ConversationUploadHandler extends RouteHandler<ConversationUpload20
             cleanTempUploads([file.filename]);
             console.log(`Successfully removed temp file ${file.filename}.`);
 
-            newFiles.push(newFile);
-        }
+            return newFile;
+        });
+
+        const newFiles = await Promise.all(fileUploadPromises);
 
         if (conversation) {
             await conversation.save();
