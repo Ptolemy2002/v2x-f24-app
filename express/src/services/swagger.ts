@@ -19,7 +19,7 @@ console.log('Detected Swagger Base URL:', baseUrl);
 
 const generatedComponents = swaggerGenerator.generateComponents().components ?? {};
 const generatedSchemas = generatedComponents.schemas ?? {};
-const genetatedParameters = generatedComponents.parameters ?? {};
+const generatedParameters = generatedComponents.parameters ?? {};
 
 const doc = {
   info: {
@@ -33,7 +33,7 @@ const doc = {
   produces: ["application/json", "application/octet-stream"],
 
   components: {
-      parameters: genetatedParameters,
+      parameters: generatedParameters,
       "@schemas": generatedSchemas
   }
 };
