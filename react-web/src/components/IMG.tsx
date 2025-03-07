@@ -1,3 +1,4 @@
+import useManualErrorHandling from "@ptolemy2002/react-manual-error-handling";
 import { PropsWithCustomChildren } from "@ptolemy2002/react-utils";
 import { Override } from "@ptolemy2002/ts-utils";
 import clsx from "clsx";
@@ -14,6 +15,7 @@ export type IMGProps = PropsWithCustomChildren<
             loadingClassName?: string;
             failedClassName?: string;
             successClassName?: string;
+            throwErrors?: boolean
         }
     >,
 
@@ -34,9 +36,11 @@ export default function IMG({
     loadingClassName="loading-image",
     failedClassName="failed-image",
     successClassName="success-image",
+    throwErrors=false,
     ...props
 }: IMGProps) {
     const [state, setState] = useState<IMGState>("loading");
+    const { _throw } = useManualErrorHandling();
 
     const srcLoading = srcSet?.loading ?? src;
     const altLoading = altSet?.loading ?? alt;
@@ -73,6 +77,7 @@ export default function IMG({
                         onError={(e) => {
                             setState("failed");
                             onError?.(e);
+                            if (throwErrors) _throw(e);
                         }}
                     />
                 }

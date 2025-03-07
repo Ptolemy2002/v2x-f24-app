@@ -41,6 +41,7 @@ export const ZodAltQueryParamSchema = swaggerRegistry.registerParameter(
                         code: z.ZodIssueCode.custom,
                         message: "Invalid JSON string"
                     });
+                    return z.NEVER;
                 }
 
                 if (!Array.isArray(parsedValue)) {
@@ -51,19 +52,21 @@ export const ZodAltQueryParamSchema = swaggerRegistry.registerParameter(
                         expected: "array",
                         received
                     });
+                    return z.NEVER;
                 }
 
                 for (let i = 0; i < parsedValue.length; i++) {
                     const alt = parsedValue[i];
                     const received = typeof alt;
 
-                    if (typeof alt !== "string") {
+                    if (received !== "string") {
                         ctx.addIssue({
                             code: z.ZodIssueCode.invalid_type,
                             expected: "string",
                             received,
                             path: [i]
                         });
+                        return z.NEVER;
                     }
                 }
 
