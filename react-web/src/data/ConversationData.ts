@@ -9,7 +9,7 @@ import {
     ZodConversationSchema
 } from "shared";
 import { zodValidateWithErrors } from "@ptolemy2002/regex-utils";
-import getApi from "src/Api";
+import getApi, { RouteIds } from "src/Api";
 
 export type ConversationRequests = {
     queryBot: () => Promise<void>;
@@ -170,7 +170,8 @@ export default class ConversationData extends MongoData<
             const difference = this.difference({ type: ["push", "pull", "botQuery"] });
             
             const { data } = await api.post(`/conversation/update/${this.id}`, { difference }, {
-                signal: ac.signal
+                signal: ac.signal,
+                id: RouteIds.conversationUpdate
             });
 
             // Ensure that the conversation is updated with the latest data.

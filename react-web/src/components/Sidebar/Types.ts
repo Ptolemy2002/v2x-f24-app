@@ -6,6 +6,7 @@ export type SidebarProps = StyledComponentPropsWithCSS<{
     colSize?: number;
     SidebarLabel?: FC<SidebarLabelProps["all"]>;
     ChatLink?: FC<ChatLinkProps["functional"]>;
+    CreateNewChatLink?: FC<CreateNewChatLinkProps["functional"]>;
     onLinkClick?: MouseEventHandler<HTMLAnchorElement>
 } & HTMLProps<HTMLUListElement>, {
     paddingX?: RequiredCSSProperties["paddingLeft"];
@@ -27,6 +28,13 @@ export type ChatLinkProps = StyledComponentPropsWithCSS<{
     text: string;
     onClick?: MouseEventHandler<HTMLAnchorElement>;
     PencilIcon?: FC<PencilIconProps>;
+} & Omit<HTMLProps<HTMLLIElement>, "onClick">, {
+    margin?: RequiredCSSProperties["marginLeft"];
+    padding?: RequiredCSSProperties["padding"];
+}>;
+
+export type CreateNewChatLinkProps = StyledComponentPropsWithCSS<{
+    onClick?: MouseEventHandler<HTMLAnchorElement>;
 } & Omit<HTMLProps<HTMLLIElement>, "onClick">, {
     margin?: RequiredCSSProperties["marginLeft"];
     padding?: RequiredCSSProperties["padding"];

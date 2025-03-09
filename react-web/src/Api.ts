@@ -1,11 +1,12 @@
-import { BotQueryRequestBody, BotQueryResponseBody, ConversationGetResponseBody, ConversationGetURLParams, ConversationListNameResponseBody, ConversationUpdateRequestBodyInput, ConversationUpdateResponseBody, ConversationUpdateURLParams } from "shared";
-import axios, { AxiosInstance, CreateAxiosDefaults } from "axios";
+import { BotQueryRequestBody, BotQueryResponseBody, ConversationGetResponseBody, ConversationGetURLParams, ConversationListNameResponseBody, ConversationNewQueryParamsInput, ConversationNewResponseBody, ConversationUpdateRequestBodyInput, ConversationUpdateResponseBody, ConversationUpdateURLParams } from "shared";
+import axios, { CreateAxiosDefaults } from "axios";
 import { TypedAxios, RouteDef } from "typed-axios-instance";
 import getEnv from "src/Env";
-import { setupCache, CacheOptions } from "axios-cache-interceptor";
+import { setupCache, CacheOptions, AxiosCacheInstance } from "axios-cache-interceptor";
 import { minutesToMilliseconds } from "date-fns";
+import { Override } from "@ptolemy2002/ts-utils";
 
-export let Api: AxiosInstance | null = null;
+export let Api: AxiosCacheInstance | null = null;
 
 // This is just a wrapper to ensure that ApiRoutes is an array of RouteDefs.
 // TypeScript will error if it is not.
@@ -39,8 +40,24 @@ export type ApiRoutes = RouteDefArray<[
 
         jsonBody: ConversationUpdateRequestBodyInput,
         jsonResponse: ConversationUpdateResponseBody
+    },
+
+    {
+        route: "/conversation/new",
+        method: "POST",
+
+        jsonResponse: ConversationNewResponseBody,
+        queryParams: ConversationNewQueryParamsInput
     }
 ]>;
+
+export const RouteIds = {
+    botQuery: "/bot/query",
+    conversationGet: `/conversation/get/:id`,
+    conversationListName: "/conversation/list-name",
+    conversationUpdate: `/conversation/update/:id`,
+    conversationNew: "/conversation/new"
+} as const;
 
 export default function getApi(
     options: Omit<CreateAxiosDefaults, "baseURL">={},
@@ -48,7 +65,7 @@ export default function getApi(
         ttl: minutesToMilliseconds(5)
     },
     createNew=false
-): TypedAxios<ApiRoutes> {
+): Override<AxiosCacheInstance, TypedAxios<ApiRoutes>> {
     if (!createNew && Api) {
         return Api;
     }

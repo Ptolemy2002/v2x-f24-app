@@ -8,11 +8,15 @@ import ConversationContainer from 'src/components/ConversationContainer';
 import { createBrowserRouter } from 'react-router-dom';
 import NotFoundPage from 'src/pages/NotFoundPage';
 import ConversationSettingsPage from 'src/pages/ConversationSettingsPage';
+import ConversationData from 'src/data/ConversationData';
+import useAppSearchParamState from 'src/SearchParams';
 
 export function PageLayout() {
     const [showSidebar, setShowSidebar] = useState(false);
     const isMD = useBreakpointQuery("md", "min");
     const isXXL = useBreakpointQuery("xxl", "min");
+
+    const { convo: convoId } = useAppSearchParamState();
 
     const toggleSidebar = useCallback(() => {
         setShowSidebar((v) => !v);
@@ -30,14 +34,26 @@ export function PageLayout() {
         }
     }
 
-    return <>
-        <Header onMenuClick={toggleSidebar} />
+    return (
+         // When the key changes, the element is re-created. This will allow the instance to be reset
+        // so that the data for the new conversation is fetched.
+        <ConversationData.Provider
+            key={convoId}
+            value={convoId ? {_id: convoId} : null}
 
-        <Row as="main">
-            {sidebar}
-            <Outlet />
-        </Row>
-    </>;
+            // This is necessary so that the children are re-evaluated when any values affecting
+            // them change. The memo function prevents React's default behavior to handle this,
+            // as it causes unnecessary re-renders.
+            renderDeps={[toggleSidebar, showSidebar, isMD, isXXL]}
+        >
+            <Header onMenuClick={toggleSidebar} />
+
+            <Row as="main">
+                {sidebar}
+                <Outlet />
+            </Row>
+        </ConversationData.Provider>
+    );
 }
 
 export const router = createBrowserRouter([{

@@ -6,7 +6,7 @@ import DefaultPencilIcon from "src/components/icons/PencilIcon";
 import StyledButton from "src/components/StyledButton";
 import { css } from "styled-components";
 
-export default function ChatLinkBase({
+function ChatLinkBase({
     text, id, className, onClick,
     PencilIcon=DefaultPencilIcon,
     ...props
@@ -53,4 +53,4 @@ export function applySubComponents<
     });
 }
 
-applySubComponents(ChatLinkBase);
+export default applySubComponents(ChatLinkBase);
