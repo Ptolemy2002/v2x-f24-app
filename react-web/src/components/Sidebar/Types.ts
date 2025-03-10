@@ -34,6 +34,7 @@ export type ChatLinkProps = StyledComponentPropsWithCSS<{
 }>;
 
 export type CreateNewChatLinkProps = StyledComponentPropsWithCSS<{
+    anonymous?: boolean;
     onClick?: MouseEventHandler<HTMLAnchorElement>;
 } & Omit<HTMLProps<HTMLLIElement>, "onClick">, {
     margin?: RequiredCSSProperties["marginLeft"];

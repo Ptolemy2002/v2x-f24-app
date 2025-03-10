@@ -6,14 +6,15 @@ import {
     Message, Conversation, MongoConversation,
     MongoMessage, isMongoMessage,
     toMessage, toMongoMessage,
-    ZodConversationSchema
+    ZodConversationSchema,
+    isAnonymousID
 } from "shared";
 import { zodValidateWithErrors } from "@ptolemy2002/regex-utils";
 import getApi, { RouteIds } from "src/Api";
 
 export type ConversationRequests = {
     queryBot: () => Promise<void>;
-    pull: (convoId: string | null) => Promise<void>;
+    pull: () => Promise<void>;
     push: () => Promise<void>;
 };
 
@@ -151,9 +152,9 @@ export default class ConversationData extends MongoData<
             undoOnFail: false
         });
 
-        this.defineRequestType("pull", async function(this: CompletedConversationData, ac, convoId) {
+        this.defineRequestType("pull", async function(this: CompletedConversationData, ac) {
             const api = getApi();
-            const { data } = await api.get(`/conversation/get/${convoId}`, {
+            const { data } = await api.get(`/conversation/get/${this.id}`, {
                 signal: ac.signal,
                 cache: false
             });
@@ -200,5 +201,9 @@ export default class ConversationData extends MongoData<
     getLastModified(this: CompletedConversationData) {
         const lastMessage = this.getLastMessage();
         return lastMessage ? lastMessage.date : this.createdAt;
+    }
+
+    isAnonymous(this: CompletedConversationData) {
+        return isAnonymousID(this.id);
     }
 }

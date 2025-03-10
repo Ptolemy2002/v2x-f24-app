@@ -18,7 +18,7 @@ export function useSpeechContainerController() {
     useMountEffect(() => {
         if (!conversationData.hasLastRequest()) {
             // _try will allow the error boundary we set up to catch if this fails.
-            _try(() => conversationData.pull(convoId));
+            _try(() => conversationData.pull());
         }
     });
 

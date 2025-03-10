@@ -19,7 +19,7 @@ function ConversationSettingsPageBodyBase(props: ConversationSettingsPageBodyPro
 
     return (
         <SuspenseBoundary fallback={<p>Loading...</p>} init={async () => {
-            await conversation.pull(conversation.id);
+            await conversation.pull();
         }}>
             <InternalForm {...props} />
         </SuspenseBoundary>

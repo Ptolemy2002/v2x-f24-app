@@ -4,6 +4,8 @@ import isCallable from 'is-callable';
 import { ConversationListName200ResponseBody } from 'shared';
 
 type EntryList = ConversationListName200ResponseBody["entries"];
+type Entry = EntryList[number];
+type PartialEntryList = Partial<Entry>[];
 
 export default class ConversationInfo {
     static Context = createProxyContext<ConversationInfo>('ConversationListContext');
@@ -44,7 +46,7 @@ export default class ConversationInfo {
 
     updateEntry(
         match: string,
-        value: MaybeTransformer<Partial<EntryList[number]>, [EntryList[number]]>,
+        value: MaybeTransformer<Partial<Entry>, [Entry]>,
         key: "name" | "_id" = "_id",
         sort = true
     ) {
@@ -72,6 +74,55 @@ export default class ConversationInfo {
 
         return {
             found,
+            entries: this.entries
+        }
+    }
+
+    mergeEntries(
+        entries: MaybeTransformer<PartialEntryList, [EntryList]>,
+        key: "name" | "_id" = "_id",
+        sort = true
+    ) {
+        if (isCallable(entries)) entries = entries(this.entries);
+
+        const found: EntryList = [];
+        let missing: PartialEntryList = entries;
+
+        // Update existing entries with new data.
+        this.setEntries((currentEntries) => currentEntries.map((e) => {
+            const match = entries.find((entry) => entry[key] === e[key]);
+            if (match) {
+                found.push(e);
+                missing = missing.filter((m) => m[key] !== e[key]);
+
+                return {
+                    ...e,
+                    ...match
+                };
+            }
+
+            return e;
+        }), sort);
+
+        // Add any missing entries to the end of the list.
+        this.setEntries((currentEntries) => {
+            for (const m of missing) {
+                currentEntries.push({
+                    // Defaults, just in case some fields are missing.
+                    _id: "",
+                    name: "Untitled Conversation",
+                    createdAt: new Date().toISOString(),
+                    modifiedAt: new Date().toISOString(),
+                    ...m
+                });
+            }
+
+            return currentEntries;
+        }, sort);
+
+        return {
+            found,
+            missing,
             entries: this.entries
         }
     }

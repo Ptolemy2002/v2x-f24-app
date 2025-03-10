@@ -8,6 +8,7 @@ import getApi, { RouteIds } from "src/Api";
 
 function CreateNewChatLinkBase({
     className, onClick,
+    anonymous=false,
     children,
     ...props
 }: CreateNewChatLinkProps["functional"]) {
@@ -20,7 +21,9 @@ function CreateNewChatLinkBase({
     return (
         <li className={clsx("chat-link", className)} {...props}>
             <a onClick={async (e) => {
-                const response = await suspend(() => api.post("/conversation/new"));
+                const response = await suspend(() => api.post("/conversation/new", null, {
+                    params: { a: anonymous ? "y" : "n" }
+                }));
 
                 if (!response) return;
 

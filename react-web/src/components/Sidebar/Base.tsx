@@ -62,7 +62,7 @@ function SidebarInternalBody(props: Omit<SuspenseBoundaryProps, "init">) {
                 const { data } = await api.get("/conversation/list-name", {id: RouteIds.conversationListName});
 
                 if (data.ok) {
-                    conversationInfo.setEntries(data.entries);
+                    conversationInfo.mergeEntries(data.entries);
                 }
             })}
             renderDeps={[conversationInfo.entries]}

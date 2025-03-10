@@ -1,5 +1,6 @@
 import { z, ZodLiteral, ZodNull, ZodString, ZodUnion } from 'zod';
 import { createContext, useContext } from 'react';
+import { ZodCoercedBoolean } from 'shared';
 
 function nullableUrl(defaultValue?: string | null, emptyIsDefault = true) {
     const urlType = z.string().trim().url();
@@ -45,7 +46,8 @@ export const EnvSchema = z.object({
     VITE_DEV_API_URL: url("http://localhost:8080", false),
     VITE_PROD_API_URL: nullableUrl(null),
     VITE_DEV_CLIENT_URL: url("http://localhost:3000", false),
-    VITE_PROD_CLIENT_URL: nullableUrl(null)
+    VITE_PROD_CLIENT_URL: nullableUrl(null),
+    VITE_DEBUG: ZodCoercedBoolean.default("f")
 });
 
 export type EnvType = {
@@ -58,7 +60,8 @@ export type EnvType = {
     devClientUrl: string,
     prodClientUrl: string | null,
     apiUrl: string,
-    clientUrl: string
+    clientUrl: string,
+    debug: boolean
 };
 let Env: z.infer<typeof EnvSchema> | null = null;
 let EnvInstance: EnvType | null = null;
@@ -82,7 +85,8 @@ export default function getEnv(createNew=false): EnvType {
             devClientUrl: Env.VITE_DEV_CLIENT_URL,
             prodClientUrl: Env.VITE_PROD_CLIENT_URL,
             apiUrl: Env.NODE_ENV === "production" ? Env.VITE_PROD_API_URL! : Env.VITE_DEV_API_URL,
-            clientUrl: Env.NODE_ENV === "production" ? Env.VITE_PROD_CLIENT_URL! : Env.VITE_DEV_CLIENT_URL
+            clientUrl: Env.NODE_ENV === "production" ? Env.VITE_PROD_CLIENT_URL! : Env.VITE_DEV_CLIENT_URL,
+            debug: Env.VITE_DEBUG
         });
     }
 
