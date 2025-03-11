@@ -49,6 +49,7 @@
     "react-inlinesvg": "^4.1.4",
     "react-router": "^6.28.0",
     "react-router-dom": "^6.28.0",
+    "react-scan": "^0.2.14",
     "shared": "file:../shared",
     "styled-components": "^6.1.13",
     "typed-axios-instance": "^3.3.1",

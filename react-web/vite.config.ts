@@ -6,7 +6,9 @@ const __dirname = dirname(".");
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react()
+  ],
   publicDir: 'public',
 
   resolve: {

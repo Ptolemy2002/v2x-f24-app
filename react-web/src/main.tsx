@@ -1,3 +1,4 @@
+import { scan } from 'react-scan'; // Must be imported before React so it can hijack the dev tools
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from 'src/App';
@@ -6,6 +7,16 @@ import CacheProvider from "react-inlinesvg/provider";
 import { NamedThemeProvider } from 'src/NamedTheme';
 import { ErrorBoundary } from 'react-error-boundary';
 import { EnvProvider } from 'src/Env';
+import { ZodCoercedBoolean } from '@ptolemy2002/regex-utils';
+
+// Calculating this separately, as the real env validation should be done within components
+// so errors can be caught by the ErrorBoundary.
+const debugMode = ZodCoercedBoolean.default("f").catch(false).parse(import.meta.env.VITE_DEBUG);
+const nodeEnv = import.meta.env.NODE_ENV ?? 'development';
+if (debugMode) console.log(import.meta.env.NODE_ENV, "Debug mode enabled. react-scan is active.");
+scan({
+    enabled: nodeEnv === 'development' && debugMode
+});
 
 export const GlobalStyle = createGlobalStyle`
     :root {

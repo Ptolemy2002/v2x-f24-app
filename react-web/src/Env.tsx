@@ -86,7 +86,7 @@ export default function getEnv(createNew=false): EnvType {
             prodClientUrl: Env.VITE_PROD_CLIENT_URL,
             apiUrl: Env.NODE_ENV === "production" ? Env.VITE_PROD_API_URL! : Env.VITE_DEV_API_URL,
             clientUrl: Env.NODE_ENV === "production" ? Env.VITE_PROD_CLIENT_URL! : Env.VITE_DEV_CLIENT_URL,
-            debug: Env.VITE_DEBUG
+            debug: Env.NODE_ENV === "development" && Env.VITE_DEBUG
         });
     }
 
