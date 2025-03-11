@@ -13,7 +13,16 @@ import { ZodCoercedBoolean } from '@ptolemy2002/regex-utils';
 // so errors can be caught by the ErrorBoundary.
 const debugMode = ZodCoercedBoolean.default("f").catch(false).parse(import.meta.env.VITE_DEBUG);
 const nodeEnv = import.meta.env.NODE_ENV ?? 'development';
-if (debugMode) console.log(import.meta.env.NODE_ENV, "Debug mode enabled. react-scan is active.");
+if (debugMode) {
+    if (nodeEnv !== 'development') {
+        console.log("Debug mode enabled, but NODE_ENV is not 'development'. react-scan is inactive.");
+    } else {
+        console.log("Debug mode enabled and NODE_ENV is 'development'. react-scan is active.");
+    }
+} else {
+    console.log("Debug mode disabled. react-scan is inactive.");
+}
+
 scan({
     enabled: nodeEnv === 'development' && debugMode
 });
