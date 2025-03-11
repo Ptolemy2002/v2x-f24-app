@@ -6,7 +6,7 @@ import { setupCache, CacheOptions, AxiosCacheInstance } from "axios-cache-interc
 import { minutesToMilliseconds } from "date-fns";
 import { Override } from "@ptolemy2002/ts-utils";
 
-export let Api: AxiosCacheInstance | null = null;
+export const ApiInstances: Record<string, AxiosCacheInstance> = {};
 
 // This is just a wrapper to ensure that ApiRoutes is an array of RouteDefs.
 // TypeScript will error if it is not.
@@ -59,23 +59,36 @@ export const RouteIds = {
     conversationNew: "/conversation/new"
 } as const;
 
+export type GetAPIOptions = {
+    key?: string,
+    options?: Omit<CreateAxiosDefaults, "baseURL">,
+    cacheOptions?: CacheOptions,
+    createNew?: boolean
+};
+
 export default function getApi(
-    options: Omit<CreateAxiosDefaults, "baseURL">={},
-    cacheOptions: CacheOptions={
-        ttl: minutesToMilliseconds(5)
-    },
-    createNew=false
+    {
+        key="default",
+        options,
+        cacheOptions = {
+            ttl: minutesToMilliseconds(5)
+        },
+        createNew = false
+    }: GetAPIOptions = {}
 ): Override<AxiosCacheInstance, TypedAxios<ApiRoutes>> {
+    const Api = ApiInstances[key];
+
     if (!createNew && Api) {
         return Api;
     }
 
     const env = getEnv();
-    Api = setupCache(axios.create({
+    const result = setupCache(axios.create({
         withCredentials: true,
         ...options,
         baseURL: env.isProd ? env.prodApiUrl! : env.devApiUrl
     }), cacheOptions);
 
-    return Api;
+    ApiInstances[key] = result;
+    return result;
 }
