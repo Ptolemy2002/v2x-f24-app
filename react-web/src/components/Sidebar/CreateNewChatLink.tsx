@@ -5,6 +5,7 @@ import ConversationData from "src/data/ConversationData";
 import useAppSearchParamState from "src/SearchParams";
 import { useSuspenseController } from "@ptolemy2002/react-suspense";
 import getApi, { RouteIds } from "src/Api";
+import { useNavigate } from "react-router";
 
 function CreateNewChatLinkBase({
     className, onClick,
@@ -16,6 +17,7 @@ function CreateNewChatLinkBase({
     const { setConvo: setConvoParam } = useAppSearchParamState();
     const [conversationInfo] = ConversationInfo.useContext();
     const [, setConversationData] = ConversationData.useContext([]);
+    const navigate = useNavigate();
     const api = getApi();
 
     return (
@@ -46,6 +48,8 @@ function CreateNewChatLinkBase({
                     // The next time we try to get a conversation list, it won't be old data
                     // that doesn't include this new conversation.
                     await api.storage.remove(RouteIds.conversationListName);
+
+                    navigate(`/?convo=${convo._id}`);
                 }
 
                 onClick?.(e);

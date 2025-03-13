@@ -7,6 +7,7 @@ export type StyledButtonProps = StyledComponentPropsWithCSS<
     ButtonProps,
     ButtonStyles & {
         variant: ButtonVariant;
+        defaults?: Partial<ButtonStyles>;
     }
 >;
 
@@ -21,8 +22,8 @@ export function StyledButtonBase(props: StyledButtonProps["functional"]) {
 
 export default Object.assign(
     styled(StyledButtonBase).attrs<StyledButtonProps["style"]>(
-        ({theme, $variant, ...props}) => ({
-            ...evaluateButtonStyles(theme, props, $variant),
+        ({theme, $variant, $defaults, ...props}) => ({
+            ...evaluateButtonStyles(theme, props, $variant, $defaults),
             $css: props.$css ?? null,
         })
     )`

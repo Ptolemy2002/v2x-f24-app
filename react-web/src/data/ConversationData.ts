@@ -16,6 +16,7 @@ export type ConversationRequests = {
     queryBot: () => Promise<void>;
     pull: () => Promise<void>;
     push: () => Promise<void>;
+    delete: () => Promise<void>;
 };
 
 export type CompletedConversationData = ConversationData & CompletedMongoData<
@@ -153,6 +154,9 @@ export default class ConversationData extends MongoData<
         });
 
         this.defineRequestType("pull", async function(this: CompletedConversationData, ac) {
+            if (this.id.length === 0) throw new Error("Cannot pull conversation without an ID");
+            if (this.isAnonymous()) throw new Error("Cannot pull anonymous conversation");
+
             const api = getApi();
             const { data } = await api.get(`/conversation/get/${this.id}`, {
                 signal: ac.signal,
@@ -167,6 +171,9 @@ export default class ConversationData extends MongoData<
         });
 
         this.defineRequestType("push", async function(this: CompletedConversationData, ac) {
+            if (this.id.length === 0) throw new Error("Cannot push conversation without an ID");
+            if (this.isAnonymous()) throw new Error("Cannot push anonymous conversation");
+
             const api = getApi();
             const difference = this.difference({ type: ["push", "pull", "botQuery"] });
             
@@ -179,6 +186,19 @@ export default class ConversationData extends MongoData<
             if (data.ok) {
                 this.fromJSON(data.conversation);
             }
+        }, {
+            undoOnFail: false
+        });
+
+        this.defineRequestType("delete", async function(this: CompletedConversationData, ac) {
+            if (this.id.length === 0) throw new Error("Cannot delete conversation without an ID");
+            if (this.isAnonymous()) throw new Error("Cannot delete anonymous conversation");
+
+            const api = getApi();
+            await api.delete(`/conversation/delete/${this.id}`, {
+                signal: ac.signal,
+                id: RouteIds.conversationDelete
+            });
         }, {
             undoOnFail: false
         });

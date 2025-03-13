@@ -13,6 +13,7 @@ import ErrorAlert from "src/components/alerts/ErrorAlert";
 import SuccessAlert from "src/components/alerts/SuccessAlert";
 import StyledButton from "src/components/StyledButton";
 import { css } from "styled-components";
+import { useNavigate } from "react-router";
 
 function ConversationSettingsPageBodyBase(props: ConversationSettingsPageBodyProps["functional"]) {
     const [conversation] = ConversationData.useContextNonNullable([]);
@@ -37,6 +38,7 @@ function InternalForm(
     const [conversationInfo] = ConversationInfo.useContext();
     const { _try } = useManualErrorHandling<void | null>();
     const [{ suspend }] = useSuspenseController([]);
+    const navigate = useNavigate();
 
     const {
         register: formRegister,
@@ -85,6 +87,20 @@ function InternalForm(
 
                 throw e;
             })
+        );
+    }, [conversation, conversationInfo, suspend, _try]);
+
+    const onDelete = useCallback(async () => {
+        await _try(
+            () => suspend(
+                async () => {
+                    await conversation.delete();
+                    conversationInfo.setEntries(
+                        (entries) => entries.filter((entry) => entry._id !== conversation.id)
+                    );
+                    navigate("/"); // Redirect to the home page
+                }
+            )
         );
     }, [conversation, conversationInfo, suspend, _try]);
 
@@ -146,6 +162,21 @@ function InternalForm(
                 `}
             >
                 Save
+            </StyledButton>
+
+            <StyledButton
+                $variant="conversationSettingsDelete"
+                type="button"
+                onClick={onDelete}
+
+                $css={css`
+                    height: fit-content;
+                    margin-left: 0.5rem;
+                    margin-top: auto;
+                    margin-bottom: auto;
+                `}
+            >
+                Delete
             </StyledButton>
         </Form>
     );

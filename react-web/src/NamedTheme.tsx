@@ -51,6 +51,10 @@ export const NamedThemes: NamedTheme[] = [
                     radius: 0
                 },
 
+                conversationSettingsDelete: {
+                    backgroundColor: "red",
+                },
+
                 pausePlay: {
                     backgroundColor: "#666",
                     hoverBackgroundColor: "#555",
