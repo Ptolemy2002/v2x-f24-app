@@ -1,10 +1,11 @@
-import { FC, HTMLProps, RefObject, PropsWithChildren, PropsWithRef } from 'react';
+import { FC, HTMLProps, RefObject, PropsWithChildren, PropsWithRef, SyntheticEvent } from 'react';
 import { RequiredCSSProperties, StyledComponentPropsWithCSS, WithCSSProp } from '@ptolemy2002/react-styled-component-utils';
 import { MaybeForwardRefComponent } from 'src/TypeUtils';
 import { RestartIconProps } from 'src/components/icons/RestartIcon';
 import { PlayIconProps } from 'src/components/icons/PlayIcon';
 import { PauseIconProps } from 'src/components/icons/PauseIcon';
 import { Override } from '@ptolemy2002/ts-utils';
+import { HourglassIconProps } from '../icons/HourglassIcon';
 
 export type AudioPlayerProps = StyledComponentPropsWithCSS<{
     src: string;
@@ -15,10 +16,13 @@ export type AudioPlayerProps = StyledComponentPropsWithCSS<{
     RestartIcon?: FC<RestartIconProps>;
     PlayIcon?: FC<PlayIconProps>;
     PauseIcon?: FC<PauseIconProps>;
+    HourglassIcon?: FC<HourglassIconProps>;
+    throwErrors?: boolean;
+    onAudioError?: (e: SyntheticEvent<HTMLAudioElement, Event>) => void;
 } & HTMLProps<HTMLDivElement>, {
     gap?: RequiredCSSProperties["gap"];
 }>;
-export type AudioPlayerControllerProps = Pick<AudioPlayerProps["functional"], 'onCanPlay' | 'onLoadedMetadata' | 'className'>;
+export type AudioPlayerControllerProps = Pick<AudioPlayerProps["functional"], 'onCanPlay' | 'onLoadedMetadata' | 'className' | 'throwErrors' | 'onAudioError'>;
 
 export type AudioMediaProps = PropsWithRef<{
     src: string;

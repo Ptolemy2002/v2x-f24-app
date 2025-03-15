@@ -6,6 +6,7 @@ import StyledButton from "src/components/StyledButton";
 import DefaultPauseIcon from 'src/components/icons/PauseIcon';
 import DefaultPlayIcon from 'src/components/icons/PlayIcon';
 import DefaultRestartIcon from 'src/components/icons/RestartIcon';
+import DefaultHourglassIcon from 'src/components/icons/HourglassIcon';
 
 function AudioPlayerBase({
     src,
@@ -17,6 +18,9 @@ function AudioPlayerBase({
     PauseIcon = DefaultPauseIcon,
     PlayIcon = DefaultPlayIcon,
     RestartIcon = DefaultRestartIcon,
+    HourglassIcon = DefaultHourglassIcon,
+    throwErrors = true,
+    onAudioError: _onAudioError,
     ...props
 }: AudioPlayerProps["functional"]) {
     const {
@@ -34,8 +38,15 @@ function AudioPlayerBase({
 
         progressText,
         className,
-        maxDuration
-    } = useAudioPlayerController({onCanPlay, onLoadedMetadata, className: _className});
+        maxDuration,
+
+        onAudioError,
+
+        loading
+    } = useAudioPlayerController({
+        onCanPlay, onLoadedMetadata, className: _className,
+        onAudioError: _onAudioError, throwErrors
+    });
 
     return (
         <div className={className} {...props}>
@@ -48,6 +59,8 @@ function AudioPlayerBase({
                 onPlay={playHandler}
                 onEnded={endedHandler}
                 onTimeUpdate={timeUpdateHandler}
+
+                onError={onAudioError}
             />
 
             <StyledButton
@@ -55,6 +68,7 @@ function AudioPlayerBase({
                 onClick={buttonClickHandler}
             >
                 {
+                    loading ? <HourglassIcon /> :
                     isPaused ? (
                         isEnded ? <RestartIcon /> : <PlayIcon />
                     ) : <PauseIcon />

@@ -27,4 +27,4 @@ export const ZodConversationFileEntrySchema = swaggerRegistry.register(
     })
 );
 
-export type ZodConversationFileEntry = z.infer<typeof ZodConversationFileEntrySchema>;
+export type ConversationFileEntry = z.infer<typeof ZodConversationFileEntrySchema>;

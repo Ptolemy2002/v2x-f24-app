@@ -5,8 +5,7 @@ import DefaultScreenReaderText from "./ScreenReaderText";
 import clsx from "clsx";
 import ConversationData from "src/data/ConversationData";
 import { ReactNode } from "react";
-import getEnv from "src/Env";
-import IMG from "src/components/IMG";
+import ImageEntryDisplay from "src/components/ImageEntryDisplay";
 
 function SpeechBubbleImageBase({
     message,
@@ -19,28 +18,12 @@ function SpeechBubbleImageBase({
 }: SpeechBubbleImageProps["functional"]) {
     const [conversation] = ConversationData.useContextNonNullable(["files"]);
     const file = conversation.files[message.src];
-    const env = getEnv();
 
     let element: ReactNode;
     if (!file) {
         element = `Unrecognized file key: ${message.src}`;
-    } else if (file.type !== "image") {
-        throw new Error(`Unable to render image message with non-image file type: ${file.type}`);
     } else {
-        element = (
-            <IMG
-                onLoad={scrollToEnd}
-                srcSet={{
-                    success: file.url.replace("$target", env.apiUrl),
-                    loading: "/loading.gif"
-                }}
-
-                altSet={{
-                    success: message.alt ?? file.alt,
-                    loading: "Loading image..."
-                }}
-            />
-        );
+        element = <ImageEntryDisplay file={file} onLoad={scrollToEnd} />
     }
 
     return (

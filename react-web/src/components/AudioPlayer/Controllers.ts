@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState, useMemo } from 'react';
+import { useCallback, useRef, useState, useMemo, SyntheticEvent } from 'react';
 import { AudioMediaControllerProps, AudioPlayerControllerProps, AudioPlayerProgressBarControllerProps } from './Types';
 import { intervalToDuration } from 'date-fns';
 import { formatDuration } from './Other';
@@ -6,13 +6,21 @@ import clsx from 'clsx';
 import { useMountEffect, useUnmountEffect } from '@ptolemy2002/react-mount-effects';
 import { isMobile } from 'react-device-detect';
 import { handleSeek } from './Other';
+import useManualErrorHandling from '@ptolemy2002/react-manual-error-handling';
 
 export function useAudioPlayerController({
     onCanPlay,
     onLoadedMetadata,
-    className: _className
+    className: _className,
+    throwErrors,
+    onAudioError: _onAudioError
 }: AudioPlayerControllerProps) {
     const audioRef = useRef<HTMLAudioElement>(null);
+
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(false);
+
+    const { _throw } = useManualErrorHandling();
 
     const [canPlay, setCanPlay] = useState(false);
     
@@ -56,8 +64,18 @@ export function useAudioPlayerController({
         } / ${formatDuration(totalDuration)}
     `, [progressDuration, totalDuration, isEnded]);
 
+    const onAudioError = useCallback((e: SyntheticEvent<HTMLAudioElement, Event>) => {
+        setLoading(false);
+        setError(true);
+
+        _onAudioError?.(e);
+        if (throwErrors) _throw(e);
+    }, [throwErrors, _onAudioError]);
+
     const canPlayHandler = useCallback(() => {
         setCanPlay(true);
+        setLoading(false);
+        setError(false);
         onCanPlay?.();
     }, [onCanPlay]);
 
@@ -92,10 +110,10 @@ export function useAudioPlayerController({
 
     const buttonClickHandler = useCallback(() => {
         const audio = audioRef.current;
-        if (audio) {
+        if (!loading && audio) {
             audio.paused ? audio.play() : audio.pause();
         }
-    }, []);
+    }, [loading]);
 
     const className = useMemo(() => clsx("audio-player", _className), [_className]);
     const maxDuration = useMemo(() => {
@@ -122,7 +140,14 @@ export function useAudioPlayerController({
         timeUpdateHandler,
         buttonClickHandler,
         className,
-        maxDuration
+        maxDuration,
+
+        loading,
+        setLoading,
+        error,
+        setError,
+
+        onAudioError
     };
 }
 
