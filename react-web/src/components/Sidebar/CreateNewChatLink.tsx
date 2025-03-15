@@ -34,20 +34,22 @@ function CreateNewChatLinkBase({
 
                     setConvoParam(convo._id);
                     const convoData = setConversationData(convo)!;
-
-                    conversationInfo.setEntries((entries) => {
-                        entries.push({
-                            _id: convo._id,
-                            name: convo.name,
-                            createdAt: convo.createdAt,
-                            modifiedAt: convoData.getLastModified().toISOString()
-                        })
-                        return entries;
-                    });
                     
-                    // The next time we try to get a conversation list, it won't be old data
-                    // that doesn't include this new conversation.
-                    await api.storage.remove(RouteIds.conversationListName);
+                    if (!convoData.isAnonymous()) {
+                        conversationInfo.setEntries((entries) => {
+                            entries.push({
+                                _id: convo._id,
+                                name: convo.name,
+                                createdAt: convo.createdAt,
+                                modifiedAt: convoData.getLastModified().toISOString()
+                            })
+                            return entries;
+                        });
+                    
+                        // The next time we try to get a conversation list, it won't be old data
+                        // that doesn't include this new conversation.
+                        await api.storage.remove(RouteIds.conversationListName);
+                    }
 
                     navigate(`/?convo=${convo._id}`);
                 }

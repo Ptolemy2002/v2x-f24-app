@@ -10,6 +10,7 @@ import {
     isAnonymousID
 } from "shared";
 import { zodValidateWithErrors } from "@ptolemy2002/regex-utils";
+import { omit } from "@ptolemy2002/ts-utils";
 import getApi, { RouteIds } from "src/Api";
 
 export type ConversationRequests = {
@@ -155,16 +156,28 @@ export default class ConversationData extends MongoData<
 
         this.defineRequestType("pull", async function(this: CompletedConversationData, ac) {
             if (this.id.length === 0) throw new Error("Cannot pull conversation without an ID");
-            if (this.isAnonymous()) throw new Error("Cannot pull anonymous conversation");
 
-            const api = getApi();
-            const { data } = await api.get(`/conversation/get/${this.id}`, {
-                signal: ac.signal,
-                cache: false
-            });
+            let data;
+            if (this.isAnonymous()) {
+                data = (await getApi().post("/conversation/new", null, {
+                    params: { a: "y" },
+                    signal: ac.signal
+                })).data;
+            } else {
+                const api = getApi();
+                data = (await api.get(`/conversation/get/${this.id}`, {
+                    signal: ac.signal,
+                    cache: false
+                })).data;
+            }
 
             if (data.ok) {
-                this.fromJSON(data.conversation);
+                if (this.isAnonymous()) {
+                    // We omit the _id field so it is not overwritten, since it will be a new ID.
+                    this.fromJSON(omit(data.conversation, "_id"));
+                } else {
+                    this.fromJSON(data.conversation);
+                }
             }
         }, {
             undoOnFail: false

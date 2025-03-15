@@ -65,7 +65,7 @@ function InternalForm(
         await _try(
             () => suspend(
                 async () => {
-                    await conversation.push()
+                    if (!conversation.isAnonymous()) await conversation.push()
                     // Update the name in the conversation entries list
                     conversationInfo.updateEntry(conversation.id, () => ({name: conversation.name}));
                 }

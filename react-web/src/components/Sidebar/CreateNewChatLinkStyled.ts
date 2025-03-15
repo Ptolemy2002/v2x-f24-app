@@ -39,6 +39,10 @@ export default applySubComponents(Object.assign(
             cursor: pointer;
         }
 
+        &.active {
+            color: ${({theme}) => theme.activeTextColor ?? theme.textColor};
+        }
+
         ${({$css}) => $css}
     `,
     {

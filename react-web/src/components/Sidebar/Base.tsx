@@ -9,6 +9,8 @@ import useManualErrorHandling from "@ptolemy2002/react-manual-error-handling";
 import getApi, { RouteIds } from "src/Api";
 import { ErrorBoundary } from "react-error-boundary";
 import ConversationInfo from "src/context/ConversationInfo";
+import useAppSearchParamState from "src/SearchParams";
+import { isAnonymousID } from "shared";
 
 function SidebarBase({
     className,
@@ -20,6 +22,7 @@ function SidebarBase({
     ...props
 }: SidebarProps["functional"]) {
     const [conversationInfo] = ConversationInfo.useContext();
+    const { convo } = useAppSearchParamState();
 
     return (
         // We need to explicitly set the "col" class here so LESS can recognize it as a column.
@@ -34,10 +37,7 @@ function SidebarBase({
                 >
                     <SidebarLabel text="Create New" />
                     <CreateNewChatLink onClick={onLinkClick}>Normal</CreateNewChatLink>
-                    {
-                        // Needs Implementing
-                        //<CreateNewChatLink onClick={onLinkClick}>Anonymous</CreateNewChatLink>
-                    }
+                    <CreateNewChatLink onClick={onLinkClick} className={clsx(isAnonymousID(convo ?? "") && "active")} anonymous>Anonymous</CreateNewChatLink>
 
                     <SidebarLabel text="Conversations" />
 
