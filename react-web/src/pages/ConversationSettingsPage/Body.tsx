@@ -14,6 +14,7 @@ import SuccessAlert from "src/components/alerts/SuccessAlert";
 import StyledButton from "src/components/StyledButton";
 import { css } from "styled-components";
 import { useNavigate } from "react-router";
+import getApi, { RouteIds } from "src/Api";
 
 function ConversationSettingsPageBodyBase(props: ConversationSettingsPageBodyProps["functional"]) {
     const [conversation] = ConversationData.useContextNonNullable([]);
@@ -39,6 +40,8 @@ function InternalForm(
     const { _try } = useManualErrorHandling<void | null>();
     const [{ suspend }] = useSuspenseController([]);
     const navigate = useNavigate();
+
+    const api = getApi();
 
     const {
         register: formRegister,
@@ -98,6 +101,11 @@ function InternalForm(
                     conversationInfo.setEntries(
                         (entries) => entries.filter((entry) => entry._id !== conversation.id)
                     );
+
+                    // The next time we try to get a conversation list, it won't be old data
+                    // that includes this deleted conversation.
+                    await api.storage.remove(RouteIds.conversationListName);
+
                     navigate("/"); // Redirect to the home page
                 }
             )
