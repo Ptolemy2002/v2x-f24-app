@@ -5,6 +5,7 @@ import { useNavigate } from "react-router";
 import DefaultPencilIcon from "src/components/icons/PencilIcon";
 import StyledButton from "src/components/StyledButton";
 import { css } from "styled-components";
+import ConversationData from "src/data/ConversationData";
 
 function ChatLinkBase({
     text, id, className, onClick,
@@ -12,6 +13,7 @@ function ChatLinkBase({
     ...props
 }: ChatLinkProps["functional"]) {
     const {convo} = useAppSearchParamState();
+    const [, setConversation] = ConversationData.useContext([]);
     const navigate = useNavigate();
 
     return (
@@ -19,6 +21,7 @@ function ChatLinkBase({
         // which is why "active" is only added when the active prop is true.
         <li className={clsx("chat-link", convo === id && "active", className)} {...props}>
             <a onClick={(e) => {
+                setConversation({ _id: id });
                 navigate("/?convo=" + id);
                 onClick?.(e);
             }}>{text}</a>

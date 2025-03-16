@@ -23,7 +23,7 @@ function SpeechBubbleImageBase({
     if (!file) {
         element = `Unrecognized file key: ${message.src}`;
     } else {
-        element = <ImageEntryDisplay file={file} onLoad={scrollToEnd} />
+        element = <ImageEntryDisplay file={file} onLoad={scrollToEnd} throwErrors />
     }
 
     return (

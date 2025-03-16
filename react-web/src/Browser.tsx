@@ -35,10 +35,9 @@ export function PageLayout() {
     }
 
     return (
-         // When the key changes, the element is re-created. This will allow the instance to be reset
+        // When the key changes, the element is re-created. This will allow the instance to be reset
         // so that the data for the new conversation is fetched.
         <ConversationData.Provider
-            key={convoId}
             value={convoId ? {_id: convoId} : null}
 
             // This is necessary so that the children are re-evaluated when any values affecting

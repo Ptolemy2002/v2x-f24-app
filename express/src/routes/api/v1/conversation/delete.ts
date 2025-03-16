@@ -4,6 +4,7 @@ import { ConversationDelete200ResponseBody, ZodConversationDeleteURLParamsSchema
 import RouteHandler, { RouteHandlerRequestData } from 'lib/RouteHandler';
 import ConversationModel from 'models/ConversationModel';
 import { ApiError } from '@google-cloud/storage';
+import { conversationBucket } from 'services/gcloud/storage';
 
 export const router = express.Router();
 
@@ -73,15 +74,21 @@ export class DeleteConversationHandler extends RouteHandler<ConversationDelete20
 
         // Get all file keys associated with this conversation
         const fileKeys = Object.keys(conversation.files);
+        const existingFiles = (await conversationBucket.getFiles())[0].map(file => file.name);
 
         // Delete all files from Google Cloud Storage
         for (const fileKey of fileKeys) {
             try {
-                await conversation.removeFile(fileKey);
+                const path = `${id}/${fileKey}`;
+                if (existingFiles.includes(path)) {
+                    await conversation.removeFile(fileKey);
+                } else {
+                    console.log(`File ${fileKey} does not exist in storage for conversation ${id}, and this was determined before attempting to delete it. Skipping.`);
+                }
             } catch (err) {
                 // Check if this is a "file doesn't exist" error (404) using instanceof
                 if (err instanceof ApiError && err.code === 404) {
-                    console.log(`File ${fileKey} does not exist in storage for conversation ${id}, skipping.`);
+                    console.log(`File ${fileKey} does not exist in storage for conversation ${id}, and this was determined after attempting to delete it. Continuing.`);
                 } else {
                     console.error(`Error deleting file ${fileKey} for conversation ${id}:`, err);
                 }

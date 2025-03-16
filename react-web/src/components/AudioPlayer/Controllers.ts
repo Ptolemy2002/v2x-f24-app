@@ -17,8 +17,7 @@ export function useAudioPlayerController({
 }: AudioPlayerControllerProps) {
     const audioRef = useRef<HTMLAudioElement>(null);
 
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(false);
+    const [hadError, setHadError] = useState(false);
 
     const { _throw } = useManualErrorHandling();
 
@@ -65,8 +64,8 @@ export function useAudioPlayerController({
     `, [progressDuration, totalDuration, isEnded]);
 
     const onAudioError = useCallback((e: SyntheticEvent<HTMLAudioElement, Event>) => {
-        setLoading(false);
-        setError(true);
+        setCanPlay(false);
+        setHadError(true);
 
         _onAudioError?.(e);
         if (throwErrors) _throw(e);
@@ -74,8 +73,8 @@ export function useAudioPlayerController({
 
     const canPlayHandler = useCallback(() => {
         setCanPlay(true);
-        setLoading(false);
-        setError(false);
+        setHadError(false);
+
         onCanPlay?.();
     }, [onCanPlay]);
 
@@ -110,10 +109,10 @@ export function useAudioPlayerController({
 
     const buttonClickHandler = useCallback(() => {
         const audio = audioRef.current;
-        if (!loading && audio) {
+        if (canPlay && audio) {
             audio.paused ? audio.play() : audio.pause();
         }
-    }, [loading]);
+    }, [canPlay]);
 
     const className = useMemo(() => clsx("audio-player", _className), [_className]);
     const maxDuration = useMemo(() => {
@@ -142,10 +141,9 @@ export function useAudioPlayerController({
         className,
         maxDuration,
 
-        loading,
-        setLoading,
-        error,
-        setError,
+        loading: !canPlay,
+        error: hadError,
+        setError: setHadError,
 
         onAudioError
     };

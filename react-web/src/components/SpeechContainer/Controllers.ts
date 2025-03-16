@@ -1,5 +1,5 @@
 import useManualErrorHandling from "@ptolemy2002/react-manual-error-handling";
-import { useDelayedEffect, useMountEffect } from "@ptolemy2002/react-mount-effects";
+import { useDelayedEffect } from "@ptolemy2002/react-mount-effects";
 import { useCallback, useEffect, useRef } from "react";
 import ConversationInfo from "src/context/ConversationInfo";
 import ConversationData from "src/data/ConversationData";
@@ -15,12 +15,12 @@ export function useSpeechContainerController() {
     const { convo: convoId, setConvo: setConvoId } = useAppSearchParamState();
 
     // If there is no last request, pull the initial data.
-    useMountEffect(() => {
+    useEffect(() => {
         if (!conversationData.hasLastRequest()) {
             // _try will allow the error boundary we set up to catch if this fails.
             _try(() => conversationData.pull());
         }
-    });
+    }, [conversationData]);
 
     // useCallback is used to keep a stable reference to the function.
     const scrollToEnd = useCallback(() => {
