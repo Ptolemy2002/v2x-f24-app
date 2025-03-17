@@ -74,7 +74,9 @@ export class DeleteConversationHandler extends RouteHandler<ConversationDelete20
 
         // Get all file keys associated with this conversation
         const fileKeys = Object.keys(conversation.files);
-        const existingFiles = (await conversationBucket.getFiles())[0].map(file => file.name);
+        const existingFiles = (await conversationBucket.getFiles({
+            prefix: `${id}/`
+        }))[0].map(file => file.name);
 
         // Delete all files from Google Cloud Storage
         for (const fileKey of fileKeys) {

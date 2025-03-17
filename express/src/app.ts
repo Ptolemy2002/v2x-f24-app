@@ -18,6 +18,8 @@ import getEnv from 'env';
 const env = getEnv();
 
 import indexRouter from 'routes/index';
+import { cleanupAnonymousConversationFiles } from 'services/gcloud/storage';
+import { schedule } from 'lib/scheduler';
 
 const app = express();
 
@@ -25,6 +27,20 @@ const app = express();
 mongoose.connect(env.mongoConnectionString)
     .then(() =>  console.log('Successfully connected to MongoDB'))
     .catch((err) => console.error("Error Connecting to MongoDB:", err));
+
+schedule(
+    "cleanupAnonymousConversationFiles",
+    0,
+    async () => {
+        await cleanupAnonymousConversationFiles();
+        return ms("5m");
+    },
+
+    (e) => {
+        console.error("Error cleaning up anonymous conversation files:", e);
+        return ms("5m");
+    }
+);
 
 app.use(logger('dev'));
 app.use(express.json());
