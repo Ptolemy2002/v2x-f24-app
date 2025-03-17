@@ -72,29 +72,21 @@ export class DeleteConversationHandler extends RouteHandler<ConversationDelete20
             };
         }
 
-        // Get all file keys associated with this conversation
-        const fileKeys = Object.keys(conversation.files);
-        const existingFiles = (await conversationBucket.getFiles({
-            prefix: `${id}/`
-        }))[0].map(file => file.name);
+        const [existingFiles] = await conversationBucket.getFiles({ prefix: `${id}/` });
 
         // Delete all files from Google Cloud Storage
-        for (const fileKey of fileKeys) {
+        for (const file of existingFiles) {
+            if (file.name.endsWith('/')) {
+                // Skip directories
+                continue;
+            }
+            
             try {
-                const path = `${id}/${fileKey}`;
-                if (existingFiles.includes(path)) {
-                    await conversation.removeFile(fileKey);
-                } else {
-                    console.log(`File ${fileKey} does not exist in storage for conversation ${id}, and this was determined before attempting to delete it. Skipping.`);
-                }
+                console.log(`Deleting file ${file.name}`);
+                await file.delete();
             } catch (err) {
-                // Check if this is a "file doesn't exist" error (404) using instanceof
-                if (err instanceof ApiError && err.code === 404) {
-                    console.log(`File ${fileKey} does not exist in storage for conversation ${id}, and this was determined after attempting to delete it. Continuing.`);
-                } else {
-                    console.error(`Error deleting file ${fileKey} for conversation ${id}:`, err);
-                }
-                // Continue with other files even if one fails
+                console.error(`Error deleting file ${file.name}:`, err);
+                console.log("Continuing with other files...");
             }
         }
 
