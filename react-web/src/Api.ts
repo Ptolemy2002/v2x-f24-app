@@ -1,4 +1,4 @@
-import { BotQueryRequestBody, BotQueryResponseBody, ConversationDeleteResponseBody, ConversationDeleteURLParams, ConversationGetResponseBody, ConversationGetURLParams, ConversationListNameResponseBody, ConversationNewQueryParamsInput, ConversationNewResponseBody, ConversationUpdateRequestBodyInput, ConversationUpdateResponseBody, ConversationUpdateURLParams } from "shared";
+import { BotQueryRequestBody, BotQueryResponseBody, ConversationDeleteResponseBody, ConversationDeleteURLParams, ConversationGetResponseBody, ConversationGetURLParams, ConversationListNameResponseBody, ConversationNewQueryParamsInput, ConversationNewResponseBody, ConversationUpdateRequestBodyInput, ConversationUpdateResponseBody, ConversationUpdateURLParams, ConversationUploadQueryParamsInput, ConversationUploadResponseBody, ConversationUploadURLParams } from "shared";
 import axios, { CreateAxiosDefaults } from "axios";
 import { TypedAxios, RouteDef } from "typed-axios-instance";
 import getEnv from "src/Env";
@@ -55,6 +55,14 @@ export type ApiRoutes = RouteDefArray<[
 
         jsonResponse: ConversationNewResponseBody,
         queryParams: ConversationNewQueryParamsInput
+    },
+
+    {
+        route: `/conversation/upload/${ConversationUploadURLParams["id"]}`,
+        method: "POST",
+
+        queryParams: ConversationUploadQueryParamsInput,
+        jsonResponse: ConversationUploadResponseBody
     }
 ]>;
 
@@ -64,7 +72,8 @@ export const RouteIds = {
     conversationListName: "/conversation/list-name",
     conversationUpdate: `/conversation/update/:id`,
     conversationDelete: `/conversation/delete/:id`,
-    conversationNew: "/conversation/new"
+    conversationNew: "/conversation/new",
+    conversationUpload: `/conversation/upload/:id`
 } as const;
 
 export type GetAPIOptions = {

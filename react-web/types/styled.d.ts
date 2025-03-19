@@ -13,7 +13,7 @@ declare module "styled-components" {
     export type ButtonVariant = 
         "menu" | "conversationTitleEdit" | "send" | "pausePlay"
         | "conversationSettingsSave" | "conversationSettingsDelete"
-        | "upload" | "selectFiles" | "removeFile"
+        | "upload" | "selectFiles" | "removeFile" | "uploadFiles"
     ;
     export type ButtonStyles = Partial<{
         radius: RequiredCSSProperties["borderRadius"],

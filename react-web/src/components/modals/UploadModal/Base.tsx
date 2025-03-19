@@ -5,6 +5,8 @@ import { acceptedFileTypeCondition } from "shared";
 import DefaultAudioPlayer from "src/components/AudioPlayer";
 import { useModalBodyController } from "./Controllers";
 import { Override } from "@ptolemy2002/ts-utils";
+import { SuspenseBoundary } from "@ptolemy2002/react-suspense";
+import { ErrorBoundary } from "react-error-boundary";
 
 function UploadModalBase({
     className,
@@ -35,7 +37,11 @@ function UploadModalBase({
                 {head}
             </Modal.Header>
 
-            <UploadModalInternalBody {...{ bodyProps, AudioPlayer, children: { body } }} />
+            <ErrorBoundary fallback={<p>An error occured.</p>}>
+                <SuspenseBoundary fallback={<p>Loading...</p>}>
+                    <UploadModalInternalBody {...{ bodyProps, AudioPlayer, children: { body } }} />
+                </SuspenseBoundary>
+            </ErrorBoundary>
         </Modal>
     );
 }

@@ -18,6 +18,7 @@ export type ConversationRequests = {
     pull: () => Promise<void>;
     push: () => Promise<void>;
     delete: () => Promise<void>;
+    upload: (files: File[] | readonly File[], alts?: string[]) => Promise<void>;
 };
 
 export type CompletedConversationData = ConversationData & CompletedMongoData<
@@ -212,6 +213,36 @@ export default class ConversationData extends MongoData<
                 signal: ac.signal,
                 id: RouteIds.conversationDelete
             });
+        }, {
+            undoOnFail: false
+        });
+
+        this.defineRequestType("upload", async function(this: CompletedConversationData, ac, files: File[] | readonly File[], alts?: string[]) {
+            if (this.id.length === 0) throw new Error("Cannot upload files without an ID");
+            const api = getApi();
+
+            // Because we're using multipart form data, this is the new simplest way to create a request body.
+            const formData = new FormData();
+            for (const file of files) {
+                formData.append("files", file);
+            }
+
+            const { data } = await api.postForm(`/conversation/upload/${this.id}`, formData, {
+                signal: ac.signal,
+                id: RouteIds.conversationUpload,
+
+                params: {
+                    alts: alts ? JSON.stringify(alts) : undefined
+                }
+            });
+
+            if (data.ok) {
+                this.updateProp("files", (files) => {
+                    for (const fileEntry of data.newFiles) {
+                        files[fileEntry.key] = fileEntry;
+                    }
+                });
+            }
         }, {
             undoOnFail: false
         });

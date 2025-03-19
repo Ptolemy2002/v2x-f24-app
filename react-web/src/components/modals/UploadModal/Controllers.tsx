@@ -7,9 +7,15 @@ import { interpretZodError } from "@ptolemy2002/regex-utils";
 import { Spacer } from "@ptolemy2002/react-utils";
 import StyledButton from "src/components/StyledButton";
 import { UploadModalProps } from "./Types";
+import { useSuspenseController } from "@ptolemy2002/react-suspense";
+import useManualErrorHandling from "@ptolemy2002/react-manual-error-handling";
+import ConversationData from "src/data/ConversationData";
 
 export function useModalBodyController(AudioPlayer: Exclude<UploadModalProps["functional"]["AudioPlayer"], undefined>) {
     const [error, setError] = useState<string | null>(null);
+    const [conversation] = ConversationData.useContextNonNullable();
+    const [{suspend}] = useSuspenseController();
+    const {_try} = useManualErrorHandling();
 
     const fileValidateHandler = useCallback((files: readonly File[]) => {
         const { success, error } = ZodConversationUploadFilesSchema.safeParse(files);
@@ -18,12 +24,13 @@ export function useModalBodyController(AudioPlayer: Exclude<UploadModalProps["fu
             const interpretedError = interpretZodError(error, {
                 prefix: "files"
             });
+
             if (Array.isArray(interpretedError)) {
                 setError(interpretedError.join(", "));
             } else {
                 setError(interpretedError);
             }
-
+            
             return false;
         }
 
@@ -68,7 +75,9 @@ export function useModalBodyController(AudioPlayer: Exclude<UploadModalProps["fu
             <>
                 <StyledButton
                     $variant="selectFiles"
-                    onClick={() => input.click()}
+                    onClick={() => {
+                        input.click()
+                    }}
                 >
                     Select Files
                 </StyledButton>
@@ -95,8 +104,24 @@ export function useModalBodyController(AudioPlayer: Exclude<UploadModalProps["fu
                             </li>
                         ))
                     }
+                    
+                    <br />
                 </ul>
                 
+                <StyledButton
+                    $variant="uploadFiles"
+                    disabled={files.length === 0}
+                    onClick={() => _try(
+                        () => suspend(
+                            async () => {
+                                await conversation.upload(files, files.map((f) => f.name));
+                                modifyInputFiles(() => [], "replace")
+                            }
+                        )
+                    )}
+                >
+                    Upload
+                </StyledButton>
             </>
         )
     }, [error]);
