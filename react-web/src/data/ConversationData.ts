@@ -217,7 +217,11 @@ export default class ConversationData extends MongoData<
             undoOnFail: false
         });
 
-        this.defineRequestType("upload", async function(this: CompletedConversationData, ac, files: File[] | readonly File[], alts?: string[]) {
+        this.defineRequestType("upload", async function(
+            this: CompletedConversationData,
+            ac, files: File[] | readonly File[],
+            alts?: string[]
+        ) {
             if (this.id.length === 0) throw new Error("Cannot upload files without an ID");
             const api = getApi();
 

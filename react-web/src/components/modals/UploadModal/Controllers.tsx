@@ -13,7 +13,7 @@ import ConversationData from "src/data/ConversationData";
 
 export function useModalBodyController(AudioPlayer: Exclude<UploadModalProps["functional"]["AudioPlayer"], undefined>) {
     const [error, setError] = useState<string | null>(null);
-    const [conversation] = ConversationData.useContextNonNullable();
+    const [conversation] = ConversationData.useContextNonNullable(["files"]);
     const [{suspend}] = useSuspenseController();
     const {_try} = useManualErrorHandling();
 
@@ -79,7 +79,7 @@ export function useModalBodyController(AudioPlayer: Exclude<UploadModalProps["fu
                         input.click()
                     }}
                 >
-                    Select Files
+                    Select New Files
                 </StyledButton>
 
                 <ul className="file-preview-list">
@@ -128,6 +128,8 @@ export function useModalBodyController(AudioPlayer: Exclude<UploadModalProps["fu
 
     return {
         error,
+        setError,
+        conversation,
         fileValidateHandler,
         fileRenderHandler
     };

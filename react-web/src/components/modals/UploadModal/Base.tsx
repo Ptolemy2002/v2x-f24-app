@@ -7,6 +7,9 @@ import { useModalBodyController } from "./Controllers";
 import { Override } from "@ptolemy2002/ts-utils";
 import { SuspenseBoundary } from "@ptolemy2002/react-suspense";
 import { ErrorBoundary } from "react-error-boundary";
+import { ReactNode } from "react";
+import getEnv from "src/Env";
+import ImageEntryDisplay from "src/components/ImageEntryDisplay";
 
 function UploadModalBase({
     className,
@@ -66,7 +69,9 @@ function UploadModalInternalBody(
         }={}
     }: UploadModalInternalBodyProps
 ) {
+    const env = getEnv();
     const {
+        conversation,
         error,
         fileValidateHandler,
         fileRenderHandler
@@ -75,6 +80,42 @@ function UploadModalInternalBody(
     return (
         <Modal.Body {...bodyProps}>
             {body ?? <>
+                <h4>Existing Files</h4>
+                <ul className="file-list">
+                    {
+                        Object.keys(conversation.files).map((fileId) => {
+                            const file = conversation.files[fileId]!;
+
+                            // Skip placeholder files
+                            if (["placeholder-image", "placeholder-audio"].includes(file.key)) return null;
+
+                            let fileElement: ReactNode = <span className="error-text">Unsupported file type: {file.type}</span>;
+
+                            if (file.type === "image") {
+                                fileElement = <ImageEntryDisplay file={file} />;
+                            } else if (file.type === "audio") {
+                                fileElement = (
+                                    <AudioPlayer
+                                        src={file.url.replace("$target", env.apiUrl)}
+                                        alt={file.alt}
+                                    />
+                                )
+                            }
+
+                            return (
+                                <li key={fileId} className="file-display">
+                                    {file.alt ?? "[No Description Provided]"}
+                                    <br />
+                                    {fileElement}
+                                </li>
+                            );
+                        })
+                    }
+                </ul>
+                
+                <br />
+
+                <h4>Upload New Files</h4>
                 <FilePicker
                     generateURLs={true}
                     validateFiles={fileValidateHandler}
