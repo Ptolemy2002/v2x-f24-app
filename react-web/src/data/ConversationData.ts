@@ -7,11 +7,17 @@ import {
     MongoMessage, isMongoMessage,
     toMessage, toMongoMessage,
     ZodConversationSchema,
-    isAnonymousID
+    isAnonymousID,
+    ConversationFileEntry
 } from "shared";
 import { zodValidateWithErrors } from "@ptolemy2002/regex-utils";
 import { omit } from "@ptolemy2002/ts-utils";
 import getApi, { RouteIds } from "src/Api";
+
+export type Attachment = {
+    type: ConversationFileEntry["type"];
+    key: string;
+};
 
 export type ConversationRequests = {
     queryBot: () => Promise<void>;
@@ -37,6 +43,12 @@ export default class ConversationData extends MongoData<
         "messages",
         "createdAt"
     ];
+
+    // This will be a property that is not part of the document itself.
+    // It will be used to manage the attachments of the current message,
+    // but will reset when the conversation changes because it's associated
+    // directly with the conversation itself.
+    attachments: Attachment[] = [];
 
     static Context = createProxyContext<CompletedConversationData | null>("ConversationContext");
     static Provider = MongoData.createProvider<
@@ -222,6 +234,8 @@ export default class ConversationData extends MongoData<
             ac, files: File[] | readonly File[],
             alts?: string[]
         ) {
+            if (this.isDirty(["push", "pull", "botQuery"]))
+                throw new Error("Please ensure the latest changes are saved before uploading files");
             if (this.id.length === 0) throw new Error("Cannot upload files without an ID");
             const api = getApi();
 
@@ -273,5 +287,31 @@ export default class ConversationData extends MongoData<
 
     isAnonymous(this: CompletedConversationData) {
         return isAnonymousID(this.id);
+    }
+
+    addAttachment(this: CompletedConversationData, attachment: string) {
+        const file = this.files[attachment];
+        if (!file) throw new Error(`File ${attachment} not found in conversation`);
+        if (this.hasAttachment(attachment)) return;
+
+        this.attachments.push({
+            type: file.type,
+            key: attachment
+        });
+    }
+
+    removeAttachment(this: CompletedConversationData, attachment: string) {
+        const index = this.attachments.findIndex((a) => a.key === attachment);
+        if (index === -1) return;
+
+        this.attachments.splice(index, 1);
+    }
+
+    hasAttachment(this: CompletedConversationData, attachment: string) {
+        return this.attachments.some((a) => a.key === attachment);
+    }
+
+    clearAttachments(this: CompletedConversationData) {
+        this.attachments = [];
     }
 }

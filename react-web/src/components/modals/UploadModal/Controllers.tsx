@@ -68,7 +68,7 @@ export function useModalBodyController(AudioPlayer: Exclude<UploadModalProps["fu
                         <span className="error-text">Unsupported file type: {file.type}</span>
                     </>
                 );
-        });
+            });
         }
 
         return (
