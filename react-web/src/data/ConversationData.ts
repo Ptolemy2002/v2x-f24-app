@@ -14,11 +14,6 @@ import { zodValidateWithErrors } from "@ptolemy2002/regex-utils";
 import { omit } from "@ptolemy2002/ts-utils";
 import getApi, { RouteIds } from "src/Api";
 
-export type Attachment = {
-    type: ConversationFileEntry["type"];
-    key: string;
-};
-
 export type ConversationRequests = {
     queryBot: () => Promise<void>;
     pull: () => Promise<void>;
@@ -48,7 +43,7 @@ export default class ConversationData extends MongoData<
     // It will be used to manage the attachments of the current message,
     // but will reset when the conversation changes because it's associated
     // directly with the conversation itself.
-    attachments: Attachment[] = [];
+    attachments: ConversationFileEntry[] = [];
 
     static Context = createProxyContext<CompletedConversationData | null>("ConversationContext");
     static Provider = MongoData.createProvider<
@@ -294,17 +289,14 @@ export default class ConversationData extends MongoData<
         if (!file) throw new Error(`File ${attachment} not found in conversation`);
         if (this.hasAttachment(attachment)) return;
 
-        this.attachments.push({
-            type: file.type,
-            key: attachment
-        });
+        this.attachments = [...this.attachments, file];
     }
 
     removeAttachment(this: CompletedConversationData, attachment: string) {
         const index = this.attachments.findIndex((a) => a.key === attachment);
         if (index === -1) return;
 
-        this.attachments.splice(index, 1);
+        this.attachments = this.attachments.slice().splice(index, 1);
     }
 
     hasAttachment(this: CompletedConversationData, attachment: string) {

@@ -2,14 +2,12 @@ import { UploadModalProps } from "./Types";
 import { Modal } from "react-bootstrap";
 import FilePicker from "@ptolemy2002/react-file-picker";
 import { acceptedFileTypeCondition } from "shared";
-import DefaultAudioPlayer from "src/components/AudioPlayer";
+import DefaultMediaAttachListItem from "./MediaAttachListItemStyled";
 import { useModalBodyController } from "./Controllers";
 import { Override } from "@ptolemy2002/ts-utils";
 import { SuspenseBoundary } from "@ptolemy2002/react-suspense";
 import { ErrorBoundary } from "react-error-boundary";
-import { ReactNode } from "react";
-import getEnv from "src/Env";
-import ImageEntryDisplay from "src/components/ImageEntryDisplay";
+import DefaultAudioPlayer from "src/components/AudioPlayer";
 
 function UploadModalBase({
     className,
@@ -22,9 +20,10 @@ function UploadModalBase({
         closeButton=true,
         ...headerProps
     }={},
+    MediaAttachListItem=DefaultMediaAttachListItem,
+    AudioPlayer=DefaultAudioPlayer,
     titleProps={},
     bodyProps={},
-    AudioPlayer=DefaultAudioPlayer,
     ...props
 }: UploadModalProps["functional"]) {
     return (
@@ -42,7 +41,7 @@ function UploadModalBase({
 
             <ErrorBoundary fallback={<p>An error occured.</p>}>
                 <SuspenseBoundary fallback={<p>Loading...</p>}>
-                    <UploadModalInternalBody {...{ bodyProps, AudioPlayer, children: { body } }} />
+                    <UploadModalInternalBody {...{ bodyProps, MediaAttachListItem, AudioPlayer, children: { body } }} />
                 </SuspenseBoundary>
             </ErrorBoundary>
         </Modal>
@@ -50,7 +49,7 @@ function UploadModalBase({
 }
 
 type UploadModalInternalBodyProps = Override<
-    Pick<UploadModalProps["functional"], "AudioPlayer" | "bodyProps" | "children">,
+    Pick<UploadModalProps["functional"], "MediaAttachListItem" | "AudioPlayer" | "bodyProps" | "children">,
     {
         children?: Pick<
             Exclude<
@@ -63,13 +62,13 @@ type UploadModalInternalBodyProps = Override<
 function UploadModalInternalBody(
     {
         bodyProps={},
+        MediaAttachListItem=DefaultMediaAttachListItem,
         AudioPlayer=DefaultAudioPlayer,
         children: {
             body=null
         }={}
     }: UploadModalInternalBodyProps
 ) {
-    const env = getEnv();
     const {
         conversation,
         error,
@@ -89,26 +88,7 @@ function UploadModalInternalBody(
                             // Skip placeholder files
                             if (["placeholder-image", "placeholder-audio"].includes(file.key)) return null;
 
-                            let fileElement: ReactNode = <span className="error-text">Unsupported file type: {file.type}</span>;
-
-                            if (file.type === "image") {
-                                fileElement = <ImageEntryDisplay file={file} />;
-                            } else if (file.type === "audio") {
-                                fileElement = (
-                                    <AudioPlayer
-                                        src={file.url.replace("$target", env.apiUrl)}
-                                        alt={file.alt}
-                                    />
-                                )
-                            }
-
-                            return (
-                                <li key={fileId} className="file-display">
-                                    {file.alt ?? "[No Description Provided]"}
-                                    <br />
-                                    {fileElement}
-                                </li>
-                            );
+                            return <MediaAttachListItem key={fileId} file={file} AudioPlayer={AudioPlayer} />
                         })
                     }
                 </ul>
@@ -136,6 +116,7 @@ export function applySubComponents<
     T extends typeof UploadModalBase
 >(C: T) {
     return Object.assign(C, {
+        MediaAttachListItem: DefaultMediaAttachListItem,
         AudioPlayer: DefaultAudioPlayer
     });
 }
