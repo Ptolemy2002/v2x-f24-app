@@ -5,11 +5,12 @@ import DefaultUploadButton from './UploadButton';
 import DefaultRightArrowIcon from 'src/components/icons/RightArrowIcon';
 import DefaultUploadIcon from 'src/components/icons/UploadIcon';
 
+// File upload is not finished and not part of the MVP
 function InputContainerBase({
     SendButton=DefaultSendButton,
-    UploadButton=DefaultUploadButton,
+    //UploadButton=DefaultUploadButton,
     RightArrowIcon=DefaultRightArrowIcon,
-    UploadIcon=DefaultUploadIcon,
+    //UploadIcon=DefaultUploadIcon,
     ...props
 }: InputContainerProps["functional"]) {
     const {
@@ -31,9 +32,11 @@ function InputContainerBase({
                 onChange={onMessageInputChanged}
             ></textarea>
 
-            <UploadButton>
-                <UploadIcon />
-            </UploadButton>
+            {/*
+                <UploadButton>
+                    <UploadIcon />
+                </UploadButton>
+            */}
             
             <SendButton onClick={addText} disabled={sendDisabled}>
                 <RightArrowIcon />
