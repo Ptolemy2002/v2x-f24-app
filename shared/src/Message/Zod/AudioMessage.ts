@@ -7,7 +7,7 @@ export const ZodAudioMessageBaseSchema = swaggerRegistry.register(
     z.object({
         src: z.string().openapi({
             description: "The source of the audio, being a key that is part of the 'files' property in the conversation it belongs to.",
-            example: "example-audio"
+            example: "placeholder-audio"
         }),
         alt: z.string().optional().openapi({
             description: "The alt text for the audio, if applicable."
