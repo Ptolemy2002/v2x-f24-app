@@ -43,7 +43,7 @@ function url(defaultValue?: string, emptyIsDefault = true) {
 
 export const EnvSchema = z.object({
     NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
-    VITE_DEV_API_URL: url("http://localhost:8080", false),
+    VITE_DEV_API_URL: url("http://localhost:8080/api/v1", false),
     VITE_PROD_API_URL: nullableUrl(null),
     VITE_DEV_CLIENT_URL: url("http://localhost:3000", false),
     VITE_PROD_CLIENT_URL: nullableUrl(null),

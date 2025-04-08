@@ -50,7 +50,7 @@ export const EnvSchema = z.object({
         .default(8080),
     DEV_API_URL: url("http://localhost:8080", false),
     PROD_API_URL: nullableUrl(null),
-    DEV_CLIENT_URL: url("http://localhost:3000", false),
+    DEV_CLIENT_URL: url("http://localhost:5000", false),
     PROD_CLIENT_URL: nullableUrl(null),
     MONGO_CONNECTION_STRING: z.string().url(), 
     GCLOUD_CONVERSATION_BUCKET: z.string(),
