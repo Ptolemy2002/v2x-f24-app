@@ -29,7 +29,7 @@
         "nanoid": "^5.0.8",
         "zod": "^3.23.8"
     },
-    "devDependencies": {
+    "dependencies": {
         "@asteasolutions/zod-to-openapi": "^7.3.0",
         "@ptolemy2002/regex-utils": "^2.0.0",
         "@ptolemy2002/ts-utils": "^3.0.0",
