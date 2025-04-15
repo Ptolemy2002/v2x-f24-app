@@ -1150,7 +1150,7 @@
           "src": {
             "type": "string",
             "description": "The source of the image, being a key that is part of the 'files' property in the conversation it belongs to.",
-            "example": "example-image"
+            "example": "placeholder-image"
           },
           "alt": {
             "type": "string",
@@ -1189,7 +1189,7 @@
           "src": {
             "type": "string",
             "description": "The source of the image, being a key that is part of the 'files' property in the conversation it belongs to.",
-            "example": "example-image"
+            "example": "placeholder-image"
           },
           "alt": {
             "type": "string",
@@ -1233,7 +1233,7 @@
           "src": {
             "type": "string",
             "description": "The source of the image, being a key that is part of the 'files' property in the conversation it belongs to.",
-            "example": "example-image"
+            "example": "placeholder-image"
           },
           "alt": {
             "type": "string",
@@ -1256,7 +1256,7 @@
           "src": {
             "type": "string",
             "description": "The source of the audio, being a key that is part of the 'files' property in the conversation it belongs to.",
-            "example": "example-audio"
+            "example": "placeholder-audio"
           },
           "alt": {
             "type": "string",
@@ -1294,7 +1294,7 @@
           "src": {
             "type": "string",
             "description": "The source of the audio, being a key that is part of the 'files' property in the conversation it belongs to.",
-            "example": "example-audio"
+            "example": "placeholder-audio"
           },
           "alt": {
             "type": "string",
@@ -1337,7 +1337,7 @@
           "src": {
             "type": "string",
             "description": "The source of the audio, being a key that is part of the 'files' property in the conversation it belongs to.",
-            "example": "example-audio"
+            "example": "placeholder-audio"
           },
           "alt": {
             "type": "string",
