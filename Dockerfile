@@ -24,7 +24,8 @@ RUN apt-get update && apt-get install -y \
 COPY . .
 
 WORKDIR /app/py-example
-RUN pip install -e .
+RUN pip install uv
+RUN uv install
 
 WORKDIR /app/shared
 RUN npm install -g npm@11.3.0
