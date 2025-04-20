@@ -23,7 +23,7 @@ function ConversationContainerBase({
     
     return (
         <div id="conversation-container" className={clsx("col", className)} {...props}>
-            <ErrorBoundary fallback={<div className="error">An error occured loading the conversation.</div>}>
+            <ErrorBoundary fallback={<div className="error">An error occured loading the conversation.</div>} key={convoId}>
                 <SpeechContainer />
                 <InputContainer />
             </ErrorBoundary>

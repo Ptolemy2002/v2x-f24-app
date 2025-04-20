@@ -21,11 +21,16 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+# Add to the path so we can use uv
+ENV PATH="$HOME/.local/bin:$PATH"
+ENV UV_HTTP_TIMEOUT=600
+
 COPY . .
 
 WORKDIR /app/py-example
-RUN pip install --upgrade pip
-RUN pip install -e .
+
+RUN uv pip install --system --no-cache-dir .
 
 WORKDIR /app/shared
 RUN npm install -g npm@11.3.0
@@ -56,7 +61,7 @@ directory=/app/express
 command=tsx ./bin/www.ts
 
 [program:llmbackend]
-command=python /app/py-example/main.py
+command=uv run /app/py-example/main.py
 
 [program:frontend]
 command=npx serve -s /app/react-web/dist -l tcp://0.0.0.0:5000
